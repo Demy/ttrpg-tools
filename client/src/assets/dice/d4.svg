@@ -1,0 +1,63 @@
+<svg version="1.1"
+     preserveAspectRatio="xMinYMin meet" 
+     baseProfile="full"
+     width="100" height="100"
+     viewbox="0 0 252 220"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <style>
+    .stroke {
+      fill: transparent;
+      stroke: rgba(0, 0, 0, 0.4);
+      stroke-width: 4px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .medium-side {
+      fill: rgba(0, 0, 0, 0.2);
+    }
+    .top-side {
+      fill: transparent
+    }
+    .medium-side,
+    .top-side {
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 2px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <path 
+    class="base"
+    d="M 126 5
+      L 5 215
+      L 247 215
+      z" 
+  />
+
+  <path 
+    class="medium-side"
+    d="M 126 5
+      L 5 215
+      L 126 100
+      z" 
+  />
+
+  <path 
+    class="medium-side"
+    d="M 126 5
+      L 247 215
+      L 126 100
+      z" 
+  />
+
+  <path 
+    class="stroke"
+    d="M 126 5
+      L 5 215
+      L 247 215
+      z" 
+  />
+
+</svg>
