@@ -125,13 +125,14 @@ export default function SelectedDicePanel(props) {
     setParsedFromCode(result);
     setIsParseError(false);
     setLastParsed(code);
+    props.onUpdate(result);
   };
 
   const getCode = (dice) => {
     const diceCollection = {};
     dice.forEach(die => {
       const count = diceCollection[die.die];
-      diceCollection[die.die] = count !== undefined ? count + 1 : 1;
+      diceCollection[die.die] = count !== undefined ? count + die.count : die.count;
     });
     let result = '';
     for (let key in diceCollection) {
@@ -157,10 +158,18 @@ export default function SelectedDicePanel(props) {
   };
 
   const handleClear = () => {
+    setRollCode('');
+    setParsedFromCode([]);
+    setIsParseError(false);
+    setLastParsed('');
     props.onUpdate([]);
   };
 
   const selected = isParseError || parsedFromCode.length === 0 ? props.selected : parsedFromCode;
+
+  const handleRollButton = () => {
+    props.onRoll(selected);
+  };
 
   return (
     <DiceContainer>
@@ -174,8 +183,18 @@ export default function SelectedDicePanel(props) {
           onBlur={handleCodeInputBlur} 
         />
         <ErrorText>{isParseError && rollCode ? parseError : ''}</ErrorText>
-        <RollButton onClick={props.onRoll}>ROLL</RollButton>
-        <ClearButton onClick={handleClear}>Clear</ClearButton>
+        <RollButton 
+          disabled={props.selected.length === 0} 
+          onClick={handleRollButton}
+        >
+          ROLL
+        </RollButton>
+        <ClearButton
+          disabled={props.selected.length === 0} 
+          onClick={handleClear}
+        >
+          Clear
+        </ClearButton>
       </TopPanel>
       <Dice>
         {selected.map((die, i) => addDiceFrom(die, `selected${i}`))}

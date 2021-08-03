@@ -57,11 +57,7 @@ export default function DiceRoller() {
     setCustomSelected(false);
   };
 
-  const handleRollDice = () => {
-    dispatch(actions.rollDice(selectedDice));
-  };
-
-  const handleRerollDice = (dice) => {
+  const handleRollDice = (dice) => {
     dispatch(actions.rollDice(dice));
   };
 
@@ -83,9 +79,10 @@ export default function DiceRoller() {
             onUpdate={setSelectedDice} 
             onRoll={handleRollDice} />
         </DicePanelContainer>
+        <h3>Result:</h3>
         <DicePanelContainer>
           <RollResultPanel
-            onRoll={handleRerollDice}
+            onRoll={handleRollDice}
           />
         </DicePanelContainer>
       </PanelsContainer>

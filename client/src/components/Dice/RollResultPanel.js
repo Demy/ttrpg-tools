@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';  
@@ -47,7 +47,17 @@ function getBaseUrl() {
 export default function RollResultPanel(props) {
 
   const lastRoll = useSelector(state => state.roll.lastRoll);
+
+  const ref = useRef(null);
+
   const link = lastRoll.id > 0 ? `${getBaseUrl()}roll/${lastRoll.id}` : '';
+
+  useEffect(() => {
+    if (lastRoll.id > 0 && ref && ref.current) {
+      var scrollDiv = ref.current.offsetTop;
+      window.scrollTo({ top: scrollDiv, behavior: 'smooth'});
+    }
+  }, [lastRoll, ref]);
 
   const addDiceFrom = (die, index) => {
     const result = [];
@@ -55,7 +65,7 @@ export default function RollResultPanel(props) {
     for (let j = 0; j < values.length; j++) {
       result.push(
         <DieContainer key={`selected${index}-${die.die}-${die.color}-${j}`} >
-          <Die sides={die.die} color={die.color} value={values[j]} size="small" />
+          <Die sides={die.die} color={die.color} value={values[j]} size="medium" />
         </DieContainer>
       );
     }
@@ -85,15 +95,24 @@ export default function RollResultPanel(props) {
     });
   };
 
+  const handleChange = () => {};
+
   return (
-    <DiceContainer>
+    <DiceContainer ref={ref}>
       <TopPanel>
         <RollLink 
+          disabled={lastRoll.id < 0}
           type="text"
           value={link} 
           onFocus={handleFocus}
+          onChange={handleChange}
         />
-        <RollButton onClick={handleReroll}>RE-ROLL</RollButton>
+        <RollButton 
+          disabled={lastRoll.id < 0} 
+          onClick={handleReroll}
+        >
+          RE-ROLL
+        </RollButton>
       </TopPanel>
       <Dice>
         {lastRoll.roll.map((die, i) => addDiceFrom(die, `selected${i}`))}

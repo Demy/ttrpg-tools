@@ -39,7 +39,7 @@ export default function FullRollResult(props) {
     for (let j = 0; j < values.length; j++) {
       result.push(
         <DieContainer key={`selected${index}-${die.die}-${die.color}-${j}`} >
-          <Die sides={die.die} color={die.color} value={values[j]} size="small" />
+          <Die sides={die.die} color={die.color} value={values[j]} size="big" />
         </DieContainer>
       );
     }
