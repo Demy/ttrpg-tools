@@ -25,7 +25,16 @@ async function savePublicRoll(result) {
   return queryResult;
 };
 
+async function getFullRoll(id) {
+  const queryResult = await db.query(
+    'SELECT id, res, time, title FROM rolls WHERE id=$1 LIMIT 1', 
+    [id]
+  );
+  return queryResult;
+};
+ 
 module.exports = {
   getPublicRolls,
-  savePublicRoll
+  savePublicRoll,
+  getFullRoll
 };

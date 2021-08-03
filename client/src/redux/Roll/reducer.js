@@ -1,8 +1,11 @@
-import { NEW_ROLL } from './constants';
+import { NEW_ROLL, FULL_ROLL } from './constants';
 
 const initialState = {
   lastRoll: {
     roll: [],
+    id: -1
+  },
+  fullRoll: {
     id: -1
   },
 };
@@ -13,7 +16,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         lastRoll: action.payload
-      }
+      };
+    case FULL_ROLL:
+      return {
+        ...state,
+        fullRoll: action.payload
+      };
     default:
       return state;
   }

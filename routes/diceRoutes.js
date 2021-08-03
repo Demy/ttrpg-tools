@@ -26,4 +26,16 @@ module.exports = app => {
 
     res.send({ roll: rollData, id });
   });
+  
+  app.get('/api/roll', async (req, res) => {
+    let result = null;
+    const id = +req.query.id;
+    if (id.toString() === req.query.id) {
+      const results = await rolls.getFullRoll(id);
+      if (results.length > 0) {
+        result = results[0];
+      }
+    }
+    res.send(result);
+  });
 };

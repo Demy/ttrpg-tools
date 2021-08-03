@@ -53,7 +53,6 @@ const DieLabel = styled.div`
   color: ${(props) => props.dieColor ? findContrastColor(props.dieColor) : '#000000'};
   font-weight: 600;
   user-select: none;
-  cursor: pointer;
   z-index: 2;
   padding: 0;
   margin: 0;
