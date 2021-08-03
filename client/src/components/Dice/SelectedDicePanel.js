@@ -59,6 +59,20 @@ export default function SelectedDicePanel(props) {
   const [parsedFromCode, setParsedFromCode] = useState([]);
   const [lastParsed, setLastParsed] = useState('');
 
+  const addDiceFrom = (die, index) => {
+    const result = [];
+    for (let j = 0; j < die.count; j++) {
+      result.push(
+        <DieButton
+          key={`selected${index}-${die.die}-${die.color}-${j}`}
+          onClick={removeDie.bind(null, index)} >
+          <Die sides={die.die} color={die.color} value={die.die} size="small" />
+        </DieButton>
+      );
+    }
+    return result;
+  };
+
   const handleCodeChange = (e) => {
     setRollCode(e.target.value);
   };
@@ -83,7 +97,7 @@ export default function SelectedDicePanel(props) {
         const die = +dieStr;
         if (amount.toString() !== amountStr || 
           die.toString() !== dieStr || 
-          amount <= 0 || die <= 0) {
+          amount <= 0 || die <= 1) {
             setIsParseError(true);
             setParseError('Invalid input');
             return;
@@ -94,8 +108,16 @@ export default function SelectedDicePanel(props) {
             return;
         }
         allDiceAmount += amount;
-        for (let j = 0; j < amount; j++) {
-          result.push({ die: die, color: props.diceColor });
+        
+        const existingIndex = result.findIndex(selected => 
+          selected.die === die && selected.color === props.diceColor);
+        if (existingIndex < 0) {
+          result.push({ die: die, color: props.diceColor, count: amount });
+        } else {
+          result[existingIndex] = { 
+            ...result[existingIndex], 
+            count: result[existingIndex].count + amount 
+          };
         }
       }
     }
@@ -155,13 +177,7 @@ export default function SelectedDicePanel(props) {
         <ClearButton onClick={handleClear}>Clear</ClearButton>
       </TopPanel>
       <Dice>
-        {selected.map((die, i) => (
-          <DieButton
-            key={`selectedDie${i}-${die.die}-${die.color}`}
-            onClick={removeDie.bind(null, i)} >
-            <Die sides={die.die} color={die.color} value={die.die} size="small" />
-          </DieButton>
-        ))}
+        {selected.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>
     </DiceContainer>
   );

@@ -37,9 +37,23 @@ export default function DiceRoller() {
 
   const dispatch = useDispatch()
 
-  const addDie = (die, color) => {
+  const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
-      setSelectedDice(selectedDice.concat([{ die, color: color ? color : diceColor }]));
+      const existingIndex = selectedDice.findIndex(die => die.die === sides && die.color === color);
+      console.log(existingIndex);
+      console.log(selectedDice);
+      if (existingIndex < 0) {
+        setSelectedDice(selectedDice.concat([{
+          die: sides, 
+          color: color ? color : diceColor, 
+          count: 1 
+        }]));
+      } else {
+        const existing = selectedDice[existingIndex];
+        const dice = selectedDice.concat();
+        dice[existingIndex] = { ...existing, count: existing.count + 1 };
+        setSelectedDice(dice);
+      }
     }
     setCustomSelected(false);
   };
