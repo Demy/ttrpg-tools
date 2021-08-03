@@ -107,7 +107,6 @@ export default function SelectedDicePanel(props) {
   const getCode = (dice) => {
     const diceCollection = {};
     dice.forEach(die => {
-      console.log(die);
       const count = diceCollection[die.die];
       diceCollection[die.die] = count !== undefined ? count + 1 : 1;
     });

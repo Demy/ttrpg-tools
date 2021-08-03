@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
 import SelectedDicePanel from './SelectedDicePanel';
+import { useDispatch } from 'react-redux';
+import * as actions from '../../redux/Roll/actions';
 
 const PanelsContainer = styled.div`
   width: 70%;
@@ -33,6 +35,8 @@ export default function DiceRoller() {
   const [selectedDice, setSelectedDice] = React.useState([]);
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
+  const dispatch = useDispatch()
+
   const addDie = (die, color) => {
     if (selectedDice.length < MAX_DICE) {
       setSelectedDice(selectedDice.concat([{ die, color: color ? color : diceColor }]));
@@ -41,7 +45,7 @@ export default function DiceRoller() {
   };
 
   const handleRollDice = () => {
-    console.log(selectedDice);
+    dispatch(actions.rollDice(selectedDice));
   };
 
   return (

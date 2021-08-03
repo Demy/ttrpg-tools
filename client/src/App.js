@@ -2,6 +2,9 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
 import DiceRoller from './components/Dice/DiceRoller';
+// Redux
+import { Provider } from 'react-redux';
+import store from './redux';
 
 function App() {
 
@@ -18,8 +21,10 @@ function App() {
 
   return (
     <div className="App">
-      <DiceRoller />
-      {response}
+      <Provider store={store}>
+        <DiceRoller />
+        {response}
+      </Provider>
     </div>
   );
 }
