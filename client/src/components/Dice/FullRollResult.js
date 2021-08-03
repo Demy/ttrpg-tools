@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import * as actions from '../../redux/Roll/actions';
 
 const DiceContainer = styled.div`
   width: 100%;
-  margin-top: 25%;
+  position: relative;
 `;
 const DieContainer = styled.div`
   display: inline-block;
@@ -26,6 +26,18 @@ export default function FullRollResult(props) {
 
   const fullRoll = useSelector(state => state.roll.fullRoll);
   const dispatch = useDispatch();
+
+  const containerRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (containerRef && containerRef.current) {
+      let scrollHeight = document.documentElement.clientHeight;
+      const height = containerRef.current.offsetHeight || containerRef.current.clientHeight;
+      if (height < scrollHeight) {
+        containerRef.current.style.marginTop = `${(scrollHeight - height) / 2}px`;
+      }
+    }
+  });
 
   useEffect(() => {
     if (rollId && fullRoll && fullRoll.id.toString() !== rollId) {
@@ -59,7 +71,7 @@ export default function FullRollResult(props) {
   const date = new Date(fullRoll.time);
 
   return (
-    <DiceContainer>
+    <DiceContainer ref={containerRef}>
       {fullRoll.title ? <h3>{fullRoll.title}</h3> : <></>}
       <Dice>
         {roll.map((die, i) => addDiceFrom(die, `selected${i}`))}

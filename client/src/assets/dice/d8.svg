@@ -31,8 +31,6 @@
     }
   </style>
 
-  <image href="./ref.png" width="228" height="261" />
-
   <path 
     class="base"
     d="M 114 5
