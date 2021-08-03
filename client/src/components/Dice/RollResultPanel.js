@@ -1,0 +1,103 @@
+import React from 'react';
+import Die from './Die';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';  
+import { toast } from 'react-toastify';
+
+const DiceContainer = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+`;
+const TopPanel = styled.div`
+  width: 100%;
+`;
+const RollLink = styled.input`
+  display: inline-block;
+  vertical-align: middle;
+  width: 350px;
+  padding: 7px;
+  margin: 15px;
+`;
+const RollButton = styled.button`
+  display: inline-block;
+  vertical-align: middle;
+  float: right;
+  padding: 12px 24px;
+  margin: 10px 10px 10px 0;
+  cursor: pointer;
+  width: 110px;
+`;
+const DieContainer = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  padding: 2px;
+`;
+const Dice = styled.div`
+  padding: 10px;
+  text-align: center;
+`;
+
+function getBaseUrl() {
+  var re = new RegExp(/^.*\//);
+  return re.exec(window.location.href);
+}
+
+export default function RollResultPanel(props) {
+
+  const lastRoll = useSelector(state => state.roll.lastRoll);
+  const link = lastRoll.id > 0 ? `${getBaseUrl()}roll/${lastRoll.id}` : '';
+
+  const addDiceFrom = (die, index) => {
+    const result = [];
+    const values = die.res;
+    for (let j = 0; j < values.length; j++) {
+      result.push(
+        <DieContainer key={`selected${index}-${die.die}-${die.color}-${j}`} >
+          <Die sides={die.die} color={die.color} value={values[j]} size="small" />
+        </DieContainer>
+      );
+    }
+    return result;
+  };
+
+  const handleReroll = () => {
+    const selected = lastRoll.roll.map(die => ({
+      die: die.die,
+      color: die.color,
+      count: die.count
+    }));
+    props.onRoll(selected);
+  };
+
+  const handleFocus = (event) => {
+    event.target.select();
+    event.target.setSelectionRange(0, 99999);
+
+    document.execCommand("copy");
+
+    toast.info("Link copied!", {
+      position: toast.POSITION.TOP_RIGHT,
+      toastId: 'Link copied',
+      autoClose: 3000,
+      hideProgressBar: true,
+    });
+  };
+
+  return (
+    <DiceContainer>
+      <TopPanel>
+        <RollLink 
+          type="text"
+          value={link} 
+          onFocus={handleFocus}
+        />
+        <RollButton onClick={handleReroll}>RE-ROLL</RollButton>
+      </TopPanel>
+      <Dice>
+        {lastRoll.roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
+      </Dice>
+    </DiceContainer>
+  );
+}

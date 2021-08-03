@@ -1,7 +1,10 @@
 import { NEW_ROLL } from './constants';
 
 const initialState = {
-  lastRoll: [],
+  lastRoll: {
+    roll: [],
+    id: -1
+  },
 };
 
 const reducer = (state = initialState, action) => {

@@ -31,6 +31,7 @@ const RollButton = styled.button`
   padding: 12px 24px;
   margin: 10px 10px 10px 0;
   cursor: pointer;
+  width: 110px;
 `;
 const ClearButton = styled.button`
   float: right;

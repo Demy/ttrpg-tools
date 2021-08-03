@@ -2,6 +2,8 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
 import DiceRoller from './components/Dice/DiceRoller';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Redux
 import { Provider } from 'react-redux';
 import store from './redux';
@@ -24,6 +26,7 @@ function App() {
       <Provider store={store}>
         <DiceRoller />
         {response}
+        <ToastContainer />
       </Provider>
     </div>
   );

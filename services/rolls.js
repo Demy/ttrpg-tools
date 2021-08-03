@@ -19,7 +19,7 @@ async function getPublicRolls(page = 1) {
 
 async function savePublicRoll(result) {
   const queryResult = await db.query(
-    'INSERT INTO public.rolls(res) VALUES ($1);', 
+    'INSERT INTO public.rolls(res) VALUES ($1) returning id;', 
     [result]
   );
   return queryResult;

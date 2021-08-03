@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
 import SelectedDicePanel from './SelectedDicePanel';
+import RollResultPanel from './RollResultPanel';
 import { useDispatch } from 'react-redux';
 import * as actions from '../../redux/Roll/actions';
 
@@ -40,8 +41,6 @@ export default function DiceRoller() {
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
       const existingIndex = selectedDice.findIndex(die => die.die === sides && die.color === color);
-      console.log(existingIndex);
-      console.log(selectedDice);
       if (existingIndex < 0) {
         setSelectedDice(selectedDice.concat([{
           die: sides, 
@@ -62,6 +61,10 @@ export default function DiceRoller() {
     dispatch(actions.rollDice(selectedDice));
   };
 
+  const handleRerollDice = (dice) => {
+    dispatch(actions.rollDice(dice));
+  };
+
   return (
     <div className="dice-roller">
       <PanelsContainer>
@@ -79,6 +82,11 @@ export default function DiceRoller() {
             max={MAX_DICE}
             onUpdate={setSelectedDice} 
             onRoll={handleRollDice} />
+        </DicePanelContainer>
+        <DicePanelContainer>
+          <RollResultPanel
+            onRoll={handleRerollDice}
+          />
         </DicePanelContainer>
       </PanelsContainer>
       <ParametersContainer>
