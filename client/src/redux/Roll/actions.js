@@ -2,8 +2,8 @@ import axios from "axios";
 import { BASE_URL, END_POINT } from "../../utils/constans";
 import { NEW_ROLL, FULL_ROLL } from "./constants";
 
-export const rollDice = (dice) => dispatch => {
-  const data = dice;
+export const rollDice = (dice, text) => dispatch => {
+  const data = { dice, text };
 	axios
 		.post(BASE_URL + END_POINT.ROLL, data)
 		.then(res => {

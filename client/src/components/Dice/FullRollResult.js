@@ -72,7 +72,7 @@ export default function FullRollResult(props) {
 
   return (
     <DiceContainer ref={containerRef}>
-      {fullRoll.title ? <h3>{fullRoll.title}</h3> : <></>}
+      {fullRoll.text ? <h3>{fullRoll.text}</h3> : <></>}
       <Dice>
         {roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>

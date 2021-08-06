@@ -78,7 +78,7 @@ export default function RollResultPanel(props) {
       color: die.color,
       count: die.count
     }));
-    props.onRoll(selected);
+    props.onRoll(selected, lastRoll.text ? 'Re-roll: ' + lastRoll.text : '');
   };
 
   const handleFocus = (event) => {

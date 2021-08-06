@@ -4,7 +4,7 @@ import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
 import SelectedDicePanel from './SelectedDicePanel';
 import RollResultPanel from './RollResultPanel';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/Roll/actions';
 
 const PanelsContainer = styled.div`
@@ -36,6 +36,8 @@ export default function DiceRoller() {
   const [selectedDice, setSelectedDice] = React.useState([]);
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
+  const lastRoll = useSelector(state => state.roll.lastRoll);
+
   const dispatch = useDispatch()
 
   const addDie = (sides, color) => {
@@ -57,8 +59,8 @@ export default function DiceRoller() {
     setCustomSelected(false);
   };
 
-  const handleRollDice = (dice) => {
-    dispatch(actions.rollDice(dice));
+  const handleRollDice = (dice, text) => {
+    dispatch(actions.rollDice(dice, text));
   };
 
   return (
@@ -79,7 +81,7 @@ export default function DiceRoller() {
             onUpdate={setSelectedDice} 
             onRoll={handleRollDice} />
         </DicePanelContainer>
-        <h3>Result:</h3>
+        <h3>Result: {lastRoll.text ? lastRoll.text : ''}</h3>
         <DicePanelContainer>
           <RollResultPanel
             onRoll={handleRollDice}

@@ -17,17 +17,17 @@ async function getPublicRolls(page = 1) {
   };
 };
 
-async function savePublicRoll(result) {
+async function savePublicRoll(dice, text) {
   const queryResult = await db.query(
-    'INSERT INTO public.rolls(res) VALUES ($1) returning id;', 
-    [result]
+    'INSERT INTO public.rolls(res, text) VALUES ($1, $2) returning id;', 
+    [dice, text]
   );
   return queryResult;
 };
 
 async function getFullRoll(id) {
   const queryResult = await db.query(
-    'SELECT id, res, time, title FROM rolls WHERE id=$1 LIMIT 1', 
+    'SELECT id, res, time, text FROM rolls WHERE id=$1 LIMIT 1', 
     [id]
   );
   return queryResult;

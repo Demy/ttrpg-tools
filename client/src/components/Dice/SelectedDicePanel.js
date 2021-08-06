@@ -10,19 +10,30 @@ const DiceContainer = styled.div`
 const TopPanel = styled.div`
   width: 100%;
 `;
-const CodeInput = styled.input`
+const Title = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 15px;
+`;
+const InputBox = styled.div`
   display: inline-block;
   vertical-align: middle;
   width: 200px;
-  padding: 7px;
   margin: 15px;
+  position: relative;
+`;
+const CodeInput = styled.input`
+  padding: 7px;
+  width: calc(100% - 14px);
 `;
 const ErrorText = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  width: 150px;
-  margin: 15px 0;
+  position: absolute;
+  left: 0;
+  width: 200px;
+  text-align: right;
+  bottom: -17px;
   color: red;
+  font-size: 12px;
 `;
 const RollButton = styled.button`
   display: inline-block;
@@ -51,6 +62,18 @@ const Dice = styled.div`
   padding: 10px;
   text-align: center;
 `;
+const BottomPanel = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+const DescriptionInput = styled.input`
+  display: inline-block;
+  vertical-align: middle;
+  flex: 1;
+  margin: 15px;
+  padding: 7px;
+`;
 
 export default function SelectedDicePanel(props) {
 
@@ -59,6 +82,7 @@ export default function SelectedDicePanel(props) {
   const [parseError, setParseError] = useState('');
   const [parsedFromCode, setParsedFromCode] = useState([]);
   const [lastParsed, setLastParsed] = useState('');
+  const [descr, setDescr] = useState('');
 
   const addDiceFrom = (die, index) => {
     const result = [];
@@ -168,21 +192,28 @@ export default function SelectedDicePanel(props) {
   const selected = isParseError || parsedFromCode.length === 0 ? props.selected : parsedFromCode;
 
   const handleRollButton = () => {
-    props.onRoll(selected);
+    props.onRoll(selected, descr);
+  };
+
+  const handleDescrChange = (e) => {
+    setDescr(e.target.value);
   };
 
   return (
     <DiceContainer>
       <TopPanel>
-        <CodeInput 
-          type="text"
-          placeholder={rollCode.length === 0 ? getCode(props.selected) : ''} 
-          value={rollCode} 
-          onChange={handleCodeChange} 
-          onKeyPress={handleKeyPress}
-          onBlur={handleCodeInputBlur} 
-        />
-        <ErrorText>{isParseError && rollCode ? parseError : ''}</ErrorText>
+        <Title>Short code:</Title>
+        <InputBox>
+          <CodeInput 
+            type="text"
+            placeholder={rollCode.length === 0 ? getCode(props.selected) : ''} 
+            value={rollCode} 
+            onChange={handleCodeChange} 
+            onKeyPress={handleKeyPress}
+            onBlur={handleCodeInputBlur} 
+          />
+          <ErrorText>{isParseError && rollCode ? parseError : ''}</ErrorText>
+        </InputBox>
         <RollButton 
           disabled={props.selected.length === 0} 
           onClick={handleRollButton}
@@ -199,6 +230,10 @@ export default function SelectedDicePanel(props) {
       <Dice>
         {selected.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>
+      <BottomPanel>
+        <Title>Description:</Title>
+        <DescriptionInput value={descr} onChange={handleDescrChange} />
+      </BottomPanel>
     </DiceContainer>
   );
 }
