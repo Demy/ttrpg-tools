@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
@@ -6,6 +6,7 @@ import SelectedDicePanel from './SelectedDicePanel';
 import RollResultPanel from './RollResultPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/Roll/actions';
+import uuid from 'react-uuid';
 
 const PanelsContainer = styled.div`
   width: 70%;
@@ -38,7 +39,14 @@ export default function DiceRoller() {
 
   const lastRoll = useSelector(state => state.roll.lastRoll);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(actions.startListeningToRolls());
+    return () => {
+      dispatch(actions.stopListeningToRolls());
+    };
+  });
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
@@ -60,7 +68,8 @@ export default function DiceRoller() {
   };
 
   const handleRollDice = (dice, text) => {
-    dispatch(actions.rollDice(dice, text));
+    const uid = uuid();
+    dispatch(actions.rollDice(dice, text, uid));
   };
 
   return (

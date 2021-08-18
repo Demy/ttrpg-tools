@@ -12,16 +12,7 @@ const options = {
 };
 const io = require('socket.io')(httpServer, options);
 
-io.on('connection', socket => {
-  console.log('Socket client connected!');
-
-  const response = new Date();
-  socket.emit('FromAPI', response);
-
-  socket.on('disconnect', () => {
-    console.log('Socket client disconnected!');
-  });
-});
+require('./services/socket')(io);
 
 // Server
 const cors = require('cors');

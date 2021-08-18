@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import rollReducer from './Roll/reducer';
+import socketMiddleware from './middleware/socketMiddleware';
 
-const middleware = [thunk];
+const middleware = [thunk, socketMiddleware()];
 const initionState = {};
 const rootReducer =  combineReducers({
   roll: rollReducer,

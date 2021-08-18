@@ -2,29 +2,8 @@ const rolls = require('../services/rolls');
 
 module.exports = app => {
   app.post('/api/roll', async (req, res) => {
-    const dice = req.body.dice;
-    const rollData = dice.map(die => {
-      const res = [];
-      for (let i = 0; i < die.count; i++) {
-        res.push(Math.round(Math.random() * (die.die - 1)) + 1);
-      }
-      return { 
-        ...die, 
-        res
-      };
-    });
-
-    let id = -1;
-    try {
-      const ids = await rolls.savePublicRoll(JSON.stringify(rollData), req.body.text);
-      if (ids.length > 0) {
-        id = ids[0].id;
-      }
-    } catch (err) {
-      console.error(`Error while getting rolls `, err.message);
-    }
-
-    res.send({ roll: rollData, id, text: req.body.text });
+    const result = await rolls.makePublicRoll(req.body.dice, req.body.text);
+    res.send(result);
   });
   
   app.get('/api/roll', async (req, res) => {

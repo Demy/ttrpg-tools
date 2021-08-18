@@ -2,6 +2,30 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config/db');
 
+async function makePublicRoll(dice, text) {
+  const rollData = dice.map(die => {
+    const res = [];
+    for (let i = 0; i < die.count; i++) {
+      res.push(Math.round(Math.random() * (die.die - 1)) + 1);
+    }
+    return { 
+      ...die, 
+      res
+    };
+  });
+
+  let id = -1;
+  try {
+    const ids = await savePublicRoll(JSON.stringify(rollData), text);
+    if (ids.length > 0) {
+      id = ids[0].id;
+    }
+  } catch (err) {
+    console.error(`Error while getting rolls `, err.message);
+  }
+  return { roll: rollData, id, text };
+};
+
 async function getPublicRolls(page = 1) {
   const offset = helper.getOffset(page, config.listPerPage);
   const rows = await db.query(
@@ -17,10 +41,10 @@ async function getPublicRolls(page = 1) {
   };
 };
 
-async function savePublicRoll(dice, text) {
+async function savePublicRoll(result, text) {
   const queryResult = await db.query(
     'INSERT INTO public.rolls(res, text) VALUES ($1, $2) returning id;', 
-    [dice, text]
+    [result, text]
   );
   return queryResult;
 };
@@ -35,6 +59,7 @@ async function getFullRoll(id) {
  
 module.exports = {
   getPublicRolls,
+  makePublicRoll,
   savePublicRoll,
   getFullRoll
 };
