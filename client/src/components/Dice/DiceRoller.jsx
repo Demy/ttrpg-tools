@@ -4,6 +4,7 @@ import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
 import SelectedDicePanel from './SelectedDicePanel';
 import RollResultPanel from './RollResultPanel';
+import RollsHistory from './RollsHistory';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/Roll/actions';
 import uuid from 'react-uuid';
@@ -106,6 +107,7 @@ export default function DiceRoller() {
           onCustomCanceled={setCustomSelected.bind(null, false)}
         />
       </ParametersContainer>
+      <RollsHistory />
     </div>
   );
 }

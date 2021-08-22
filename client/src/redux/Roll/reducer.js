@@ -1,16 +1,17 @@
 import { 
-  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, 
-  PUBLIC_ROOM, 
-  CLEAR_LAST_ROLL
+  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
+  PUBLIC_ROOM
 } from './constants';
+
+const defaultLastRoll = {
+  roll: [],
+  id: -1
+};
 
 const initialState = {
   rollUid: '',
   room: '',
-  lastRoll: {
-    roll: [],
-    id: -1
-  },
+  lastRoll: defaultLastRoll,
   fullRoll: {
     id: -1
   },
@@ -23,6 +24,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         room: PUBLIC_ROOM
       };
+    case MOVE_TO_ROOM:
+      return {
+        ...state,
+        room: action.payload,
+        lastRoll: defaultLastRoll,
+        rollUid: ''
+      };
     case NEW_ROLL:
       if (state.rollUid === action.payload.uid) {
         return {
@@ -34,10 +42,7 @@ const reducer = (state = initialState, action) => {
     case CLEAR_LAST_ROLL:
       return {
         ...state,
-        lastRoll: {
-          roll: [],
-          id: -1
-        },
+        lastRoll: defaultLastRoll,
         rollUid: ''
       };
     case FULL_ROLL:
@@ -50,6 +55,21 @@ const reducer = (state = initialState, action) => {
         ...state,
         rollUid: action.payload
       };
+    case ROLLS_HISTORY:
+      if (state.room === action.payload.room || 
+        (state.room === PUBLIC_ROOM && !action.payload.room)) {
+        return {
+          ...state,
+          history: action.payload.history.map(roll => {
+            return {
+              time: new Date(roll.time),
+              text: roll.text,
+              res: JSON.parse(roll.res)
+            };
+          })
+        };
+      }
+      return state;
     default:
       return state;
   }

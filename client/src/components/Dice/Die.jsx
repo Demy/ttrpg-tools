@@ -34,6 +34,8 @@ const findContrastColor = (color) => {
 
 const getSizeMult = (size) => {
   switch(size) {
+    case 'tiny':
+      return 0.4;
     case 'small':
       return 0.6;
     case 'medium':

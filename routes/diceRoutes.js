@@ -17,4 +17,10 @@ module.exports = app => {
     }
     res.send(result);
   });
+
+  app.get('/api/history', async (req, res) => {
+    let roomId = req.query.room;
+    const results = await rolls.getRollsHistory(roomId);
+    res.send({ history: results, room: roomId });
+  });
 };

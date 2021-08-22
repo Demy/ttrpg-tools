@@ -56,10 +56,24 @@ async function getFullRoll(id) {
   );
   return queryResult;
 };
+
+async function getRollsHistory(roomId) {
+  console.log('getRollsHistory ' + roomId);
+  const queryResult = await db.query(
+    'SELECT res, time, text FROM rolls LIMIT 20'
+  );
+  return queryResult;
+};
+
+async function makeRoll(dice, text) {
+
+};
  
 module.exports = {
   getPublicRolls,
   makePublicRoll,
   savePublicRoll,
-  getFullRoll
+  getFullRoll,
+  getRollsHistory,
+  makeRoll,
 };

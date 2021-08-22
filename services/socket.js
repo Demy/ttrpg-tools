@@ -23,6 +23,24 @@ module.exports = io => {
         socket.leave(PUBLIC_ROOM);
       });
     });
+    
+    socket.on('joinRoom', ({ roomId }) => {
+      console.log('joinRoom ' + roomId);
+
+      socket.join(roomId);
+
+      socket.on('roll', ({ dice, text, uid }) => {
+        rolls.makeRoll(dice, text).then(res => {
+          io.to(roomId).emit('roll', { ...res, uid });
+        });
+      });
+
+      socket.on('leaveRoom', () => {
+        console.log('leaveRoom');
+        
+        socket.leave(roomId);
+      });
+    });
 
     socket.on('disconnect', () => {
       console.log('Socket client disconnected!');
