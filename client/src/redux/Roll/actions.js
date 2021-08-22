@@ -1,21 +1,22 @@
 import axios from "axios";
 import { BASE_URL, END_POINT } from "../../utils/constans";
-import { NEW_ROLL, FULL_ROLL, ROLL_UID } from "./constants";
+import { NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, CLEAR_LAST_ROLL } from "./constants";
 
-export const startListeningToRolls = () => dispatch => {
+export const moveToPublicRoom = () => dispatch => {
+  console.log('moveToPublicRoom');
+  dispatch({ type: MOVE_TO_PUBLIC_ROOM });
   dispatch({
     event: 'roll',
-    handle: data => dispatch({
-      type: NEW_ROLL,
-      payload: data,
-    }),
+    handle: data => {
+      return dispatch({
+        type: NEW_ROLL,
+        payload: data,
+      });
+    },
   });
-};
-
-export const stopListeningToRolls = () => dispatch => {
   dispatch({
-    event: 'roll',
-    leave: true,
+    event: 'joinPublicRoom',
+    emit: true,
   });
 };
 
@@ -39,4 +40,8 @@ export const getFullRoll = (rollId) => dispatch => {
 		.catch(error => {
 			console.log(error);
 		});
+};
+
+export const clearLastRoll = () => dispatch => {
+  dispatch({ type: CLEAR_LAST_ROLL });
 };

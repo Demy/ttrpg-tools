@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 export default function socketMiddleware() {
-  const socket = io('http://localhost:4000');
+  const socket = io('/');
 
   return store => next => (action) => {    
     const dispatch = store.dispatch;

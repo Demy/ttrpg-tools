@@ -38,15 +38,15 @@ export default function DiceRoller() {
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
   const lastRoll = useSelector(state => state.roll.lastRoll);
+  const room = useSelector(state => state.roll.room);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.startListeningToRolls());
-    return () => {
-      dispatch(actions.stopListeningToRolls());
-    };
-  });
+    if (dispatch && room === '') {
+      dispatch(actions.moveToPublicRoom());
+    }
+  }, [dispatch, room]);
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {

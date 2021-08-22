@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';  
+import { useSelector, useDispatch } from 'react-redux';  
 import { toast } from 'react-toastify';
+import * as actions from '../../redux/Roll/actions';
 
 const DiceContainer = styled.div`
   display: inline-block;
@@ -28,6 +29,13 @@ const RollButton = styled.button`
   cursor: pointer;
   width: 110px;
 `;
+const ClearButton = styled.button`
+  float: right;
+  padding: 10px 14px;
+  margin: 13px 10px 13px 0;
+  cursor: pointer;
+  border: none;
+`;
 const DieContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
@@ -47,6 +55,8 @@ function getBaseUrl() {
 export default function RollResultPanel(props) {
 
   const lastRoll = useSelector(state => state.roll.lastRoll);
+
+  const dispatch = useDispatch();
 
   const ref = useRef(null);
 
@@ -97,6 +107,10 @@ export default function RollResultPanel(props) {
 
   const handleChange = () => {};
 
+  const handleClear = () => {
+    dispatch(actions.clearLastRoll());
+  };
+
   return (
     <DiceContainer ref={ref}>
       <TopPanel>
@@ -113,6 +127,12 @@ export default function RollResultPanel(props) {
         >
           RE-ROLL
         </RollButton>
+        <ClearButton
+          disabled={lastRoll.id < 0} 
+          onClick={handleClear}
+        >
+          Clear
+        </ClearButton>
       </TopPanel>
       <Dice>
         {lastRoll.roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
