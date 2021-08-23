@@ -4,7 +4,7 @@ import {
 } from './constants';
 
 const defaultLastRoll = {
-  roll: [],
+  res: [],
   id: -1
 };
 
@@ -32,13 +32,20 @@ const reducer = (state = initialState, action) => {
         rollUid: ''
       };
     case NEW_ROLL:
-      if (state.rollUid === action.payload.uid) {
-        return {
-          ...state,
-          lastRoll: action.payload
-        };
+      let lastRoll = state.lastRoll;
+      let history = state.history.concat();
+      history.unshift(action.payload);
+      if (history.length > 10) {
+        history.pop();
       }
-      return state;
+      if (state.rollUid === action.payload.uid) {
+        lastRoll = action.payload;
+      }
+      return {
+        ...state,
+        lastRoll,
+        history
+      };
     case CLEAR_LAST_ROLL:
       return {
         ...state,

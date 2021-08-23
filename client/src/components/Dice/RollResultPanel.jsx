@@ -83,7 +83,7 @@ export default function RollResultPanel(props) {
   };
 
   const handleReroll = () => {
-    const selected = lastRoll.roll.map(die => ({
+    const selected = lastRoll.res.map(die => ({
       die: die.die,
       color: die.color,
       count: die.count
@@ -135,7 +135,7 @@ export default function RollResultPanel(props) {
         </ClearButton>
       </TopPanel>
       <Dice>
-        {lastRoll.roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
+        {lastRoll.res.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>
     </DiceContainer>
   );

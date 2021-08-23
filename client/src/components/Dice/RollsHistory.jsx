@@ -7,12 +7,9 @@ export default function RollsHistory() {
 
   const history = useSelector(state => state.roll.history);
 
-  console.log(history);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(history);
     if (dispatch && !history) {
       dispatch(actions.loadRollsHistory());
     }

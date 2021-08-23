@@ -73,8 +73,6 @@ export const loadRollsHistory = (room) => dispatch => {
 	axios
 		.get(BASE_URL + END_POINT.ROLLS_HISTORY + (room ? '?room=' + room : ''))
 		.then(res => {
-      console.log('ROLLS_HISTORY');
-      console.log(res.data);
 	    dispatch({ type: ROLLS_HISTORY, payload: { history: res.data.history, room } });
 		})
 		.catch(error => {

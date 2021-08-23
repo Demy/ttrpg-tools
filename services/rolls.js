@@ -23,7 +23,7 @@ async function makePublicRoll(dice, text) {
   } catch (err) {
     console.error(`Error while getting rolls `, err.message);
   }
-  return { roll: rollData, id, text };
+  return { res: rollData, id, text, time: new Date(Date.now()) };
 };
 
 async function getPublicRolls(page = 1) {
@@ -60,7 +60,7 @@ async function getFullRoll(id) {
 async function getRollsHistory(roomId) {
   console.log('getRollsHistory ' + roomId);
   const queryResult = await db.query(
-    'SELECT res, time, text FROM rolls LIMIT 20'
+    'SELECT res, time, text FROM rolls ORDER BY time DESC LIMIT 10'
   );
   return queryResult;
 };

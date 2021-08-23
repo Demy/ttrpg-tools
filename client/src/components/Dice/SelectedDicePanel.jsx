@@ -175,9 +175,14 @@ export default function SelectedDicePanel(props) {
     parseCodeToDice(rollCode);
   };
 
-  const removeDie = (index) => {
+  const removeDie = (diceIndex) => {
     const copy = props.selected.concat();
-    copy.splice(index, 1);
+    const dice = copy[diceIndex];
+    if (dice.count > 1) {
+      --dice.count;
+    } else {
+      copy.splice(diceIndex, 1);
+    }
     props.onUpdate(copy);
   };
 
@@ -186,6 +191,7 @@ export default function SelectedDicePanel(props) {
     setParsedFromCode([]);
     setIsParseError(false);
     setLastParsed('');
+    setDescr('');
     props.onUpdate([]);
   };
 
@@ -228,7 +234,7 @@ export default function SelectedDicePanel(props) {
         </ClearButton>
       </TopPanel>
       <Dice>
-        {selected.map((die, i) => addDiceFrom(die, `selected${i}`))}
+        {selected.map((die, i) => addDiceFrom(die, i))}
       </Dice>
       <BottomPanel>
         <Title>Description:</Title>
