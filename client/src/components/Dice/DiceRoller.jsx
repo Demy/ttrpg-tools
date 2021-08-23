@@ -22,12 +22,28 @@ const DicePanelContainer = styled.div`
   width: 100%;
 `;
 
-const ParametersContainer = styled.div`
-  border: 1px solid #c0c0c0;
+const SidePanelContaner = styled.div`
   width: 30%;
-  max-width: 200px;
+  max-width: 300px;
   display: inline-block;
   vertical-align: top;
+  margin-left: 10px;
+`;
+const ParametersContainer = styled.div`
+  border: 1px solid #c0c0c0;
+`;
+
+const HistoryPanelContainer = styled.div`
+  border: 1px solid #c0c0c0;
+  width: 100%;
+  max-height: 394px;
+  overflow: auto;
+  margin: 10px auto;
+`;
+const HistoryTitle = styled.h3`
+  width: 100%;
+  margin: 15px 10px;
+  text-align: left;
 `;
 
 const MAX_DICE = 100;
@@ -98,16 +114,21 @@ export default function DiceRoller() {
           />
         </DicePanelContainer>
       </PanelsContainer>
-      <ParametersContainer>
-        <ParametersPanel 
-          diceColor={diceColor} 
-          showSidesSetting={isCustomSelected} 
-          onColorSelected={setDiceColor}
-          onAddDie={addDie} 
-          onCustomCanceled={setCustomSelected.bind(null, false)}
-        />
-      </ParametersContainer>
-      <RollsHistory />
+      <SidePanelContaner>
+        <ParametersContainer>
+          <ParametersPanel 
+            diceColor={diceColor} 
+            showSidesSetting={isCustomSelected} 
+            onColorSelected={setDiceColor}
+            onAddDie={addDie} 
+            onCustomCanceled={setCustomSelected.bind(null, false)}
+          />
+        </ParametersContainer>
+        <HistoryTitle>All rolls</HistoryTitle>
+        <HistoryPanelContainer>
+          <RollsHistory />
+        </HistoryPanelContainer>
+      </SidePanelContaner>
     </div>
   );
 }

@@ -23,7 +23,7 @@ async function makePublicRoll(dice, text) {
   } catch (err) {
     console.error(`Error while getting rolls `, err.message);
   }
-  return { res: rollData, id, text, time: new Date(Date.now()) };
+  return { res: rollData, id, text, time: Date.now() };
 };
 
 async function getPublicRolls(page = 1) {

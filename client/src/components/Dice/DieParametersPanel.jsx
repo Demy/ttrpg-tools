@@ -72,7 +72,7 @@ export default function DieParametersPanel(props) {
       {props.showSidesSetting ? (
         <div>
           <div>
-            <PanelLabel>Value:</PanelLabel>
+            <PanelLabel>Sides:</PanelLabel>
             <input type="number" value={sidesValue} onChange={handleSidesChange} />
           </div>
           <div>

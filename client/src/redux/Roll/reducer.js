@@ -34,7 +34,10 @@ const reducer = (state = initialState, action) => {
     case NEW_ROLL:
       let lastRoll = state.lastRoll;
       let history = state.history.concat();
-      history.unshift(action.payload);
+      history.unshift({ 
+        ...action.payload,
+        time: new Date(action.payload.time) 
+      });
       if (history.length > 10) {
         history.pop();
       }

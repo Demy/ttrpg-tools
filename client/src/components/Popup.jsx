@@ -8,7 +8,7 @@ const WithOverlay = styled.div`
 `;
 const PopupView = styled.div`
   position: relative;
-  z-index: 2; 
+  z-index: 3; 
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -16,7 +16,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 2;
 `;
 
 export default function Popup(props) {
