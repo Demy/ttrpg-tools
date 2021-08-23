@@ -75,7 +75,7 @@ export const loadRollsHistory = (room) => dispatch => {
 		.then(res => {
       console.log('ROLLS_HISTORY');
       console.log(res.data);
-	    dispatch({ type: ROLLS_HISTORY, payload: { history: res.data, room } });
+	    dispatch({ type: ROLLS_HISTORY, payload: { history: res.data.history, room } });
 		})
 		.catch(error => {
 			console.log(error);

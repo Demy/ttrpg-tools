@@ -38,6 +38,7 @@ export default function RollsHistory() {
           })}
         </div>
       ))}
+      {history.length === 0 ? <div>No rolls done yet</div> : <></>}
     </div>
   );
 }

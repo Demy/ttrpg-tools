@@ -56,8 +56,9 @@ const reducer = (state = initialState, action) => {
         rollUid: action.payload
       };
     case ROLLS_HISTORY:
-      if (state.room === action.payload.room || 
-        (state.room === PUBLIC_ROOM && !action.payload.room)) {
+      if (action.payload.history && 
+          (state.room === action.payload.room || 
+          (state.room === PUBLIC_ROOM && !action.payload.room))) {
         return {
           ...state,
           history: action.payload.history.map(roll => {
