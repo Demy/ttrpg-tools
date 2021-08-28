@@ -12,7 +12,7 @@ module.exports = io => {
       socket.join(PUBLIC_ROOM);
 
       socket.on('roll', ({ dice, text, uid }) => {
-        rolls.makePublicRoll(dice, text).then(res => {
+        rolls.makePublicRoll(dice, text, res => {
           io.to(PUBLIC_ROOM).emit('roll', { ...res, uid });
         });
       });

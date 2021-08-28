@@ -15,6 +15,7 @@ const initialState = {
   fullRoll: {
     id: -1
   },
+  history: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -33,7 +34,7 @@ const reducer = (state = initialState, action) => {
       };
     case NEW_ROLL:
       let lastRoll = state.lastRoll;
-      let history = state.history.concat();
+      let history = state.history ? state.history.concat() : [];
       history.unshift({ 
         ...action.payload,
         time: new Date(action.payload.time) 

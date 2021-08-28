@@ -34,7 +34,6 @@ const addZero = (num) => {
   return num < 10 ? `0${num}` : num.toString();
 };
 const toTimeString = (time) => {
-  console.log(time);
   return `${addZero(time.getHours())}:${addZero(time.getMinutes())}:${addZero(time.getSeconds())}`;
 };
 

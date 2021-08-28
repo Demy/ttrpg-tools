@@ -2,7 +2,7 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config/db');
 
-async function makePublicRoll(dice, text) {
+function makePublicRoll(dice, text, callback) {
   const rollData = dice.map(die => {
     const res = [];
     for (let i = 0; i < die.count; i++) {
@@ -14,55 +14,49 @@ async function makePublicRoll(dice, text) {
     };
   });
 
-  let id = -1;
-  try {
-    const ids = await savePublicRoll(JSON.stringify(rollData), text);
-    if (ids.length > 0) {
-      id = ids[0].id;
+  savePublicRoll(JSON.stringify(rollData), text, (error, result) => {
+    if (error) {
+      throw(error);
     }
-  } catch (err) {
-    console.error(`Error while getting rolls `, err.message);
-  }
-  return { res: rollData, id, text, time: Date.now() };
+    callback({ res: rollData, id: result.insertId, text, time: Date.now() });
+  });
 };
 
-async function getPublicRolls(page = 1) {
+function getPublicRolls(callback, page = 1) {
   const offset = helper.getOffset(page, config.listPerPage);
-  const rows = await db.query(
-    'SELECT id, res, time FROM rolls OFFSET $1 LIMIT $2', 
-    [offset, config.listPerPage]
+  db.query(
+    `SELECT id, res, time FROM rolls OFFSET ${offset} LIMIT ${config.listPerPage}`, 
+    (error, results, fields) => {
+      const data = helper.emptyOrRows(results);
+      const meta = {page};
+    
+      callback(error, {
+        data,
+        meta
+      }, fields);
+    }
   );
-  const data = helper.emptyOrRows(rows);
-  const meta = {page};
-
-  return {
-    data,
-    meta
-  };
 };
 
-async function savePublicRoll(result, text) {
-  const queryResult = await db.query(
-    'INSERT INTO public.rolls(res, text) VALUES ($1, $2) returning id;', 
-    [result, text]
+function savePublicRoll(result, text, callback) {
+  db.query(
+    `INSERT INTO rolls(res, text) VALUES (${db.escape(result)}, ${db.escape(text)})`, 
+    callback
   );
-  return queryResult;
 };
 
-async function getFullRoll(id) {
-  const queryResult = await db.query(
-    'SELECT id, res, time, text FROM rolls WHERE id=$1 LIMIT 1', 
-    [id]
+function getFullRoll(id, callback) {
+  db.query(
+    `SELECT id, res, time, text FROM rolls WHERE id=${id} LIMIT 1`,
+    callback
   );
-  return queryResult;
 };
 
-async function getRollsHistory(roomId) {
-  console.log('getRollsHistory ' + roomId);
-  const queryResult = await db.query(
-    'SELECT res, time, text FROM rolls ORDER BY time DESC LIMIT 10'
+async function getRollsHistory(roomId, callback) {
+  db.query(
+    'SELECT res, time, text FROM rolls ORDER BY time DESC LIMIT 10',
+    callback
   );
-  return queryResult;
 };
 
 async function makeRoll(dice, text) {
