@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 export default function socketMiddleware() {
   const socket = io('/');
 
-  return store => next => (action) => {    
+  return store => next => (action) => {
     const dispatch = store.dispatch;
     if (typeof action === 'function') {
       return next(action);
@@ -29,7 +29,7 @@ export default function socketMiddleware() {
     if (typeof handleEvent === 'string') {
       handleEvent = result => dispatch({ type: handle, result, ...rest });
     }
-
+    
     return socket.on(event, (data) => handleEvent(data));
   };
 }

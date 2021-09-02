@@ -74,7 +74,7 @@ export default function RollsHistory() {
           })}
         </HistoryLine>
       ))}
-      {history.length === 0 ? <div>No rolls done yet</div> : <></>}
+      {history.length === 0 ? <div>&nbsp;No rolls done yet</div> : <></>}
     </HistoryTableContainer>
   );
 }

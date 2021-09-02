@@ -5,7 +5,6 @@ import {
 } from "./constants";
 
 export const moveToPublicRoom = () => dispatch => {
-  console.log('moveToPublicRoom');
   dispatch({ type: MOVE_TO_PUBLIC_ROOM });
   dispatch({
     event: 'roll',

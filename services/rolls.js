@@ -52,14 +52,14 @@ function getFullRoll(id, callback) {
   );
 };
 
-async function getRollsHistory(roomId, callback) {
+function getRollsHistory(roomId, callback) {
   db.query(
     'SELECT res, time, text FROM rolls ORDER BY time DESC LIMIT 10',
     callback
   );
 };
 
-async function makeRoll(dice, text) {
+function makeRoll(dice, text) {
 
 };
  
