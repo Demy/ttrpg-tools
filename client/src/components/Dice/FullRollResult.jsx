@@ -40,7 +40,8 @@ export default function FullRollResult(props) {
   });
 
   useEffect(() => {
-    if (rollId && fullRoll && fullRoll.id.toString() !== rollId) {
+    if (rollId && fullRoll && fullRoll.id && 
+        fullRoll.id.toString() !== rollId) {
       dispatch(actions.getFullRoll(+rollId));
     }
   }, [rollId, fullRoll, dispatch]);
@@ -60,7 +61,7 @@ export default function FullRollResult(props) {
 
   if (!fullRoll) {
     return <DiceContainer>This roll was not made (yet?)</DiceContainer>;
-  } else if (fullRoll.id === -1) {
+  } else if (fullRoll && fullRoll.id === -1) {
     return <DiceContainer>Loading...</DiceContainer>;
   }
   

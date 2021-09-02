@@ -46,7 +46,7 @@ const HistoryTitle = styled.h3`
   text-align: left;
 `;
 
-const MAX_DICE = 100;
+const MAX_DICE = 20;
 
 export default function DiceRoller() {
 

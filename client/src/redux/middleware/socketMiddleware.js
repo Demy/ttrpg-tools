@@ -1,7 +1,12 @@
 import io from 'socket.io-client';
 
 export default function socketMiddleware() {
-  const socket = io('/');
+  const socket = io(process.env.REACT_APP_SOCKET_URL);
+  socket.on('connect_error', (e) => {
+    console.log('Socket connection error: ' + process.env.REACT_APP_SOCKET_URL);
+    console.log(e);
+    socket.connect();
+  });
 
   return store => next => (action) => {
     const dispatch = store.dispatch;

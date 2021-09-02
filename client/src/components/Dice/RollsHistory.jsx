@@ -29,6 +29,21 @@ const HistoryLabel = styled.div`
   padding: 0 0 2px 0;
   font-size: 12px;
 `;
+const BottomLine = styled.div`
+
+`;
+const DiceView = styled.div`
+  display: inline-block;
+  width: calc(100% - 40px);
+`;
+const LinkButton = styled.div`
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  vertical-align: top;
+  cursor: pointer;
+`;
 
 const addZero = (num) => {
   return num < 10 ? `0${num}` : num.toString();
@@ -61,17 +76,22 @@ export default function RollsHistory() {
               {toTimeString(roll.time)}
             </HistoryDate>
           </TopLine>
-          {roll.res.map((die, dieIndex) => {
-            return die.res.map((dieResult, resultIndex) => (
-              <Die 
-                key={`die-${id}-${dieIndex}-${resultIndex}`} 
-                color={die.color} 
-                value={dieResult} 
-                sides={die.die} 
-                size="tiny"
-              />
-            ))
-          })}
+          <BottomLine>
+            <DiceView>
+              {roll.res.map((die, dieIndex) => {
+                return die.res.map((dieResult, resultIndex) => (
+                  <Die 
+                    key={`die-${id}-${dieIndex}-${resultIndex}`} 
+                    color={die.color} 
+                    value={dieResult} 
+                    sides={die.die} 
+                    size="tiny"
+                  />
+                ))
+              })}
+            </DiceView>
+            <a href={`/roll/${roll.id}`}><LinkButton>🔗</LinkButton></a>
+          </BottomLine>
         </HistoryLine>
       ))}
       {history.length === 0 ? <div>&nbsp;No rolls done yet</div> : <></>}

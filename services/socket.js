@@ -3,7 +3,8 @@ const rolls = require('./rolls');
 const PUBLIC_ROOM = 'public';
 
 module.exports = io => {
-  io.on('connection', socket => {
+  io.of(path)
+  .on('connection', socket => {
     console.log('Socket client connected!');
     
     socket.on('joinPublicRoom', () => {
