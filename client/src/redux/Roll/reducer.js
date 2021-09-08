@@ -74,8 +74,8 @@ const reducer = (state = initialState, action) => {
           ...state,
           history: action.payload.history.map(roll => {
             return {
+              ...roll,
               time: new Date(roll.time),
-              text: roll.text,
               res: JSON.parse(roll.res)
             };
           })

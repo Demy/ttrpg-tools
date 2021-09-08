@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as actions from '../../redux/Roll/actions';
 import Die from './Die';
+import { Link } from 'react-router-dom';
 
 const HistoryTableContainer = styled.div`
   text-align: left;
@@ -14,35 +15,30 @@ const HistoryLine = styled.div`
   }
   padding: 5px 10px;
 `;
-const TopLine = styled.div`
-  position: relative;
+const LeftPart = styled.div`
+  width: calc(100% - 40px);
+  display: inline-block;
+  vertical-align: top;
+`;
+const RightPart = styled.div`
+  width: 40px;
+  display: inline-block;
+  vertical-align: top;
 `;
 const HistoryDate = styled.div`
   padding: 2px 0;
   font-size: 10px;
-  position: absolute;
-  right: 0;
-  top: 0;
   color: #585858;
 `;
 const HistoryLabel = styled.div`
   padding: 0 0 2px 0;
   font-size: 12px;
 `;
-const BottomLine = styled.div`
-
-`;
-const DiceView = styled.div`
-  display: inline-block;
-  width: calc(100% - 40px);
-`;
 const LinkButton = styled.div`
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin-left: 5px;
-  vertical-align: top;
+  width: 100%;
   cursor: pointer;
+  opacity: 0.3;
+  text-align: right;
 `;
 
 const addZero = (num) => {
@@ -70,14 +66,9 @@ export default function RollsHistory() {
     <HistoryTableContainer>
       {history.map((roll, id) => (
         <HistoryLine key={`history-roll-${id}`}>
-          <TopLine>
+          <LeftPart>
             {roll.text ? <HistoryLabel>{roll.text}:</HistoryLabel> : <></>}
-            <HistoryDate>
-              {toTimeString(roll.time)}
-            </HistoryDate>
-          </TopLine>
-          <BottomLine>
-            <DiceView>
+            <div>
               {roll.res.map((die, dieIndex) => {
                 return die.res.map((dieResult, resultIndex) => (
                   <Die 
@@ -89,9 +80,20 @@ export default function RollsHistory() {
                   />
                 ))
               })}
-            </DiceView>
-            <a href={`/roll/${roll.id}`}><LinkButton>🔗</LinkButton></a>
-          </BottomLine>
+            </div>
+          </LeftPart>
+          <RightPart>
+            <HistoryDate>
+              {toTimeString(roll.time)}
+            </HistoryDate>
+            <LinkButton>
+              <Link 
+                to={`/roll/${roll.id}`} 
+                target="_blank"
+                style={{ textDecoration: 'none' }}
+              >🔗</Link>
+            </LinkButton>
+          </RightPart>
         </HistoryLine>
       ))}
       {history.length === 0 ? <div>&nbsp;No rolls done yet</div> : <></>}

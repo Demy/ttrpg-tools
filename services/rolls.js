@@ -54,7 +54,7 @@ function getFullRoll(id, callback) {
 
 function getRollsHistory(roomId, callback) {
   db.query(
-    'SELECT res, time, text FROM rolls ORDER BY time DESC LIMIT 10',
+    'SELECT id, res, time, text FROM rolls ORDER BY time DESC LIMIT 10',
     callback
   );
 };
