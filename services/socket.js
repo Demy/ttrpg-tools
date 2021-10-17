@@ -2,15 +2,13 @@ const rolls = require('./rolls');
 
 const PUBLIC_ROOM = 'public';
 
-module.exports = io => {
-  io.of(path)
-  .on('connection', socket => {
+module.exports = (io) => {
+  io.on("connection", (socket) => {
     console.log('Socket client connected!');
     
     socket.on('joinPublicRoom', () => {
-      console.log('joinPublicRoom');
-
       socket.join(PUBLIC_ROOM);
+      io.to(PUBLIC_ROOM).emit('message', { text: 'Welcome!' });
 
       socket.on('roll', ({ dice, text, uid }) => {
         rolls.makePublicRoll(dice, text, res => {

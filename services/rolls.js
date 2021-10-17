@@ -14,60 +14,34 @@ function makePublicRoll(dice, text, callback) {
     };
   });
 
-  savePublicRoll(JSON.stringify(rollData), text, (error, result) => {
-    if (error) {
-      throw(error);
-    }
+  savePublicRoll(JSON.stringify(rollData), text).then(result => {
     callback({ res: rollData, id: result.insertId, text, time: Date.now() });
+  }, error => {
+      throw error;
   });
 };
 
-function getPublicRolls(callback, page = 1) {
-  const offset = helper.getOffset(page, config.listPerPage);
-  db.query(
-    `SELECT id, res, time FROM rolls OFFSET ${offset} LIMIT ${config.listPerPage}`, 
-    (error, results, fields) => {
-      const data = helper.emptyOrRows(results);
-      const meta = {page};
-    
-      callback(error, {
-        data,
-        meta
-      }, fields);
-    }
+function savePublicRoll(result, text) {
+  return db.query(
+    `INSERT INTO rolls(res, text) VALUES (${db.escape(result)}, ${db.escape(text)})`
   );
 };
 
-function savePublicRoll(result, text, callback) {
-  db.query(
-    `INSERT INTO rolls(res, text) VALUES (${db.escape(result)}, ${db.escape(text)})`, 
-    callback
+function getFullRoll(id) {
+  return db.query(
+    `SELECT id, res, time, text FROM rolls WHERE id=${id} LIMIT 1`
   );
 };
 
-function getFullRoll(id, callback) {
-  db.query(
-    `SELECT id, res, time, text FROM rolls WHERE id=${id} LIMIT 1`,
-    callback
+function getRollsHistory(roomId) {
+  return db.query(
+    'SELECT id, res, time, text FROM rolls ORDER BY time DESC LIMIT 10'
   );
-};
-
-function getRollsHistory(roomId, callback) {
-  db.query(
-    'SELECT id, res, time, text FROM rolls ORDER BY time DESC LIMIT 10',
-    callback
-  );
-};
-
-function makeRoll(dice, text) {
-
 };
  
 module.exports = {
-  getPublicRolls,
   makePublicRoll,
   savePublicRoll,
   getFullRoll,
   getRollsHistory,
-  makeRoll,
 };

@@ -18,12 +18,10 @@ module.exports = app => {
 
   app.get('/api/history', (req, res) => {
     let roomId = req.query.room;
-    rolls.getRollsHistory(roomId, (error, results) => {
-      if (error) {
-        res.error(error);
-        return;
-      }
+    rolls.getRollsHistory(roomId).then(results => {
       res.send({ history: results, room: roomId });
+    }, error => {
+      res.error(error);
     });
   });
 };

@@ -1,56 +1,29 @@
 import axios from "axios";
 import { BASE_URL, END_POINT } from "../../utils/constans";
 import { 
-  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY
+  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, 
+  CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY, SET_SOCKET
 } from "./constants";
+
+export const setSocket = (socket) => dispatch => {
+  dispatch({ type: SET_SOCKET, payload: socket })
+};
 
 export const moveToPublicRoom = () => dispatch => {
   dispatch({ type: MOVE_TO_PUBLIC_ROOM });
-  dispatch({
-    event: 'roll',
-    handle: data => {
-      return dispatch({
-        type: NEW_ROLL,
-        payload: data,
-      });
-    },
-  });
-  dispatch({
-    event: 'joinPublicRoom',
-    emit: true,
-  });
+};
+
+export const addNewRoll = (data) => dispatch => {
+  dispatch({ type: NEW_ROLL, payload: data });
 };
 
 export const moveToRoom = (roomId) => dispatch => {
   console.log('moveToRoom ' + roomId);
   dispatch({ type: MOVE_TO_ROOM, payload: roomId });
-  dispatch({
-    event: 'roll',
-    handle: data => {
-      return dispatch({
-        type: NEW_ROLL,
-        payload: data,
-      });
-    },
-  });
-  dispatch({
-    event: 'joinRoom',
-    emit: true,
-    payload: {
-      roomId
-    }
-  });
 };
 
-export const rollDice = (dice, text, uid) => dispatch => {
+export const setLastRollId = (uid) => dispatch => {
   dispatch({ type: ROLL_UID, payload: uid });
-  dispatch({
-    event: 'roll',
-    emit: true,
-    payload: {
-      dice, text, uid
-    },
-  });
 };
 
 export const getFullRoll = (rollId) => dispatch => {

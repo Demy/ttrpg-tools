@@ -1,41 +1,26 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const httpServer = require('http').createServer(app);
+const socket = require("socket.io");
+const cors = require("cors");
 const dotenv = require('dotenv');
-var compression = require('compression');
 
 dotenv.config();
 
-// Socket.io
-const options = {
-  path: '/api',
-  cors: true,
-  origins: ['https://demy.su', 'http://localhost:3000'],
-  methods: ["GET", "POST"],
-  transports: ['websocket', 'polling'],
-  allowEIO3: true, 
-  upgrade: false
-};
-const io = require('socket.io')(httpServer, options);
+app.use(express());
+const port = 8000;
 
-require('./services/socket')(io, '/socket');
+app.use(cors());
 
-// Server
-const cors = require('cors');
-
-var corsOptions = {
-  origins: ['https://demy.su', 'http://localhost:3000'],
-  optionsSuccessStatus: 200 // For legacy browser support
-};
-app.use(cors(corsOptions));
-app.use(express.json());
-
-app.use(compression());
-
-app.get('/', async (req, res) => {
-  res.send('API root');
-});
+var server = app.listen(
+  port,
+  () => {
+    console.log(
+      `Server is running on the port no: ${(port)} `
+    )
+    
+    const io = socket(server);
+    require('./services/socket')(io);
+  }
+);
 
 require('./routes/diceRoutes')(app);
-
-httpServer.listen(4000);

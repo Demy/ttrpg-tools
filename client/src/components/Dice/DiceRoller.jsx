@@ -48,6 +48,10 @@ const HistoryTitle = styled.h3`
 
 const MAX_DICE = 20;
 
+const joinPublicRoom = (socket) => {
+  socket.emit('joinPublicRoom');
+};
+
 export default function DiceRoller() {
 
   const [diceColor, setDiceColor] = React.useState('#ffffff');
@@ -56,14 +60,33 @@ export default function DiceRoller() {
 
   const lastRoll = useSelector(state => state.roll.lastRoll);
   const room = useSelector(state => state.roll.room);
+  const socket = useSelector(state => state.roll.socket);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (dispatch && room === '') {
+    if (!!dispatch && room === '' && !!socket) {
+      socket.on('message', data => {
+        console.log('Message:');
+        console.log(data);
+      });
       dispatch(actions.moveToPublicRoom());
+      socket.on('roll', data => {
+        dispatch(actions.addNewRoll(data));
+      });
+      if (socket.connected) {
+        joinPublicRoom(socket);
+      } else {
+        socket.on('connect', () => {
+          joinPublicRoom(socket);
+        });
+      }
+      socket.on('reconnect', () => {
+        joinPublicRoom(socket);
+      });
+    
     }
-  }, [dispatch, room]);
+  }, [dispatch, room, socket]);
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
@@ -85,8 +108,12 @@ export default function DiceRoller() {
   };
 
   const handleRollDice = (dice, text) => {
-    const uid = uuid();
-    dispatch(actions.rollDice(dice, text, uid));
+    if (socket) {
+      const uid = uuid();
+      console.log('Socket: roll emit ' + uid);
+      socket.emit('roll', { dice, text, uid });
+      dispatch(actions.setLastRollId(uid));
+    }
   };
 
   return (

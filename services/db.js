@@ -1,31 +1,29 @@
 const config = require('../config/db');
 
-let connection = null;
-let isReady = false;
-
 const mysql = require('mysql');
-connection = mysql.createConnection(config.db);
 
-connection.connect(function(err) {
-  if (err) throw err;
-  isReady = true;
+var pool  = mysql.createPool({
+    connectionLimit : 60,
+    multipleStatements: true,
+    ...config.db
 });
 
-function query(sql, params) {
-  if (!isReady) {
-    reject(Error('Data base is not ready'));
-  }
-  return new Promise( ( resolve, reject ) => {
-    connection.query( sql, params, ( err, rows ) => {
-      if ( err )
-        return reject( err );
-      resolve( rows );
-    } );
-  } );
+
+function query(sql) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection(function(err, connection) {
+      connection.query(sql, function(err, rows) {
+        connection.release();
+          if (err)
+            return reject(err);
+          resolve(rows);
+      });
+    });
+  });
 }
 
 function escape(text) {
-  return connection.escape(text);
+  return mysql.escape(text);
 }
 
 module.exports = {
