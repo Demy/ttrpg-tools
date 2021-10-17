@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config/db');
 
 function makePublicRoll(dice, text, callback) {
   const rollData = dice.map(die => {

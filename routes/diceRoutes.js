@@ -5,11 +5,13 @@ module.exports = app => {
     let result = null;
     const id = +req.query.id;
     if (id.toString() === req.query.id) {
-      rolls.getFullRoll(id, (error, results) => {
+      rolls.getFullRoll(id).then((results) => {
         if (results.length > 0) {
           result = results[0];
         }
         res.send(result);
+      }, (error) => {
+        res.error('Cannot get the roll result from the data base');
       });
     } else {
       res.error('No roll ID specified');
