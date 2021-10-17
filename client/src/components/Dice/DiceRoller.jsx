@@ -47,9 +47,17 @@ const HistoryTitle = styled.h3`
 `;
 
 const MAX_DICE = 20;
+const MAX_TEXT_LENGTH = 100;
 
 const joinPublicRoom = (socket) => {
   socket.emit('joinPublicRoom');
+};
+
+const trimLength = (text) => {
+  if (text && text.length > MAX_TEXT_LENGTH) {
+    return text.substring(0, MAX_TEXT_LENGTH - 3) + '...';
+  }
+  return text;
 };
 
 export default function DiceRoller() {
@@ -66,10 +74,6 @@ export default function DiceRoller() {
 
   useEffect(() => {
     if (!!dispatch && room === '' && !!socket) {
-      socket.on('message', data => {
-        console.log('Message:');
-        console.log(data);
-      });
       dispatch(actions.moveToPublicRoom());
       socket.on('roll', data => {
         dispatch(actions.addNewRoll(data));
@@ -110,8 +114,7 @@ export default function DiceRoller() {
   const handleRollDice = (dice, text) => {
     if (socket) {
       const uid = uuid();
-      console.log('Socket: roll emit ' + uid);
-      socket.emit('roll', { dice, text, uid });
+      socket.emit('roll', { dice, text: trimLength(text), uid });
       dispatch(actions.setLastRollId(uid));
     }
   };
