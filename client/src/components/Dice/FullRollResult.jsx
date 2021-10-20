@@ -3,7 +3,7 @@ import Die from './Die';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
-import * as actions from '../../redux/Roll/actions';
+import * as actions from '../../redux/room/actions';
 
 const DiceContainer = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ export default function FullRollResult(props) {
 
   let { rollId } = useParams();
 
-  const fullRoll = useSelector(state => state.roll.fullRoll);
+  const fullRoll = useSelector(state => state.room.fullRoll);
   const dispatch = useDispatch();
 
   const containerRef = useRef(null);

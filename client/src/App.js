@@ -5,9 +5,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomePage from './components/pages/HomePage';
 import DiceRollerPage from './components/pages/DiceRollerPage';
 import RollResultPage from './components/pages/RollResultPage';
+import RoomPage from './components/pages/RoomPage';
 import io from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from './redux/Roll/actions';
+import * as actions from './redux/room/actions';
 
 import './App.css';
 
@@ -20,7 +21,7 @@ socketClient.on('connect_error', (e) => {
 
 function App() {
 
-  const socket = useSelector(state => state.roll.socket);
+  const socket = useSelector(state => state.room.socket);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,6 +42,9 @@ function App() {
           </Route>
           <Route path="/">
             <HomePage />
+          </Route>
+          <Route path="/room/:roomId">
+            <RoomPage />
           </Route>
         </Switch>
         <ToastContainer />

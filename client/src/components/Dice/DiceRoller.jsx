@@ -6,7 +6,7 @@ import SelectedDicePanel from './SelectedDicePanel';
 import RollResultPanel from './RollResultPanel';
 import RollsHistory from './RollsHistory';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../redux/Roll/actions';
+import * as actions from '../../redux/room/actions';
 import uuid from 'react-uuid';
 
 const PanelsContainer = styled.div`
@@ -21,7 +21,9 @@ const DicePanelContainer = styled.div`
   border: 1px solid #c0c0c0;
   width: 100%;
 `;
-
+const ResultContainer = styled.div`
+  opacity: ${props => props.active ? 1 : 0.5};
+`;
 const SidePanelContaner = styled.div`
   width: 30%;
   max-width: 300px;
@@ -66,9 +68,9 @@ export default function DiceRoller() {
   const [selectedDice, setSelectedDice] = React.useState([]);
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
-  const lastRoll = useSelector(state => state.roll.lastRoll);
-  const room = useSelector(state => state.roll.room);
-  const socket = useSelector(state => state.roll.socket);
+  const lastRoll = useSelector(state => state.room.lastRoll);
+  const room = useSelector(state => state.room.roomName);
+  const socket = useSelector(state => state.room.socket);
 
   const dispatch = useDispatch();
 
@@ -137,12 +139,14 @@ export default function DiceRoller() {
             onUpdate={setSelectedDice} 
             onRoll={handleRollDice} />
         </DicePanelContainer>
-        <h3>Result: {lastRoll.text ? lastRoll.text : ''}</h3>
-        <DicePanelContainer>
-          <RollResultPanel
-            onRoll={handleRollDice}
-          />
-        </DicePanelContainer>
+        <ResultContainer active={lastRoll && lastRoll.id >= 0}>
+          <h3>Result: {lastRoll.text ? lastRoll.text : ''}</h3>
+          <DicePanelContainer>
+            <RollResultPanel
+              onRoll={handleRollDice}
+            />
+          </DicePanelContainer>
+        </ResultContainer>
       </PanelsContainer>
       <SidePanelContaner>
         <ParametersContainer>

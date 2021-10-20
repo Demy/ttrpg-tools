@@ -91,7 +91,12 @@ export default function SelectedDicePanel(props) {
         <DieButton
           key={`selected${index}-${die.die}-${die.color}-${j}`}
           onClick={removeDie.bind(null, index)} >
-          <Die sides={die.die} color={die.color} value={die.die} size="small" />
+          <Die 
+            sides={die.die} 
+            color={die.color} 
+            value={die.die} 
+            size="small" 
+          />
         </DieButton>
       );
     }

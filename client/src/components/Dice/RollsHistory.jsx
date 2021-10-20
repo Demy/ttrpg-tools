@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import * as actions from '../../redux/Roll/actions';
+import * as actions from '../../redux/room/actions';
 import Die from './Die';
 import { Link } from 'react-router-dom';
 
@@ -50,7 +50,7 @@ const toTimeString = (time) => {
 
 export default function RollsHistory() {
 
-  const history = useSelector(state => state.roll.history);
+  const history = useSelector(state => state.room.history);
 
   const dispatch = useDispatch();
 

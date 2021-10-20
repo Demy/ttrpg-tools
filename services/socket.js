@@ -1,4 +1,5 @@
 const rolls = require('./rolls');
+const rooms = require('./rooms');
 
 const PUBLIC_ROOM = 'public';
 
@@ -20,6 +21,12 @@ module.exports = (io) => {
         console.log('leavePublicRoom');
         
         socket.leave(PUBLIC_ROOM);
+      });
+    });
+
+    socket.on('createRoom', (data) => {
+      rooms.createRoom(data).then(result => {
+        socket.emit('room', data.roomId);
       });
     });
     

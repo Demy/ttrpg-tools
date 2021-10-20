@@ -3,7 +3,7 @@ import Die from './Die';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';  
 import { toast } from 'react-toastify';
-import * as actions from '../../redux/Roll/actions';
+import * as actions from '../../redux/room/actions';
 
 const DiceContainer = styled.div`
   display: inline-block;
@@ -54,7 +54,7 @@ function getBaseUrl() {
 
 export default function RollResultPanel(props) {
 
-  const lastRoll = useSelector(state => state.roll.lastRoll);
+  const lastRoll = useSelector(state => state.room.lastRoll);
 
   const dispatch = useDispatch();
 

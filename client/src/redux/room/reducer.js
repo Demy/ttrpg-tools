@@ -12,7 +12,7 @@ const defaultLastRoll = {
 const initialState = {
   socket: null,
   rollUid: '',
-  room: '',
+  roomName: '',
   lastRoll: defaultLastRoll,
   fullRoll: {
     id: -1
@@ -30,12 +30,12 @@ const reducer = (state = initialState, action) => {
     case MOVE_TO_PUBLIC_ROOM:
       return {
         ...state,
-        room: PUBLIC_ROOM
+        roomName: PUBLIC_ROOM
       };
     case MOVE_TO_ROOM:
       return {
         ...state,
-        room: action.payload,
+        roomName: action.payload,
         lastRoll: defaultLastRoll,
         rollUid: ''
       };
@@ -75,8 +75,8 @@ const reducer = (state = initialState, action) => {
       };
     case ROLLS_HISTORY:
       if (action.payload.history && 
-          (state.room === action.payload.room || 
-          (state.room === PUBLIC_ROOM && !action.payload.room))) {
+          (state.roomName === action.payload.room || 
+          (state.roomName === PUBLIC_ROOM && !action.payload.room))) {
         return {
           ...state,
           history: action.payload.history.map(roll => {
