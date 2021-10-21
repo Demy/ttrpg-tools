@@ -65,15 +65,14 @@ module.exports = app => {
   });
 
   app.post('/api/verify', (req, res) => {
-    const token =
-      req.body.token || req.query.token || req.headers["x-access-token"];
-  
+    const token = req.body.token;
+    const roomId = req.body.roomId;
     if (!token) {
       return res.status(403).send("A token is required for authentication");
     }
     try {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-      res.send(decoded);
+      res.send(decoded && decoded.roomId === roomId);
     } catch (err) {
       return res.status(401).send("Invalid Token");
     }

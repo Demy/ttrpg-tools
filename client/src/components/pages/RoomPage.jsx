@@ -57,10 +57,10 @@ export default function RoomPage() {
     if (canUseCookies) {
       const token = cookies.token;
       if (token && !roomToken) {
-        dispatch(actions.verifyToken(token));
+        dispatch(actions.verifyAndSaveToken(token, roomId));
       }
     }
-  }, [canUseCookies, cookies, dispatch, roomToken]);
+  }, [canUseCookies, cookies.token, dispatch, roomId, roomToken]);
 
   const handleCookieAccept = () => {
     if (roomToken) {

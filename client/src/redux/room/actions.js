@@ -20,7 +20,6 @@ export const addNewRoll = (data) => dispatch => {
 };
 
 export const moveToRoom = (roomId) => dispatch => {
-  console.log('moveToRoom ' + roomId);
   dispatch({ type: MOVE_TO_ROOM, payload: roomId });
 };
 
@@ -84,10 +83,12 @@ export const setToken = (token) => dispatch => {
   dispatch({ type: ROOM_TOKEN, payload: token });
 };
 
-export const verifyToken = (token) => dispatch => {
+export const verifyAndSaveToken = (token, roomId) => dispatch => {
 	axios
-		.post(BASE_URL + END_POINT.VERIFY_TOKEN, { token })
+		.post(BASE_URL + END_POINT.VERIFY_TOKEN, { token, roomId })
 		.then(res => {
-	    dispatch({ type: ROOM_TOKEN, payload: token });
+      if (res && res.data) {
+	      dispatch({ type: ROOM_TOKEN, payload: token });
+      }
 		}, error => {});
 };

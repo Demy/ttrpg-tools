@@ -80,7 +80,7 @@ export default function RoomPanel() {
           history.push('/room/' + roomId);
         }
       });
-      console.log(roomId);
+      
       socket.emit('createRoom', { 
         roomId, 
         private: isPrivate ? 1 : 0, 

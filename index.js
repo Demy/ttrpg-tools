@@ -24,4 +24,4 @@ var server = app.listen(
   }
 );
 
-require('./routes/diceRoutes')(app);
+require('./routes/roomRoutes')(app);
