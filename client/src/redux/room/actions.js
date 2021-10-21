@@ -79,3 +79,15 @@ export const logInToRoom = (roomId, password) => dispatch => {
       });
 		});
 };
+
+export const setToken = (token) => dispatch => {
+  dispatch({ type: ROOM_TOKEN, payload: token });
+};
+
+export const verifyToken = (token) => dispatch => {
+	axios
+		.post(BASE_URL + END_POINT.VERIFY_TOKEN, { token })
+		.then(res => {
+	    dispatch({ type: ROOM_TOKEN, payload: token });
+		}, error => {});
+};

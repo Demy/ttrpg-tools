@@ -78,7 +78,6 @@ export default function RoomPanel() {
       socket.on('room', (createdRoomId) => {
         if (roomId === createdRoomId) {
           history.push('/room/' + roomId);
-          console.log('Go to /room/' + roomId);
         }
       });
       console.log(roomId);

@@ -4,4 +4,5 @@ export const END_POINT = {
   ROLLS_HISTORY: 'history',
   ROOM_STATUS: 'room',
   ROOM_LOGIN: 'room-login',
+  VERIFY_TOKEN: 'verify',
 }
