@@ -1,4 +1,6 @@
 const rolls = require('../services/rolls');
+const rooms = require('../services/rooms');
+const jwt = require('jsonwebtoken');
 
 module.exports = app => {
   app.get('/api/roll', (req, res) => {
@@ -11,10 +13,11 @@ module.exports = app => {
         }
         res.send(result);
       }, (error) => {
-        res.error('Cannot get the roll result from the data base');
+        console.log(error);
+        res.status(500).send('Cannot get the roll result from the data base');
       });
     } else {
-      res.error('No roll ID specified');
+      res.status(500).send('No roll ID specified');
     }
   });
 
@@ -23,7 +26,41 @@ module.exports = app => {
     rolls.getRollsHistory(roomId).then(results => {
       res.send({ history: results, room: roomId });
     }, error => {
-      res.error(error);
+      console.log(error);
+      res.status(500).send(error);
+    });
+  });
+
+  app.get('/api/room', (req, res) => {
+    let roomId = req.query.room;
+    rooms.getRoomStatus(roomId).then(results => {
+      let result = null;
+      if (results.length > 0) {
+        result = results[0];
+      }
+      res.send(result);
+    }, error => {
+      console.log(error);
+      res.status(500).send(error);
+    });
+  });
+
+  app.post('/api/room-login', (req, res) => {
+    const roomId = req.body.roomId;
+    rooms.checkPassword(roomId, req.body.password).then(result => {
+      if (result) {
+        const token = jwt.sign(
+          { roomId },
+          process.env.TOKEN_KEY,
+          { expiresIn: "24h" }
+        );
+        res.status(201).json({ token });
+      } else {
+        res.status(400).send('Incorrect password');
+      }
+    }, error => {
+      console.log(error);
+      res.status(500).send(error);
     });
   });
 };

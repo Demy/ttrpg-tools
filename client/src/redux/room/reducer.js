@@ -1,7 +1,7 @@
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, 
   CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
-  PUBLIC_ROOM, SET_SOCKET
+  PUBLIC_ROOM, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
 } from './constants';
 
 const defaultLastRoll = {
@@ -13,6 +13,8 @@ const initialState = {
   socket: null,
   rollUid: '',
   roomName: '',
+  roomStatus: null,
+  roomToken: '',
   lastRoll: defaultLastRoll,
   fullRoll: {
     id: -1
@@ -89,6 +91,16 @@ const reducer = (state = initialState, action) => {
         };
       }
       return state;
+    case ROOM_STATUS:
+      return {
+        ...state,
+        roomStatus: action.payload
+      };
+    case ROOM_TOKEN:
+      return {
+        ...state,
+        roomToken: action.payload
+      }
     default:
       return state;
   }

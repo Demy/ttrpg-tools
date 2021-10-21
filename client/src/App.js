@@ -34,6 +34,9 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
+          <Route path="/room/:roomId">
+            <RoomPage />
+          </Route>
           <Route path="/roll/:rollId">
             <RollResultPage />
           </Route>
@@ -42,9 +45,6 @@ function App() {
           </Route>
           <Route path="/">
             <HomePage />
-          </Route>
-          <Route path="/room/:roomId">
-            <RoomPage />
           </Route>
         </Switch>
         <ToastContainer />

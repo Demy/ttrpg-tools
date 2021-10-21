@@ -10,6 +10,7 @@ app.use(express());
 const port = 8000;
 
 app.use(cors());
+app.use(express.json())
 
 var server = app.listen(
   port,

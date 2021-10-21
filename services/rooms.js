@@ -14,6 +14,25 @@ async function createRoom ({ roomId, private, password, protected }) {
   return result;
 }
 
+function getRoomStatus(roomId) {
+  return db.query(
+    `SELECT private, protected FROM rooms WHERE id=${db.escape(roomId)} LIMIT 1`
+  );
+};
+
+async function checkPassword(roomId, password) {
+  const results = await db.query(
+    `SELECT password FROM rooms WHERE id=${db.escape(roomId)} LIMIT 1`
+  );
+  if (results.length > 0) {
+    const result = results[0];
+    let comp = bcrypt.compareSync(password, result.password);
+    return comp;
+  }
+};
+
 module.exports = {
   createRoom,
+  getRoomStatus,
+  checkPassword,
 };
