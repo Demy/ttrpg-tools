@@ -1,6 +1,8 @@
 const db = require('./db');
 
-function makePublicRoll(dice, text, callback) {
+const PUBLIC_ROOM = 'public';
+
+function makeRoll({ roomId, dice, text }, callback) {
   const rollData = dice.map(die => {
     const res = [];
     for (let i = 0; i < die.count; i++) {
@@ -12,34 +14,49 @@ function makePublicRoll(dice, text, callback) {
     };
   });
 
-  savePublicRoll(JSON.stringify(rollData), text).then(result => {
+  saveRoll(roomId, JSON.stringify(rollData), text).then(result => {
     callback({ res: rollData, id: result.insertId, text, time: Date.now() });
   }, error => {
       throw error;
   });
 };
 
-function savePublicRoll(result, text) {
+function saveRoll(roomId, result, text) {
+  if (!roomId || roomId === PUBLIC_ROOM) {
+    return db.query(
+      `INSERT INTO rolls(res, text) VALUES (${db.escape(result)}, ${db.escape(text)})`
+    );
+  }
   return db.query(
-    `INSERT INTO rolls(res, text) VALUES (${db.escape(result)}, ${db.escape(text)})`
+    `INSERT INTO room_rolls(room, res, text) VALUES (${db.escape(roomId)}, ${db.escape(result)}, ${db.escape(text)})`
   );
 };
 
-function getFullRoll(id) {
+function getFullRoll(id, roomId) {
+  if (!roomId || roomId === PUBLIC_ROOM) {
+    return db.query(
+      `SELECT * FROM rolls WHERE id=${id} LIMIT 1`
+    );
+  }
   return db.query(
-    `SELECT id, res, time, text FROM rolls WHERE id=${id} LIMIT 1`
+    `SELECT * FROM room_rolls WHERE id=${id} AND room=${roomId} LIMIT 1`
   );
 };
 
 function getRollsHistory(roomId) {
+  if (!roomId || roomId === PUBLIC_ROOM) {
+    return db.query(
+      'SELECT * FROM rolls ORDER BY time DESC LIMIT 10'
+    );
+  }
   return db.query(
-    'SELECT id, res, time, text FROM rolls ORDER BY time DESC LIMIT 10'
+    `SELECT * FROM room_rolls WHERE room=${db.escape(roomId)} ORDER BY time DESC LIMIT 10`
   );
 };
  
 module.exports = {
-  makePublicRoll,
-  savePublicRoll,
+  makeRoll,
+  saveRoll,
   getFullRoll,
   getRollsHistory,
 };

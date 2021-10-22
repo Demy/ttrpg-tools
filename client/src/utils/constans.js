@@ -5,4 +5,5 @@ export const END_POINT = {
   ROOM_STATUS: 'room',
   ROOM_LOGIN: 'room-login',
   VERIFY_TOKEN: 'verify',
-}
+};
+export const PUBLIC_ROOM = 'public';

@@ -26,13 +26,12 @@ const DescriptionPart = styled.div`
   vertical-align: top;
 `;
 const FormPart = styled.div`
-  width: 30%;
   vertical-align: top;
   display: inline-block;
 `;
 const Description = styled.p`
   font-size: 1em;
-  margin: 0.5em 0;
+  margin: 5px 0 10px 0;
   padding-right: 20px;
 `;
 const CreateButton = styled.button`

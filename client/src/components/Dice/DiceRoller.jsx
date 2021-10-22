@@ -51,8 +51,8 @@ const HistoryTitle = styled.h3`
 const MAX_DICE = 20;
 const MAX_TEXT_LENGTH = 100;
 
-const joinPublicRoom = (socket) => {
-  socket.emit('joinPublicRoom');
+const joinRoom = (socket, roomId) => {
+  socket.emit('joinRoom', roomId);
 };
 
 const trimLength = (text) => {
@@ -62,7 +62,7 @@ const trimLength = (text) => {
   return text;
 };
 
-export default function DiceRoller() {
+export default function DiceRoller({ roomId }) {
 
   const [diceColor, setDiceColor] = React.useState('#ffffff');
   const [selectedDice, setSelectedDice] = React.useState([]);
@@ -76,23 +76,23 @@ export default function DiceRoller() {
 
   useEffect(() => {
     if (!!dispatch && room === '' && !!socket) {
-      dispatch(actions.moveToPublicRoom());
+      dispatch(actions.moveToRoom(roomId));
       socket.on('roll', data => {
         dispatch(actions.addNewRoll(data));
       });
       if (socket.connected) {
-        joinPublicRoom(socket);
+        joinRoom(socket, roomId);
       } else {
         socket.on('connect', () => {
-          joinPublicRoom(socket);
+          joinRoom(socket, roomId);
         });
       }
       socket.on('reconnect', () => {
-        joinPublicRoom(socket);
+        joinRoom(socket, roomId);
       });
     
     }
-  }, [dispatch, room, socket]);
+  }, [dispatch, room, roomId, socket]);
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {

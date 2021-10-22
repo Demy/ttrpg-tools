@@ -1,14 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import DiceRoller from '../Dice/DiceRoller';
 
-export default function RoomView() {
+const ViewContainer = styled.div`
+  padding: 10px;
+  margin: 0 auto;
+`;
 
-  const roomName = useSelector(state => state.room.roomName);
+export default function RoomView({ roomId }) {
 
   return (
-    <div>
-      Room: {roomName}
-    </div>
+    <ViewContainer>
+      <h3>Private room</h3>
+      <DiceRoller roomId={roomId} />
+    </ViewContainer>
   );
 }

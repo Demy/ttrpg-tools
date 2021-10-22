@@ -1,9 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Loading() {
+const LoadingText = styled.div`
+  padding: 20px;
+  color: #c0c0c0;
+  ${props => props.middle ? `
+    margin-top: 25%;
+    font-size: 16pt;
+  ` : ''}
+`;
+
+export default function Loading(props) {
 
   return (
-    <p>Loading...</p>
+    <LoadingText middle={props.middle}>Loading...</LoadingText>
   );
 }

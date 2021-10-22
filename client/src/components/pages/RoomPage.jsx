@@ -22,6 +22,7 @@ export default function RoomPage() {
   const [cookies, setCookie] = useCookies(['token']);
 
   const [needLogIn, setNeedLogIn] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -36,16 +37,14 @@ export default function RoomPage() {
       if (roomStatus.private && !roomToken) {
         setNeedLogIn(true);
       } else {
-        socket.emit('joinRoom', { roomId });
-        dispatch(actions.moveToRoom(roomId));
+        setIsConnected(true);
       }
     }
   }, [dispatch, roomId, roomStatus, roomToken, socket]);
 
   useEffect(() => {
     if (needLogIn && roomToken) {
-      socket.emit('joinRoom', { roomId });
-      dispatch(actions.moveToRoom(roomId));
+      setIsConnected(true);
       setNeedLogIn(false);
       if (canUseCookies) {
         setCookie('token', roomToken, { path: '/room' });
@@ -70,8 +69,8 @@ export default function RoomPage() {
 
   return (
     <div className="room">
-      {roomName === roomId ? <RoomView /> : (
-        needLogIn ? <RoomLogIn roomId={roomId} /> : <Loading />
+      {isConnected ? <RoomView roomId={roomId} /> : (
+        needLogIn ? <RoomLogIn roomId={roomId} /> : <Loading middle />
       )}
       <CookieConsent 
         enableDeclineButton

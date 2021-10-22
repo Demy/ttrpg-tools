@@ -51,14 +51,15 @@ const toTimeString = (time) => {
 export default function RollsHistory() {
 
   const history = useSelector(state => state.room.history);
+  const roomName = useSelector(state => state.room.roomName);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (dispatch && !history) {
-      dispatch(actions.loadRollsHistory());
+    if (dispatch && !history && roomName) {
+      dispatch(actions.loadRollsHistory(roomName));
     }
-  }, [dispatch, history]);
+  }, [dispatch, history, roomName]);
 
   if (!history) return <></>;
 

@@ -1,14 +1,15 @@
 import React from 'react';
 import DiceRoller from '../Dice/DiceRoller';
-import RoomPanel from '../Room/RoomPanel';
+import NewRoomPanel from '../Room/NewRoomPanel';
+import { PUBLIC_ROOM } from '../../utils/constans';
 
 export default function HomePage() {
 
   return (
     <div className="home">
-      <RoomPanel />
+      <NewRoomPanel />
       <h3>Public room</h3>
-      <DiceRoller />
+      <DiceRoller roomId={PUBLIC_ROOM} />
     </div>
   );
 }

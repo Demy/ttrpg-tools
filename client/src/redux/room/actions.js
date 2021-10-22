@@ -1,18 +1,13 @@
 import axios from "axios";
-import { BASE_URL, END_POINT } from "../../utils/constans";
+import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
 import { toast } from 'react-toastify';
 import { 
-  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, 
-  CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY, SET_SOCKET,
-  ROOM_STATUS, ROOM_TOKEN
+  NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
+  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
 } from "./constants";
 
 export const setSocket = (socket) => dispatch => {
   dispatch({ type: SET_SOCKET, payload: socket })
-};
-
-export const moveToPublicRoom = () => dispatch => {
-  dispatch({ type: MOVE_TO_PUBLIC_ROOM });
 };
 
 export const addNewRoll = (data) => dispatch => {
@@ -43,10 +38,11 @@ export const clearLastRoll = () => dispatch => {
 };
 
 export const loadRollsHistory = (room) => dispatch => {
+  const roomId = room ? room : PUBLIC_ROOM;
 	axios
-		.get(BASE_URL + END_POINT.ROLLS_HISTORY + (room ? '?room=' + room : ''))
+		.get(BASE_URL + END_POINT.ROLLS_HISTORY + '?room=' + roomId)
 		.then(res => {
-	    dispatch({ type: ROLLS_HISTORY, payload: { history: res.data.history, room } });
+	    dispatch({ type: ROLLS_HISTORY, payload: { history: res.data.history, room: roomId } });
 		})
 		.catch(error => {
 			console.log(error);

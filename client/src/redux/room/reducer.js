@@ -1,8 +1,9 @@
 import { 
-  NEW_ROLL, FULL_ROLL, ROLL_UID, MOVE_TO_PUBLIC_ROOM, 
+  NEW_ROLL, FULL_ROLL, ROLL_UID, 
   CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
-  PUBLIC_ROOM, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
+  SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
 } from './constants';
+import { PUBLIC_ROOM } from '../../utils/constans';
 
 const defaultLastRoll = {
   res: [],
@@ -29,17 +30,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         socket: action.payload
       };
-    case MOVE_TO_PUBLIC_ROOM:
-      return {
-        ...state,
-        roomName: PUBLIC_ROOM
-      };
     case MOVE_TO_ROOM:
       return {
         ...state,
         roomName: action.payload,
         lastRoll: defaultLastRoll,
-        rollUid: ''
+        rollUid: '',
+        history: null,
       };
     case NEW_ROLL:
       let lastRoll = state.lastRoll;
@@ -76,9 +73,7 @@ const reducer = (state = initialState, action) => {
         rollUid: action.payload
       };
     case ROLLS_HISTORY:
-      if (action.payload.history && 
-          (state.roomName === action.payload.room || 
-          (state.roomName === PUBLIC_ROOM && !action.payload.room))) {
+      if (action.payload.history && state.roomName === action.payload.room) {
         return {
           ...state,
           history: action.payload.history.map(roll => {
