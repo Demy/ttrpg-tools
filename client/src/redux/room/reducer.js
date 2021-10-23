@@ -3,7 +3,6 @@ import {
   CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
   SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
 } from './constants';
-import { PUBLIC_ROOM } from '../../utils/constans';
 
 const defaultLastRoll = {
   res: [],

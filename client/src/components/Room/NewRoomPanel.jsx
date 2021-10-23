@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ToggleSwitch from '../UI/ToggleSwitch';
 import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router';
+import * as actions from '../../redux/room/actions';
 
 const RoomPanelContainer = styled.div`
   width: 100%;
@@ -62,6 +63,7 @@ export default function RoomPanel() {
   const socket = useSelector(state => state.room.socket);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);

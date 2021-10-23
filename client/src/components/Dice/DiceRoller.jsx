@@ -65,6 +65,7 @@ const trimLength = (text) => {
 export default function DiceRoller({ roomId }) {
 
   const [diceColor, setDiceColor] = React.useState('#ffffff');
+  const [currentRoom, setCurrentRoom] = React.useState('');
   const [selectedDice, setSelectedDice] = React.useState([]);
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
@@ -75,8 +76,14 @@ export default function DiceRoller({ roomId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!!dispatch && room === '' && !!socket) {
+    if (!!dispatch && roomId !== currentRoom && !!socket) {
+      if (currentRoom !== '' && socket.connected) {
+        socket.emit('leaveRoom');
+      }
+
       dispatch(actions.moveToRoom(roomId));
+      setCurrentRoom(roomId);
+
       socket.on('roll', data => {
         dispatch(actions.addNewRoll(data));
       });
