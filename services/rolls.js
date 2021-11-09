@@ -39,7 +39,7 @@ function getFullRoll(id, roomId) {
     );
   }
   return db.query(
-    `SELECT * FROM room_rolls WHERE id=${id} AND room=${roomId} LIMIT 1`
+    `SELECT * FROM room_rolls WHERE id=${id} AND room=${db.escape(roomId)} LIMIT 1`
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';  
@@ -18,18 +18,17 @@ const TopPanel = styled.div`
 const RollLink = styled.input`
   display: inline-block;
   vertical-align: middle;
-  width: 350px;
+  width: 200px;
   padding: 7px;
   margin: 15px;
 `;
-const RollButton = styled.button`
+const ReRollButton = styled.button`
   display: inline-block;
   vertical-align: middle;
   float: right;
   padding: 12px 24px;
   margin: 10px 10px 10px 0;
   cursor: pointer;
-  width: 110px;
   text-transform: uppercase;
 `;
 const ClearButton = styled.button`
@@ -51,13 +50,15 @@ const Dice = styled.div`
 `;
 
 function getBaseUrl() {
-  var re = new RegExp(/^.*\//);
-  return re.exec(window.location.href);
+  return window.location.origin;
 }
 
 export default function RollResultPanel(props) {
 
   const lastRoll = useSelector(state => state.room.lastRoll);
+  const roomName = useSelector(state => state.room.roomName);
+
+  const [canCopy, setCanCopy] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -65,7 +66,7 @@ export default function RollResultPanel(props) {
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
-  const link = lastRoll.id > 0 ? `${getBaseUrl()}roll/${lastRoll.id}` : '';
+  const link = lastRoll.id > 0 ? `${getBaseUrl()}/roll/${roomName}/${lastRoll.id}` : '';
 
   useEffect(() => {
     if (lastRoll.id > 0 && ref && ref.current) {
@@ -93,7 +94,7 @@ export default function RollResultPanel(props) {
       color: die.color,
       count: die.count
     }));
-    props.onRoll(selected, lastRoll.text ? lang('reroll') + ': ' + lastRoll.text : '');
+    props.onRoll(selected, lastRoll.text ? `${lang('reroll')}: ${lastRoll.text}` : '');
   };
 
   const handleFocus = (event) => {
@@ -101,6 +102,8 @@ export default function RollResultPanel(props) {
     event.target.setSelectionRange(0, 99999);
 
     document.execCommand("copy");
+
+    setCanCopy(false);
 
     toast.info(lang('link_copied'), {
       position: toast.POSITION.TOP_RIGHT,
@@ -124,14 +127,15 @@ export default function RollResultPanel(props) {
           type="text"
           value={link} 
           onFocus={handleFocus}
+          onBlur={setCanCopy.bind(null, true)}
           onChange={handleChange}
         />
-        <RollButton 
+        <ReRollButton 
           disabled={lastRoll.id < 0} 
           onClick={handleReroll}
         >
           {lang('reroll')}
-        </RollButton>
+        </ReRollButton>
         <ClearButton
           disabled={lastRoll.id < 0} 
           onClick={handleClear}

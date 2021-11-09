@@ -39,7 +39,7 @@ function App() {
           <Route path="/room/:roomId">
             <RoomPage />
           </Route>
-          <Route path="/roll/:rollId">
+          <Route path="/roll/:roomId/:rollId">
             <RollResultPage />
           </Route>
           <Route path="/roll">

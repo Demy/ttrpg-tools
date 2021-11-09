@@ -21,9 +21,9 @@ export const setLastRollId = (uid) => dispatch => {
   dispatch({ type: ROLL_UID, payload: uid });
 };
 
-export const getFullRoll = (rollId) => dispatch => {
+export const getFullRoll = (rollId, roomId) => dispatch => {
 	axios
-		.get(BASE_URL + END_POINT.ROLL + '?id=' + rollId)
+		.get(`${BASE_URL}${END_POINT.ROLL}?id=${rollId}&room=${roomId}`)
 		.then(res => {
 	    dispatch({ type: FULL_ROLL, payload: res.data });
 		})

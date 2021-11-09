@@ -93,7 +93,7 @@ export default function RollsHistory() {
             </HistoryDate>
             <LinkButton>
               <Link 
-                to={`/roll/${roll.id}`} 
+                to={`/roll/${roomName}/${roll.id}`} 
                 target="_blank"
                 style={{ textDecoration: 'none' }}
               >🔗</Link>

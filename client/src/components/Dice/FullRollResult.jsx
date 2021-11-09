@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import * as actions from '../../redux/room/actions';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, PUBLIC_ROOM } from '../../utils/constans';
 
 const DiceContainer = styled.div`
   width: 100%;
@@ -21,10 +21,16 @@ const Dice = styled.div`
   padding: 10px;
   text-align: center;
 `;
+const RoomName = styled.h4`
+  font-weight: normal;
+  color: #898989;
+  padding: 0.5em;
+  margin: 0;
+`;
 
-export default function FullRollResult(props) {
+export default function FullRollResult() {
 
-  let { rollId } = useParams();
+  let { rollId, roomId } = useParams();
 
   const fullRoll = useSelector(state => state.room.fullRoll);
   const dispatch = useDispatch();
@@ -44,11 +50,11 @@ export default function FullRollResult(props) {
   });
 
   useEffect(() => {
-    if (rollId && fullRoll && fullRoll.id && 
-        fullRoll.id.toString() !== rollId) {
-      dispatch(actions.getFullRoll(+rollId));
+    if (rollId && roomId && fullRoll && 
+        fullRoll.id && fullRoll.id.toString() !== rollId) {
+      dispatch(actions.getFullRoll(+rollId, roomId));
     }
-  }, [rollId, fullRoll, dispatch]);
+  }, [rollId, fullRoll, dispatch, roomId]);
 
   const addDiceFrom = (die, index) => {
     const result = [];
@@ -81,7 +87,8 @@ export default function FullRollResult(props) {
       <Dice>
         {roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>
-      {lang('date')}: {date.toUTCString()}
+      <RoomName>{lang('room')}: {lang(roomId === PUBLIC_ROOM ? 'public_room' : 'private_room')}</RoomName>
+      {lang('date')}: {date.toLocaleString()}
     </DiceContainer>
   );
 }

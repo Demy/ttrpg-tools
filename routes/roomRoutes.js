@@ -6,7 +6,7 @@ module.exports = app => {
   app.get('/api/roll', (req, res) => {
     let result = null;
     const id = +req.query.id;
-    const roomId = +req.query.room;
+    const roomId = req.query.room;
     if (id.toString() === req.query.id) {
       rolls.getFullRoll(id, roomId).then((results) => {
         if (results.length > 0) {
