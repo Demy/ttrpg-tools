@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const DiceContainer = styled.div`
   display: inline-block;
@@ -43,6 +45,7 @@ const RollButton = styled.button`
   margin: 10px 10px 10px 0;
   cursor: pointer;
   width: 110px;
+  text-transform: uppercase
 `;
 const ClearButton = styled.button`
   float: right;
@@ -84,6 +87,8 @@ export default function SelectedDicePanel(props) {
   const [lastParsed, setLastParsed] = useState('');
   const [descr, setDescr] = useState('');
 
+  const [lang] = useTranslation(L18N_NAMESPACE);
+
   const addDiceFrom = (die, index) => {
     const result = [];
     for (let j = 0; j < die.count; j++) {
@@ -118,7 +123,7 @@ export default function SelectedDicePanel(props) {
         const dIndex = piece.indexOf('d');
         if (dIndex <= 0) {
           setIsParseError(true);
-          setParseError('Invalid input');
+          setParseError(lang('invalid'));
           return;
         }
         const amountStr = piece.substring(0, dIndex);
@@ -129,12 +134,12 @@ export default function SelectedDicePanel(props) {
           die.toString() !== dieStr || 
           amount <= 0 || die <= 1) {
             setIsParseError(true);
-            setParseError('Invalid input');
+            setParseError(lang('invalid'));
             return;
         }
         if (allDiceAmount + amount > props.max) {
             setIsParseError(true);
-            setParseError('Too many dice');
+            setParseError(lang('too_many_dice'));
             return;
         }
         allDiceAmount += amount;
@@ -213,7 +218,7 @@ export default function SelectedDicePanel(props) {
   return (
     <DiceContainer>
       <TopPanel>
-        <Title>Short code:</Title>
+        <Title>{lang('short_code')}:</Title>
         <InputBox>
           <CodeInput 
             type="text"
@@ -229,20 +234,20 @@ export default function SelectedDicePanel(props) {
           disabled={props.selected.length === 0} 
           onClick={handleRollButton}
         >
-          ROLL
+          {lang('roll')}
         </RollButton>
         <ClearButton
           disabled={props.selected.length === 0} 
           onClick={handleClear}
         >
-          Clear
+          {lang('clear')}
         </ClearButton>
       </TopPanel>
       <Dice>
         {selected.map((die, i) => addDiceFrom(die, i))}
       </Dice>
       <BottomPanel>
-        <Title>Description:</Title>
+        <Title>{lang('description')}:</Title>
         <DescriptionInput value={descr} onChange={handleDescrChange} />
       </BottomPanel>
     </DiceContainer>

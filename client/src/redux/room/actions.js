@@ -1,6 +1,5 @@
 import axios from "axios";
 import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
-import { toast } from 'react-toastify';
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
   ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
@@ -60,19 +59,12 @@ export const getRoomStatus = (room) => dispatch => {
 		});
 };
 
-export const logInToRoom = (roomId, password) => dispatch => {
+export const logInToRoom = (roomId, password, onError) => dispatch => {
 	axios
 		.post(BASE_URL + END_POINT.ROOM_LOGIN, { roomId, password })
 		.then(res => {
 	    dispatch({ type: ROOM_TOKEN, payload: res.data.token });
-		}, error => {
-			toast.error('Incorrect password', {
-        position: toast.POSITION.TOP_RIGHT,
-        toastId: 'error',
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
-		});
+		}, onError);
 };
 
 export const setToken = (token) => dispatch => {

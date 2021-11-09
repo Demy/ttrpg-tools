@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import * as actions from '../../redux/room/actions';
 import Die from './Die';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const HistoryTableContainer = styled.div`
   text-align: left;
@@ -53,6 +55,8 @@ export default function RollsHistory() {
   const history = useSelector(state => state.room.history);
   const roomName = useSelector(state => state.room.roomName);
 
+  const [lang] = useTranslation(L18N_NAMESPACE);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -97,7 +101,7 @@ export default function RollsHistory() {
           </RightPart>
         </HistoryLine>
       ))}
-      {history.length === 0 ? <div>&nbsp;No rolls done yet</div> : <></>}
+      {history.length === 0 ? <div>&nbsp;{lang('no_rolls')}</div> : <></>}
     </HistoryTableContainer>
   );
 }

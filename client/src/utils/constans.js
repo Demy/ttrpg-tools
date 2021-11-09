@@ -7,3 +7,4 @@ export const END_POINT = {
   VERIFY_TOKEN: 'verify',
 };
 export const PUBLIC_ROOM = 'public';
+export const L18N_NAMESPACE = 'ttrpg';

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { SketchPicker, } from 'react-color';
 import Popup from '../Popup';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const ParametersPanel = styled.div`
   padding: 13px 15px;
@@ -47,6 +49,8 @@ export default function DieParametersPanel(props) {
   const [showPicker, setShowPicker] = React.useState(false);
   const [sidesValue, setSidesValue] = React.useState(100);
 
+  const [lang] = useTranslation(L18N_NAMESPACE);
+
   const handleChangeComplete = (color) => {
     props.onColorSelected(color.hex);
   }
@@ -61,8 +65,8 @@ export default function DieParametersPanel(props) {
 
   return (
     <ParametersPanel>
-      <Title>Die parameters</Title>
-      <PanelLabel onClick={setShowPicker.bind(null, !showPicker)}>Color:</PanelLabel>
+      <Title>{lang('parameters')}</Title>
+      <PanelLabel onClick={setShowPicker.bind(null, !showPicker)}>{lang('color')}:</PanelLabel>
       <ColorPicker>
         <ColorSample color={props.diceColor} onClick={setShowPicker.bind(null, !showPicker)} />
         <Popup show={showPicker} hide={setShowPicker.bind(null, false)}>
@@ -72,12 +76,12 @@ export default function DieParametersPanel(props) {
       {props.showSidesSetting ? (
         <div>
           <div>
-            <PanelLabel>Sides:</PanelLabel>
+            <PanelLabel>{lang('sides')}:</PanelLabel>
             <input type="number" value={sidesValue} onChange={handleSidesChange} />
           </div>
           <div>
-            <AddButton onClick={handleAddDie}>Add</AddButton>
-            <CancelButton onClick={props.onCustomCanceled}>Cancel</CancelButton>
+            <AddButton onClick={handleAddDie}>{lang('add')}</AddButton>
+            <CancelButton onClick={props.onCustomCanceled}>{lang('cancel')}</CancelButton>
           </div>
         </div>
       ) : <></>}

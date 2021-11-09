@@ -6,7 +6,9 @@ import RoomView from '../Room/RoomView';
 import RoomLogIn from '../Room/RoomLogIn';
 import Loading from '../UI/Loading';
 import { useCookies } from 'react-cookie';
-import CookieConsent, { getCookieConsentValue, OPTIONS } from "react-cookie-consent";
+import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-consent';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 export default function RoomPage() {
 
@@ -23,6 +25,8 @@ export default function RoomPage() {
 
   const [needLogIn, setNeedLogIn] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+
+  const [lang] = useTranslation(L18N_NAMESPACE);
 
   const dispatch = useDispatch();
 
@@ -83,9 +87,11 @@ export default function RoomPage() {
           padding: "10px 20px",
           border: "1px solid #c0c0c0"
         }}
+        buttonText={lang('cookies_accept')}
+        declineButtonText={lang('cookies_decline')}
         onAccept={handleCookieAccept}
       >
-        This website uses cookies to enhance the user experience
+        {lang('cookies_descr')}
       </CookieConsent>
     </div>
   );

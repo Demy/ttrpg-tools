@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ToggleSwitch from '../UI/ToggleSwitch';
 import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router';
-import * as actions from '../../redux/room/actions';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const RoomPanelContainer = styled.div`
   width: 100%;
@@ -63,7 +64,8 @@ export default function RoomPanel() {
   const socket = useSelector(state => state.room.socket);
 
   const history = useHistory();
-  const dispatch = useDispatch();
+
+  const [lang] = useTranslation(L18N_NAMESPACE);
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
@@ -71,7 +73,7 @@ export default function RoomPanel() {
 
   const handleCreate = () => {
     if (isPrivate && !password) {
-      showError('Please fill in the password', 'password');
+      showError(lang('enter_password'), 'password');
       return;
     }
     const roomId = uuid();
@@ -89,29 +91,27 @@ export default function RoomPanel() {
         protected: isPrivate && areRollsPrivate ? 1 : 0 
       });
     } else {
-      showError('No connection to the server. Please try to realod the page', 'socket');
+      showError(lang('no_connection'), 'socket');
     }
   };
 
   return (
     <RoomPanelContainer>
-      <Title>Create a room</Title>
+      <Title>{lang('create_room')}</Title>
       <PanelPartsContainer>
         <DescriptionPart>
           <Description>
-            In a separate room you can gather your players and have your own dice roller 
-            with a dice log separate from the public rolls. 
+            {lang('create_room_descr_1')}
           </Description>
           <Description>
-            You can set up a password for your room to make sure it's private and protected.
+            {lang('create_room_descr_2')}
           </Description>
-          <Description>  
-            Choose "Protect roll result links" if you want the links of the roll results 
-            be also protected by the password.
+          <Description>
+            {lang('create_room_descr_3')}
           </Description>
         </DescriptionPart>
         <FormPart>
-          <ToggleSwitch label="Use password" value={isPrivate} onChange={setPrivate} />
+          <ToggleSwitch label={lang('use_password')} value={isPrivate} onChange={setPrivate} />
           {isPrivate ? (
             <div>
               <div>
@@ -119,14 +119,14 @@ export default function RoomPanel() {
               </div>
               <div>
                 <ToggleSwitch 
-                  label="Protect roll result links" 
+                  label={lang('protect_links')} 
                   value={areRollsPrivate} 
                   onChange={setRollsPrivate} 
                 />
               </div>
             </div>
           ) : <></>}
-          <CreateButton onClick={handleCreate}>Create</CreateButton>
+          <CreateButton onClick={handleCreate}>{lang('create')}</CreateButton>
         </FormPart>
       </PanelPartsContainer>
     </RoomPanelContainer>

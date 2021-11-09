@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import * as actions from '../../redux/room/actions';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const DiceContainer = styled.div`
   width: 100%;
@@ -26,6 +28,8 @@ export default function FullRollResult(props) {
 
   const fullRoll = useSelector(state => state.room.fullRoll);
   const dispatch = useDispatch();
+
+  const [lang] = useTranslation(L18N_NAMESPACE);
 
   const containerRef = useRef(null);
 
@@ -60,9 +64,9 @@ export default function FullRollResult(props) {
   };
 
   if (!fullRoll) {
-    return <DiceContainer>This roll was not made (yet?)</DiceContainer>;
+    return <DiceContainer>{lang('no_roll')}</DiceContainer>;
   } else if (fullRoll && fullRoll.id === -1) {
-    return <DiceContainer>Loading...</DiceContainer>;
+    return <DiceContainer>{lang('loading')}...</DiceContainer>;
   }
   
   let roll = [];
@@ -77,7 +81,7 @@ export default function FullRollResult(props) {
       <Dice>
         {roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>
-      Date: {date.toUTCString()}
+      {lang('date')}: {date.toUTCString()}
     </DiceContainer>
   );
 }

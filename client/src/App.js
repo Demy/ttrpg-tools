@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from './redux/room/actions';
 
 import './App.css';
+import LanguageSelector from './components/UI/LanguageSelector';
 
 const socketClient = io.connect('/');
 
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <div className="App">
+      <LanguageSelector />
       <Router>
         <Switch>
           <Route path="/room/:roomId">

@@ -8,6 +8,8 @@ import RollsHistory from './RollsHistory';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/room/actions';
 import uuid from 'react-uuid';
+import { useTranslation } from 'react-i18next';
+import { L18N_NAMESPACE } from '../../utils/constans';
 
 const PanelsContainer = styled.div`
   width: 70%;
@@ -69,6 +71,8 @@ export default function DiceRoller({ roomId }) {
   const [selectedDice, setSelectedDice] = React.useState([]);
   const [isCustomSelected, setCustomSelected] = React.useState(false);
 
+  const [lang] = useTranslation(L18N_NAMESPACE);
+
   const lastRoll = useSelector(state => state.room.lastRoll);
   const room = useSelector(state => state.room.roomName);
   const socket = useSelector(state => state.room.socket);
@@ -99,7 +103,7 @@ export default function DiceRoller({ roomId }) {
       });
     
     }
-  }, [dispatch, room, roomId, socket]);
+  }, [currentRoom, dispatch, room, roomId, socket]);
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
@@ -147,7 +151,7 @@ export default function DiceRoller({ roomId }) {
             onRoll={handleRollDice} />
         </DicePanelContainer>
         <ResultContainer active={lastRoll && lastRoll.id >= 0}>
-          <h3>Result: {lastRoll.text ? lastRoll.text : ''}</h3>
+          <h3>{lang('result')}: {lastRoll.text ? lastRoll.text : ''}</h3>
           <DicePanelContainer>
             <RollResultPanel
               onRoll={handleRollDice}
@@ -165,7 +169,7 @@ export default function DiceRoller({ roomId }) {
             onCustomCanceled={setCustomSelected.bind(null, false)}
           />
         </ParametersContainer>
-        <HistoryTitle>All rolls</HistoryTitle>
+        <HistoryTitle>{lang('all_rolls')}</HistoryTitle>
         <HistoryPanelContainer>
           <RollsHistory />
         </HistoryPanelContainer>

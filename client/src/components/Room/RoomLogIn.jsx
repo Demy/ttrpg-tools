@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import * as actions from '../../redux/room/actions';
+import { L18N_NAMESPACE } from '../../utils/constans';
+import { toast } from 'react-toastify';
 
 const RoomLoginContainer = styled.div`
   padding: 20px;
@@ -26,6 +29,8 @@ export default function RoomLogIn({ roomId }) {
 
   const [password, setPassword] = useState('');
 
+  const [lang] = useTranslation(L18N_NAMESPACE);
+
   const dispatch = useDispatch();
 
   const handleChangePassword = (e) => {
@@ -33,14 +38,21 @@ export default function RoomLogIn({ roomId }) {
   };
 
   const handleLogIn = () => {
-    dispatch(actions.logInToRoom(roomId, password));
+    dispatch(actions.logInToRoom(roomId, password, error => {
+			toast.error(lang('incorrect_password'), {
+        position: toast.POSITION.TOP_RIGHT,
+        toastId: 'error',
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+		}));
   };
 
   return (
     <RoomLoginContainer>
-      <h3>Please enter room password:</h3>
+      <h3>{lang('enter_password')}:</h3>
       <Password type="password" value={password} onChange={handleChangePassword} />
-      <LogInButton onClick={handleLogIn} disabled={password === ''}>Enter</LogInButton>
+      <LogInButton onClick={handleLogIn} disabled={password === ''}>{lang('enter')}</LogInButton>
     </RoomLoginContainer>
   );
 }
