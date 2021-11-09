@@ -5,7 +5,7 @@ import { L18N_NAMESPACE } from '../../utils/constans';
 import DiceRoller from '../Dice/DiceRoller';
 
 const ViewContainer = styled.div`
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   margin: 0 auto;
 `;
 

@@ -79,7 +79,12 @@ export default function RoomPage() {
       <CookieConsent 
         enableDeclineButton
         location={OPTIONS.BOTTOM}
-        style={{ background: "#dddddd", color: '#252525', textAlign: 'left' }}
+        style={{ 
+          background: "#ffffff", 
+          color: '#252525', 
+          textAlign: 'left', 
+          border: '1px solid #d0d0d0'
+        }}
         buttonStyle={{ 
           color: "#4e503b", 
           fontSize: "1em", 
