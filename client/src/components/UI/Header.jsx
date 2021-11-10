@@ -10,7 +10,7 @@ import LanguageSelector from './LanguageSelector';
 const HeaderContainer = styled.header`
   text-align: left;
   background: #f5f5f5;
-  border: 1px solid #898989;
+  border-bottom: 1px solid #898989;
   display: relative;
 `;
 const LogoButton = styled.div`

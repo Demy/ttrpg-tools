@@ -9,25 +9,75 @@ import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE } from '../../utils/constans';
 
 const RoomPanelContainer = styled.div`
-  width: 100%;
   text-align: left;
-  max-width: 880px;
+  max-width: 910px;
   margin: 20px auto;
-  padding: 10px 15px;
   border: 1px solid #c0c0c0;
+  width: calc(100% - 30px);
+  @media (min-width: 768px) {
+    width: 100%;
+  }
 `;
 const Title = styled.h3`
+  padding: 10px 15px 0 15px;
   margin: 0.4em 0;
+  display: none;
+  @media (min-width: 768px) {
+    display: block;
+  }
+`;
+const MobileTitle = styled.div`
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #898989;
+  padding: 10px 15px;
+  &:after {
+    content: '+';
+    font-size: 18px;
+    font-weight: bold;
+    color: #898989;
+    float: right;
+    margin-top: -2px;
+    width: 18px;
+    text-align: center;
+  }
+  ${props => props.open ? `
+    &:after {
+      content: '-';
+    }
+  ` : ''}
+  @media (min-width: 768px) {
+    display: none;
+  }
 `;
 const PanelPartsContainer = styled.div`
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  ${props => props.open ? `
+    max-height: initial;
+  ` : ''}
+  @media (min-width: 768px) {
+    overflow: auto;
+    max-height: initial;
+  }
   wdth: 100%;
 `;
 const DescriptionPart = styled.div`
-  width: 70%;
+  width: auto;
+  padding: 10px 15px 0 15px;
+  @media (min-width: 768px) {
+    width: calc(70% - 30px);
+  }
   display: inline-block;
   vertical-align: top;
 `;
 const FormPart = styled.div`
+  padding: 0 15px 15px 15px;
+  @media (min-width: 768px) {
+    width: calc(30% - 15px);
+    margin: 10px 15px 10px 0;
+    padding: 0;
+  }
   vertical-align: top;
   display: inline-block;
 `;
@@ -60,6 +110,7 @@ export default function RoomPanel() {
   const [isPrivate, setPrivate] = useState(false);
   const [password, setPassword] = useState('');
   const [areRollsPrivate, setRollsPrivate] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   const socket = useSelector(state => state.room.socket);
 
@@ -98,7 +149,10 @@ export default function RoomPanel() {
   return (
     <RoomPanelContainer>
       <Title>{lang('create_room')}</Title>
-      <PanelPartsContainer>
+      <MobileTitle open={isOpen} onClick={setOpen.bind(null, !isOpen)}>
+        {lang('create_room')}
+      </MobileTitle>
+      <PanelPartsContainer open={isOpen}>
         <DescriptionPart>
           <Description>
             {lang('create_room_descr_1')}
