@@ -9,16 +9,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/room/actions';
 import uuid from 'react-uuid';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
 
-const PanelsContainer = styled.div`
-  width: 70%;
-  display: inline-block;
-  vertical-align: top;
-  max-width: 600px;
+const MainContentContainer = styled.div`
   text-align: left;
+  margin: 15px;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    width: 70%;
+    padding: 0;
+    margin: 0;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 600px;
+  }
 `;
-
+const SideContentContainer = styled.div`
+  margin: 15px;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    width: calc(30% - 10px);
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 300px;
+  }
+`;
 const DicePanelContainer = styled.div`
   border: 1px solid #c0c0c0;
   width: 100%;
@@ -26,20 +42,12 @@ const DicePanelContainer = styled.div`
 const ResultContainer = styled.div`
   opacity: ${props => props.active ? 1 : 0.5};
 `;
-const SidePanelContaner = styled.div`
-  width: 30%;
-  max-width: 300px;
-  display: inline-block;
-  vertical-align: top;
-  margin-left: 10px;
-`;
 const ParametersContainer = styled.div`
   border: 1px solid #c0c0c0;
 `;
 
 const HistoryPanelContainer = styled.div`
   border: 1px solid #c0c0c0;
-  width: 100%;
   max-height: 394px;
   overflow: auto;
   margin: 10px auto;
@@ -134,7 +142,7 @@ export default function DiceRoller({ roomId }) {
 
   return (
     <div className="dice-roller">
-      <PanelsContainer>
+      <MainContentContainer>
         <DicePanelContainer>
           <DicePanel 
             diceColor={diceColor} 
@@ -142,6 +150,19 @@ export default function DiceRoller({ roomId }) {
             onCustomToggle={setCustomSelected} 
           />
         </DicePanelContainer>
+      </MainContentContainer>
+      <SideContentContainer>
+        <ParametersContainer>
+          <ParametersPanel 
+            diceColor={diceColor} 
+            showSidesSetting={isCustomSelected} 
+            onColorSelected={setDiceColor}
+            onAddDie={addDie} 
+            onCustomCanceled={setCustomSelected.bind(null, false)}
+          />
+        </ParametersContainer>
+      </SideContentContainer>
+      <MainContentContainer>
         <DicePanelContainer>
           <SelectedDicePanel 
             selected={selectedDice} 
@@ -158,22 +179,13 @@ export default function DiceRoller({ roomId }) {
             />
           </DicePanelContainer>
         </ResultContainer>
-      </PanelsContainer>
-      <SidePanelContaner>
-        <ParametersContainer>
-          <ParametersPanel 
-            diceColor={diceColor} 
-            showSidesSetting={isCustomSelected} 
-            onColorSelected={setDiceColor}
-            onAddDie={addDie} 
-            onCustomCanceled={setCustomSelected.bind(null, false)}
-          />
-        </ParametersContainer>
+      </MainContentContainer>
+      <SideContentContainer>
         <HistoryTitle>{lang('all_rolls')}</HistoryTitle>
         <HistoryPanelContainer>
           <RollsHistory />
         </HistoryPanelContainer>
-      </SidePanelContaner>
+      </SideContentContainer>
     </div>
   );
 }

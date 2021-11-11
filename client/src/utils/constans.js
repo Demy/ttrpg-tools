@@ -8,3 +8,5 @@ export const END_POINT = {
 };
 export const PUBLIC_ROOM = 'public';
 export const L18N_NAMESPACE = 'ttrpg';
+
+export const MOBILE_SCREEN = '910px';

@@ -6,15 +6,15 @@ import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
 
 const RoomPanelContainer = styled.div`
   text-align: left;
-  max-width: 910px;
+  max-width: ${MOBILE_SCREEN};
   margin: 20px auto;
   border: 1px solid #c0c0c0;
   width: calc(100% - 30px);
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     width: 100%;
   }
 `;
@@ -22,7 +22,7 @@ const Title = styled.h3`
   padding: 10px 15px 0 15px;
   margin: 0.4em 0;
   display: none;
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     display: block;
   }
 `;
@@ -45,7 +45,7 @@ const MobileTitle = styled.div`
       content: '-';
     }
   ` : ''}
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     display: none;
   }
 `;
@@ -56,7 +56,7 @@ const PanelPartsContainer = styled.div`
   ${props => props.open ? `
     max-height: initial;
   ` : ''}
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     overflow: auto;
     max-height: initial;
   }
@@ -65,15 +65,16 @@ const PanelPartsContainer = styled.div`
 const DescriptionPart = styled.div`
   width: auto;
   padding: 10px 15px 0 15px;
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     width: calc(70% - 30px);
+    padding: 10px 15px;
   }
   display: inline-block;
   vertical-align: top;
 `;
 const FormPart = styled.div`
   padding: 0 15px 15px 15px;
-  @media (min-width: 768px) {
+  @media (min-width: ${MOBILE_SCREEN}) {
     width: calc(30% - 15px);
     margin: 10px 15px 10px 0;
     padding: 0;

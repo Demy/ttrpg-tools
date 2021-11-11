@@ -1,9 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
-import { L18N_NAMESPACE } from '../../utils/constans';
 import Die from '../Dice/Die';
 import LanguageSelector from './LanguageSelector';
 
@@ -30,8 +28,6 @@ const Title = styled.div`
 `;
 
 export default function Header(props) {
-
-  const [lang] = useTranslation(L18N_NAMESPACE);
 
   const history = useHistory();
 

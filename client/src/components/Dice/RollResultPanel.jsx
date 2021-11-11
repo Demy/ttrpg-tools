@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as actions from '../../redux/room/actions';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
+import PCView from '../UI/PCView';
+import MobileView from '../UI/MobileView';
 
 const DiceContainer = styled.div`
   display: inline-block;
@@ -14,27 +16,52 @@ const DiceContainer = styled.div`
 `;
 const TopPanel = styled.div`
   width: 100%;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 const RollLink = styled.input`
-  display: inline-block;
-  vertical-align: middle;
-  width: 200px;
+  display: block;
+  width: calc(100% - 44px);
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: inline-block;
+    vertical-align: middle;
+    flex: 1;
+  }
   padding: 7px;
   margin: 15px;
+`;
+const ButtonsPanel = styled.div`
+  flex-direction: row;
+  display: flex;
+  width: 100%;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: inline-block;
+    vertical-align: top;
+  }
 `;
 const ReRollButton = styled.button`
   display: inline-block;
   vertical-align: middle;
   float: right;
   padding: 12px 24px;
-  margin: 10px 10px 10px 0;
+  margin: 10px 15px;
+  flex: 1;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    margin: 10px 10px 10px 0;
+    flex; none;
+  }
   cursor: pointer;
   text-transform: uppercase;
 `;
 const ClearButton = styled.button`
   float: right;
   padding: 10px 14px;
-  margin: 13px 10px 13px 0;
+  margin: 10px 15px 10px 0;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    margin: 13px 10px 13px 0;
+  }
   cursor: pointer;
   border: none;
 `;
@@ -98,6 +125,7 @@ export default function RollResultPanel(props) {
   };
 
   const handleFocus = (event) => {
+    if (!canCopy) return;
     event.target.select();
     event.target.setSelectionRange(0, 99999);
 
@@ -119,6 +147,21 @@ export default function RollResultPanel(props) {
     dispatch(actions.clearLastRoll());
   };
 
+  const buttons = <ButtonsPanel>
+    <ReRollButton 
+      disabled={lastRoll.id < 0} 
+      onClick={handleReroll}
+    >
+      {lang('reroll')}
+    </ReRollButton>
+    <ClearButton
+      disabled={lastRoll.id < 0} 
+      onClick={handleClear}
+    >
+      {lang('clear')}
+    </ClearButton>
+  </ButtonsPanel>
+
   return (
     <DiceContainer ref={ref}>
       <TopPanel>
@@ -130,19 +173,13 @@ export default function RollResultPanel(props) {
           onBlur={setCanCopy.bind(null, true)}
           onChange={handleChange}
         />
-        <ReRollButton 
-          disabled={lastRoll.id < 0} 
-          onClick={handleReroll}
-        >
-          {lang('reroll')}
-        </ReRollButton>
-        <ClearButton
-          disabled={lastRoll.id < 0} 
-          onClick={handleClear}
-        >
-          {lang('clear')}
-        </ClearButton>
+        <PCView>
+          {buttons}
+        </PCView>
       </TopPanel>
+      <MobileView>
+        {buttons}
+      </MobileView>
       <Dice>
         {lastRoll.res.map((die, i) => addDiceFrom(die, `selected${i}`))}
       </Dice>

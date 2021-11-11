@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Die from './Die';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
+import PCView from '../UI/PCView';
+import MobileView from '../UI/MobileView';
 
 const DiceContainer = styled.div`
   display: inline-block;
@@ -11,18 +13,21 @@ const DiceContainer = styled.div`
 `;
 const TopPanel = styled.div`
   width: 100%;
+  flex-direction: row;
+  display: flex;
 `;
 const Title = styled.div`
   display: inline-block;
   vertical-align: middle;
-  margin-left: 15px;
+  margin: 17px 0 17px 10px;
 `;
 const InputBox = styled.div`
   display: inline-block;
   vertical-align: middle;
-  width: 200px;
+  width: calc(100% - 32px);
   margin: 15px;
   position: relative;
+  flex: 1;
 `;
 const CodeInput = styled.input`
   padding: 7px;
@@ -31,26 +36,43 @@ const CodeInput = styled.input`
 const ErrorText = styled.div`
   position: absolute;
   left: 0;
-  width: 200px;
+  width: 100%;
   text-align: right;
   bottom: -17px;
   color: red;
   font-size: 12px;
 `;
+const ButtonsPanel = styled.div`
+  flex-direction: row;
+  display: flex;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: inline-block;
+    vertical-align: top;
+  }
+`;
 const RollButton = styled.button`
-  display: inline-block;
-  vertical-align: middle;
-  float: right;
+  margin: 10px 15px 15px 15px;
+  flex: 1;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: inline-block;
+    vertical-align: middle;
+    float: right;
+    margin: 10px 15px 10px 0;
+    flex: none;
+  }
   padding: 12px 24px;
-  margin: 10px 10px 10px 0;
   cursor: pointer;
   width: 110px;
   text-transform: uppercase
 `;
 const ClearButton = styled.button`
+  margin: 10px 15px 15px 0;
   float: right;
   padding: 10px 14px;
-  margin: 13px 10px 13px 0;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    margin: 13px 10px 13px 0;
+    padding: 10px 14px;
+  }
   cursor: pointer;
   border: none;
 `;
@@ -62,7 +84,10 @@ const DieButton = styled.div`
   padding: 2px;
 `;
 const Dice = styled.div`
-  padding: 10px;
+  padding: 0 10px;
+  @media (min-width: ${MOBILE_SCREEN}) {
+    padding: 10px;
+  }
   text-align: center;
 `;
 const BottomPanel = styled.div`
@@ -75,7 +100,7 @@ const DescriptionInput = styled.input`
   vertical-align: middle;
   flex: 1;
   margin: 15px;
-  padding: 7px;
+  padding: 7px 0;
 `;
 
 export default function SelectedDicePanel(props) {
@@ -215,6 +240,21 @@ export default function SelectedDicePanel(props) {
     setDescr(e.target.value);
   };
 
+  const buttons = <ButtonsPanel>
+    <RollButton 
+      disabled={props.selected.length === 0} 
+      onClick={handleRollButton}
+    >
+      {lang('roll')}
+    </RollButton>
+    <ClearButton
+      disabled={props.selected.length === 0} 
+      onClick={handleClear}
+    >
+      {lang('clear')}
+    </ClearButton>
+  </ButtonsPanel>;
+
   return (
     <DiceContainer>
       <TopPanel>
@@ -230,26 +270,22 @@ export default function SelectedDicePanel(props) {
           />
           <ErrorText>{isParseError && rollCode ? parseError : ''}</ErrorText>
         </InputBox>
-        <RollButton 
-          disabled={props.selected.length === 0} 
-          onClick={handleRollButton}
-        >
-          {lang('roll')}
-        </RollButton>
-        <ClearButton
-          disabled={props.selected.length === 0} 
-          onClick={handleClear}
-        >
-          {lang('clear')}
-        </ClearButton>
+        <PCView>
+          {buttons}
+        </PCView>
       </TopPanel>
-      <Dice>
-        {selected.map((die, i) => addDiceFrom(die, i))}
-      </Dice>
+      {selected.length ? (
+        <Dice>
+          {selected.map((die, i) => addDiceFrom(die, i))}
+        </Dice>
+      ) : <></>}
       <BottomPanel>
         <Title>{lang('description')}:</Title>
         <DescriptionInput value={descr} onChange={handleDescrChange} />
       </BottomPanel>
+      <MobileView>
+        {buttons}
+      </MobileView>
     </DiceContainer>
   );
 }
