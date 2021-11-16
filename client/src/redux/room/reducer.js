@@ -1,7 +1,7 @@
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, 
   CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
-  SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
+  SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY
 } from './constants';
 
 const defaultLastRoll = {
@@ -85,6 +85,11 @@ const reducer = (state = initialState, action) => {
         };
       }
       return state;
+    case CLEAR_HISTORY:
+      return {
+        ...state,
+        history: null
+      };
     case ROOM_STATUS:
       return {
         ...state,

@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
-  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN
+  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY
 } from "./constants";
 
 export const setSocket = (socket) => dispatch => {
@@ -46,6 +46,10 @@ export const loadRollsHistory = (room) => dispatch => {
 		.catch(error => {
 			console.log(error);
 		});
+};
+
+export const clearHistory = () => dispatch => {
+  dispatch({ type: CLEAR_HISTORY });
 };
 
 export const getRoomStatus = (room) => dispatch => {

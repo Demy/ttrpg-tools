@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as actions from '../../redux/room/actions';
@@ -55,15 +55,18 @@ export default function RollsHistory() {
   const history = useSelector(state => state.room.history);
   const roomName = useSelector(state => state.room.roomName);
 
+  const [loadedRoom, setLoadedRoom] = useState('');
+
   const [lang] = useTranslation(L18N_NAMESPACE);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (dispatch && !history && roomName) {
+    if (roomName && roomName !== loadedRoom) {
       dispatch(actions.loadRollsHistory(roomName));
+      setLoadedRoom(roomName);
     }
-  }, [dispatch, history, roomName]);
+  }, [dispatch, loadedRoom, roomName]);
 
   if (!history) return <></>;
 

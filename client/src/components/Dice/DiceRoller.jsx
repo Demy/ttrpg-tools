@@ -62,6 +62,7 @@ const MAX_DICE = 20;
 const MAX_TEXT_LENGTH = 100;
 
 const joinRoom = (socket, roomId) => {
+  socket.emit('leaveRoom');
   socket.emit('joinRoom', roomId);
 };
 
@@ -89,16 +90,14 @@ export default function DiceRoller({ roomId }) {
 
   useEffect(() => {
     if (!!dispatch && roomId !== currentRoom && !!socket) {
-      if (currentRoom !== '' && socket.connected) {
-        socket.emit('leaveRoom');
-      }
-
       dispatch(actions.moveToRoom(roomId));
       setCurrentRoom(roomId);
 
+      socket.off('roll');
       socket.on('roll', data => {
         dispatch(actions.addNewRoll(data));
       });
+
       if (socket.connected) {
         joinRoom(socket, roomId);
       } else {
@@ -109,7 +108,6 @@ export default function DiceRoller({ roomId }) {
       socket.on('reconnect', () => {
         joinRoom(socket, roomId);
       });
-    
     }
   }, [currentRoom, dispatch, room, roomId, socket]);
 

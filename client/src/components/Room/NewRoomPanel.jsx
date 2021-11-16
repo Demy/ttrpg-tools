@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ToggleSwitch from '../UI/ToggleSwitch';
 import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
+import * as actions from '../../redux/room/actions';
 
 const RoomPanelContainer = styled.div`
   text-align: left;
@@ -116,6 +117,7 @@ export default function RoomPanel() {
   const socket = useSelector(state => state.room.socket);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
@@ -132,6 +134,7 @@ export default function RoomPanel() {
     if (socket) {
       socket.on('room', (createdRoomId) => {
         if (roomId === createdRoomId) {
+          dispatch(actions.clearHistory());
           history.push('/room/' + roomId);
         }
       });
