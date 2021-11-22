@@ -8,13 +8,23 @@ import { toast } from 'react-toastify';
 
 const RoomLoginContainer = styled.div`
   padding: 20px;
-  margin: 20% auto 0 auto;
+  margin: 15% auto 0 auto;
   width: 100%;
   max-width: 270px;
+  text-align: left;
 `;
-const Password = styled.input`
-  padding: 8px 14px;
-  width: calc(100% - 32px);
+const Title = styled.h3`
+  width: 100%;
+  text-align: center;
+`;
+const Input = styled.input`
+  padding: 8px;
+  margin: 3px 0 10px 0;
+  width: calc(100% - 18px);
+`;
+const Label = styled.label`
+  font-size: 0.9rem;
+  color: #5a5a5a;
 `;
 const LogInButton = styled.button`
   padding: 10px 20px;
@@ -25,34 +35,53 @@ const LogInButton = styled.button`
   width: 100%;
 `;
 
-export default function RoomLogIn({ roomId }) {
+export default function RoomLogIn({ roomId, needPassword }) {
 
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
   const dispatch = useDispatch();
 
-  const handleChangePassword = (e) => {
+  const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
   const handleLogIn = () => {
-    dispatch(actions.logInToRoom(roomId, password, error => {
-			toast.error(lang('incorrect_password'), {
-        position: toast.POSITION.TOP_RIGHT,
-        toastId: 'error',
-        autoClose: 2000,
-        hideProgressBar: true,
-      });
-		}));
+    if (needPassword) {
+      dispatch(actions.logInToRoom(roomId, username, password, error => {
+        toast.error(lang('incorrect_password'), {
+          position: toast.POSITION.TOP_RIGHT,
+          toastId: 'error',
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+      }));
+    } else {
+      dispatch(actions.setUser(username));
+    }
   };
 
   return (
     <RoomLoginContainer>
-      <h3>{lang('enter_password')}:</h3>
-      <Password type="password" value={password} onChange={handleChangePassword} />
-      <LogInButton onClick={handleLogIn} disabled={password === ''}>{lang('enter')}</LogInButton>
+      <Title>{lang('private_room')}:</Title>
+      <Label of="name">{lang('char_name')}</Label>
+      <Input type="text" id="name" value={username} onChange={handleUsernameChange} />
+      {needPassword ? 
+        <div>
+          <Label of="password">{lang('room_password')}</Label>
+          <Input type="password" id="password" value={password} onChange={handlePasswordChange} />
+        </div> : <></>
+      }
+      <LogInButton 
+        onClick={handleLogIn} 
+        disabled={username === '' || (needPassword && password === '')}
+      >{lang('enter')}</LogInButton>
     </RoomLoginContainer>
   );
 }

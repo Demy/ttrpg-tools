@@ -10,21 +10,24 @@ import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-cons
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE } from '../../utils/constans';
 
+const TOKEN_PREFIX = 'token__';
+const USER_PREFIX = 'user__'
+
 export default function RoomPage() {
 
   let { roomId } = useParams();
 
   const roomName = useSelector(state => state.room.roomName);
   const roomStatus = useSelector(state => state.room.roomStatus);
+  const username = useSelector(state => state.room.username);
   const roomToken = useSelector(state => state.room.roomToken);
-  const socket = useSelector(state => state.room.socket);
 
   const canUseCookies = getCookieConsentValue();
 
-  const [cookies, setCookie] = useCookies(['token']);
+  const [cookies, setCookie] = useCookies(['auth']);
 
   const [needLogIn, setNeedLogIn] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
@@ -32,49 +35,70 @@ export default function RoomPage() {
 
   useEffect(() => {
     if (roomName !== roomId) {
+      dispatch(actions.clearToken());
+      dispatch(actions.setUser(''));
       dispatch(actions.getRoomStatus(roomId));
     }
   }, [dispatch, roomId, roomName]);
+
+  useEffect(() => {
+    if (canUseCookies) {
+      const token = cookies[TOKEN_PREFIX + roomId];
+      const user = cookies[USER_PREFIX + roomId];
+      if (user) {
+        dispatch(actions.setUser(user));
+      } else {
+        dispatch(actions.setUser(''));
+      }
+      if (user && token) {
+        dispatch(actions.verifyAndSaveToken(token, roomId));
+      } else {
+        dispatch(actions.clearToken());
+      }
+    }
+  }, [canUseCookies, cookies, dispatch, roomId]);
 
   useEffect(() => {
     if (roomStatus !== null) {
       if (roomStatus.private && !roomToken) {
         setNeedLogIn(true);
       } else {
-        setIsConnected(true);
+        setIsAuthorized(true);
       }
     }
-  }, [dispatch, roomId, roomStatus, roomToken, socket]);
+  }, [roomStatus, roomToken]);
 
   useEffect(() => {
-    if (needLogIn && roomToken) {
-      setIsConnected(true);
+    if (needLogIn && roomToken && username) {
+      setIsAuthorized(true);
       setNeedLogIn(false);
       if (canUseCookies) {
-        setCookie('token', roomToken, { path: '/room' });
+        setCookie(TOKEN_PREFIX + roomId, roomToken);
+        setCookie(USER_PREFIX + roomId, username);
       }
     }
-  }, [canUseCookies, dispatch, needLogIn, roomId, roomToken, setCookie, socket]);
+  }, [canUseCookies, needLogIn, roomId, roomToken, setCookie, username]);
 
   useEffect(() => {
-    if (canUseCookies) {
-      const token = cookies.token;
-      if (token && !roomToken) {
-        dispatch(actions.verifyAndSaveToken(token, roomId));
-      }
+    if (!needLogIn && isAuthorized && username && canUseCookies) {
+      setCookie(USER_PREFIX + roomId, username);
     }
-  }, [canUseCookies, cookies.token, dispatch, roomId, roomToken]);
+  }, [canUseCookies, isAuthorized, needLogIn, roomId, setCookie, username]);
 
   const handleCookieAccept = () => {
-    if (roomToken) {
-      setCookie('token', roomToken, { path: '/room' });
+    if (isAuthorized) {
+      if (roomToken) {
+        setCookie(TOKEN_PREFIX + roomId, roomToken);
+      }
+      setCookie(USER_PREFIX + roomId, username);
     }
   };
 
   return (
     <div className="room">
-      {isConnected ? <RoomView roomId={roomId} /> : (
-        needLogIn ? <RoomLogIn roomId={roomId} /> : <Loading middle />
+      {isAuthorized && username !== '' ? <RoomView roomId={roomId} /> : (
+        needLogIn || username === '' ? <RoomLogIn roomId={roomId} needPassword={needLogIn} /> : 
+          <Loading middle />
       )}
       <CookieConsent 
         enableDeclineButton

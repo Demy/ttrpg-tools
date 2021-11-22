@@ -7,4 +7,5 @@ export const MOVE_TO_ROOM = 'MOVE_TO_ROOM';
 export const ROLLS_HISTORY = 'ROLLS_HISTORY';
 export const ROOM_STATUS = 'ROOM_STATUS';
 export const ROOM_TOKEN = 'ROOM_TOKEN';
+export const USERNAME = 'USERNAME';
 export const CLEAR_HISTORY = 'CLEAR_HISTORY';
