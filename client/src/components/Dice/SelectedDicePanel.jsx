@@ -100,7 +100,7 @@ const DescriptionInput = styled.input`
   vertical-align: middle;
   flex: 1;
   margin: 15px;
-  padding: 7px 0;
+  padding: 7px;
 `;
 
 export default function SelectedDicePanel(props) {

@@ -79,6 +79,7 @@ export default function DiceRoller({ roomId }) {
 
   const lastRoll = useSelector(state => state.room.lastRoll);
   const roomName = useSelector(state => state.room.roomName);
+  const username = useSelector(state => state.room.username);
   const socket = useSelector(state => state.room.socket);
 
   const dispatch = useDispatch();
@@ -136,7 +137,8 @@ export default function DiceRoller({ roomId }) {
   const handleRollDice = (dice, text) => {
     if (socket) {
       const uid = uuid();
-      socket.emit('roll', { dice, text: trimLength(text), uid });
+      let fullText = `${username ? username : ''}${username && text ? ': ' : ''}${text}`;
+      socket.emit('roll', { dice, text: trimLength(fullText), uid });
       dispatch(actions.setLastRollId(uid));
     }
   };

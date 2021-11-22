@@ -84,6 +84,7 @@ export default function RollResultPanel(props) {
 
   const lastRoll = useSelector(state => state.room.lastRoll);
   const roomName = useSelector(state => state.room.roomName);
+  const username = useSelector(state => state.room.username);
 
   const [canCopy, setCanCopy] = useState(true);
 
@@ -121,7 +122,19 @@ export default function RollResultPanel(props) {
       color: die.color,
       count: die.count
     }));
-    props.onRoll(selected, lastRoll.text ? `${lang('reroll')}: ${lastRoll.text}` : '');
+    let text = '';
+    if (lastRoll.text) {
+      if (username) {
+        if (lastRoll.text !== username) {
+          const index = lastRoll.text.indexOf(': ');
+          const rollText = lastRoll.text.substr(index + 2);
+          text = `${lang('reroll')} ${rollText}`;
+        }
+      } else {
+        text = `${lang('reroll')} ${lastRoll.text}`;
+      }
+    }
+    props.onRoll(selected, text);
   };
 
   const handleFocus = (event) => {
