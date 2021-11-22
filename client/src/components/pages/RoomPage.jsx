@@ -13,6 +13,8 @@ import { L18N_NAMESPACE } from '../../utils/constans';
 const TOKEN_PREFIX = 'token__';
 const USER_PREFIX = 'user__'
 
+const COOKIES_PARAMS = { path: '/room', secure: true };
+
 export default function RoomPage() {
 
   let { roomId } = useParams();
@@ -74,23 +76,23 @@ export default function RoomPage() {
       setNeedLogIn(false);
       if (canUseCookies) {
         setCookie(TOKEN_PREFIX + roomId, roomToken);
-        setCookie(USER_PREFIX + roomId, username);
+        setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
       }
     }
   }, [canUseCookies, needLogIn, roomId, roomToken, setCookie, username]);
 
   useEffect(() => {
     if (!needLogIn && isAuthorized && username && canUseCookies) {
-      setCookie(USER_PREFIX + roomId, username);
+      setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
     }
   }, [canUseCookies, isAuthorized, needLogIn, roomId, setCookie, username]);
 
   const handleCookieAccept = () => {
     if (isAuthorized) {
       if (roomToken) {
-        setCookie(TOKEN_PREFIX + roomId, roomToken);
+        setCookie(TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
       }
-      setCookie(USER_PREFIX + roomId, username);
+      setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
     }
   };
 

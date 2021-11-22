@@ -61,11 +61,6 @@ const HistoryTitle = styled.h3`
 const MAX_DICE = 20;
 const MAX_TEXT_LENGTH = 100;
 
-const joinRoom = (socket, roomId) => {
-  socket.emit('leaveRoom');
-  socket.emit('joinRoom', roomId);
-};
-
 const trimLength = (text) => {
   if (text && text.length > MAX_TEXT_LENGTH) {
     return text.substring(0, MAX_TEXT_LENGTH - 3) + '...';
@@ -83,33 +78,41 @@ export default function DiceRoller({ roomId }) {
   const [lang] = useTranslation(L18N_NAMESPACE);
 
   const lastRoll = useSelector(state => state.room.lastRoll);
-  const room = useSelector(state => state.room.roomName);
+  const roomName = useSelector(state => state.room.roomName);
   const socket = useSelector(state => state.room.socket);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!!dispatch && roomId !== currentRoom && !!socket) {
+    if (roomId !== currentRoom && !!socket) {
+      const oldRoomName = roomName;
+      const joinRoom = () => {
+        if (oldRoomName) {
+          socket.emit('leaveRoom', oldRoomName);
+        }
+        socket.emit('joinRoom', roomId);;
+      };
+      if (socket.connected) {
+        joinRoom();
+      } else {
+        socket.on('connect', () => {
+          joinRoom();
+        });
+      }
+      socket.on('reconnect', () => {
+        joinRoom();
+      });
+
       dispatch(actions.moveToRoom(roomId));
-      setCurrentRoom(roomId);
 
       socket.off('roll');
       socket.on('roll', data => {
         dispatch(actions.addNewRoll(data));
       });
 
-      if (socket.connected) {
-        joinRoom(socket, roomId);
-      } else {
-        socket.on('connect', () => {
-          joinRoom(socket, roomId);
-        });
-      }
-      socket.on('reconnect', () => {
-        joinRoom(socket, roomId);
-      });
+      setCurrentRoom(roomId);
     }
-  }, [currentRoom, dispatch, room, roomId, socket]);
+  }, [currentRoom, dispatch, roomId, roomName, socket]);
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {

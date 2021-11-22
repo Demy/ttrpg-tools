@@ -9,14 +9,18 @@ module.exports = (io) => {
       console.log('joinRoom ' + roomId);
       socket.join(roomId);
 
-      socket.on('roll', ({ dice, text, uid }) => {
+      const onRollListener = ({ dice, text, uid }) => {
+        console.log('roll in ' + roomId);
         rolls.makeRoll({ roomId, dice, text }, res => {
           io.to(roomId).emit('roll', { ...res, uid });
         });
-      });
+      };
+
+      socket.on('roll', onRollListener);
 
       socket.on('leaveRoom', () => {
-        console.log('leaveRoom ' + roomId);
+        console.log('leaveRoom (inner) ' + roomId);
+        socket.off('roll', onRollListener);
         socket.leave(roomId);
       });
     });
