@@ -8,12 +8,9 @@ import Loading from '../UI/Loading';
 import { useCookies } from 'react-cookie';
 import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE } from '../../utils/constans';
-
-const TOKEN_PREFIX = 'token__';
-const USER_PREFIX = 'user__'
-
-const COOKIES_PARAMS = { path: '/room', secure: true };
+import { 
+  L18N_NAMESPACE, COOKIES_TOKEN_PREFIX, COOKIES_USER_PREFIX, COOKIES_PARAMS 
+} from '../../utils/constans';
 
 export default function RoomPage() {
 
@@ -45,8 +42,8 @@ export default function RoomPage() {
 
   useEffect(() => {
     if (canUseCookies) {
-      const token = cookies[TOKEN_PREFIX + roomId];
-      const user = cookies[USER_PREFIX + roomId];
+      const token = cookies[COOKIES_TOKEN_PREFIX + roomId];
+      const user = cookies[COOKIES_USER_PREFIX + roomId];
       if (user) {
         dispatch(actions.setUser(user));
       } else {
@@ -75,24 +72,24 @@ export default function RoomPage() {
       setIsAuthorized(true);
       setNeedLogIn(false);
       if (canUseCookies) {
-        setCookie(TOKEN_PREFIX + roomId, roomToken);
-        setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
+        setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
+        setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
       }
     }
   }, [canUseCookies, needLogIn, roomId, roomToken, setCookie, username]);
 
   useEffect(() => {
     if (!needLogIn && isAuthorized && username && canUseCookies) {
-      setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
+      setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
     }
   }, [canUseCookies, isAuthorized, needLogIn, roomId, setCookie, username]);
 
   const handleCookieAccept = () => {
     if (isAuthorized) {
       if (roomToken) {
-        setCookie(TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
+        setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
       }
-      setCookie(USER_PREFIX + roomId, username, COOKIES_PARAMS);
+      setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
     }
   };
 

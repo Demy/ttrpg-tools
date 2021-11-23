@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SketchPicker, } from 'react-color';
-import Popup from '../Popup';
+import Popup from '../UI/Popup';
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE } from '../../utils/constans';
 

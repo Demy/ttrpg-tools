@@ -17,14 +17,15 @@ const Overlay = styled.div`
   right: 0;
   bottom: 0;
   z-index: 2;
+  background-color: rgba(200, 200, 200, 0.2);
 `;
 
 export default function Popup(props) {
 
   return (
-    <WithOverlay visible={props.show}>
+    <WithOverlay visible={props.show} style={props.style}>
       <Overlay onClick={props.hide} />
-      <PopupView>
+      <PopupView style={props.innerStyle}>
         {props.children}
       </PopupView>
     </WithOverlay>
