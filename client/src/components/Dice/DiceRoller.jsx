@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
@@ -70,10 +70,11 @@ const trimLength = (text) => {
 
 export default function DiceRoller({ roomId }) {
 
-  const [diceColor, setDiceColor] = React.useState('#ffffff');
-  const [currentRoom, setCurrentRoom] = React.useState('');
-  const [selectedDice, setSelectedDice] = React.useState([]);
-  const [isCustomSelected, setCustomSelected] = React.useState(false);
+  const [diceColor, setDiceColor] = useState('#ffffff');
+  const [currentRoom, setCurrentRoom] = useState('');
+  const [selectedDice, setSelectedDice] = useState([]);
+  const [isCustomSelected, setCustomSelected] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
@@ -85,9 +86,23 @@ export default function DiceRoller({ roomId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const onFocusFunction = () => {
+      if (socket && !socket.connected) {
+        socket.connect();
+      }
+    };
+    window.addEventListener("focus", onFocusFunction);
+ 
+    return () => {
+      window.removeEventListener("focus", onFocusFunction);
+    };
+  }, [socket]);
+
+  useEffect(() => {
     if (roomId !== currentRoom && !!socket) {
       const oldRoomName = roomName;
       const joinRoom = () => {
+        console.log(`Leave ${oldRoomName} join ${roomId}`);
         if (oldRoomName) {
           socket.emit('leaveRoom', oldRoomName);
         }
@@ -108,6 +123,7 @@ export default function DiceRoller({ roomId }) {
 
       socket.off('roll');
       socket.on('roll', data => {
+        setLoading(false);
         dispatch(actions.addNewRoll(data));
       });
 
@@ -134,13 +150,27 @@ export default function DiceRoller({ roomId }) {
     setCustomSelected(false);
   };
 
+  const executeWhenConnected = (action) => {
+    if (socket.connected) {
+      if (action) action.call(null);
+      return;
+    }
+    const doAction = () => {
+      if (action) action.call(null);
+      socket.off('connect', doAction);
+    };
+    socket.on('connect', doAction);
+    socket.connect();
+  };
+
   const handleRollDice = (dice, text) => {
-    if (socket) {
+    setLoading(true);
+    executeWhenConnected(() => {
       const uid = uuid();
       let fullText = `${username ? username : ''}${username && text ? ': ' : ''}${text}`;
       socket.emit('roll', { dice, text: trimLength(fullText), uid });
       dispatch(actions.setLastRollId(uid));
-    }
+    });
   };
 
   return (
@@ -148,6 +178,7 @@ export default function DiceRoller({ roomId }) {
       <MainContentContainer>
         <DicePanelContainer>
           <DicePanel 
+            disabled={isLoading}
             diceColor={diceColor} 
             onDieSelected={addDie} 
             onCustomToggle={setCustomSelected} 
@@ -168,6 +199,7 @@ export default function DiceRoller({ roomId }) {
       <MainContentContainer>
         <DicePanelContainer>
           <SelectedDicePanel 
+            disabled={isLoading}
             selected={selectedDice} 
             diceColor={diceColor} 
             max={MAX_DICE}
@@ -178,6 +210,7 @@ export default function DiceRoller({ roomId }) {
           <h3>{lang('result')}: {lastRoll.text ? lastRoll.text : ''}</h3>
           <DicePanelContainer>
             <RollResultPanel
+              disabled={isLoading}
               onRoll={handleRollDice}
             />
           </DicePanelContainer>

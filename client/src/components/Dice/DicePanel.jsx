@@ -8,6 +8,9 @@ const DiceContainer = styled.div`
   padding: 11px 0;
   text-align: center;
   width: 100%;
+  ${props => props.disabled ? `
+    opacity: 0.8;
+  ` : ''}
 `;
 const DieButton = styled.div`
   cursor: pointer;
@@ -21,6 +24,7 @@ export default function DicePanel(props) {
   const diceOptions = [4, 6, 8, 10, 12, 20, CUSTOM_DIE];
 
   const handleSelectDie = (die) => {
+    if (props.disabled) return;
     if (die === CUSTOM_DIE) {
       props.onCustomToggle(true);
       return;
@@ -30,7 +34,7 @@ export default function DicePanel(props) {
   };
 
   return (
-    <DiceContainer>
+    <DiceContainer disabled={props.disabled}>
       {diceOptions.map(die => (
         <DieButton key={`die${die}`} onClick={handleSelectDie.bind(null, die)}>
           <Die sides={die} value={die} color={props.diceColor} size="small" />

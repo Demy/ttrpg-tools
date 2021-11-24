@@ -162,13 +162,13 @@ export default function RollResultPanel(props) {
 
   const buttons = <ButtonsPanel>
     <ReRollButton 
-      disabled={lastRoll.id < 0} 
+      disabled={props.disabled || lastRoll.id < 0} 
       onClick={handleReroll}
     >
       {lang('reroll')}
     </ReRollButton>
     <ClearButton
-      disabled={lastRoll.id < 0} 
+      disabled={props.disabled || lastRoll.id < 0} 
       onClick={handleClear}
     >
       {lang('clear')}
@@ -176,7 +176,7 @@ export default function RollResultPanel(props) {
   </ButtonsPanel>
 
   return (
-    <DiceContainer ref={ref}>
+    <DiceContainer ref={ref} disabled={props.disabled}>
       <TopPanel>
         <RollLink 
           disabled={lastRoll.id < 0}

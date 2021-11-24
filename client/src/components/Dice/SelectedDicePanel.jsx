@@ -10,6 +10,9 @@ const DiceContainer = styled.div`
   display: inline-block;
   vertical-align: top;
   width: 100%;
+  ${props => props.disabled ? `
+    opacity: 0.8;
+  ` : ''}
 `;
 const TopPanel = styled.div`
   width: 100%;
@@ -211,6 +214,7 @@ export default function SelectedDicePanel(props) {
   };
 
   const removeDie = (diceIndex) => {
+    if (props.disabled) return;
     const copy = props.selected.concat();
     const dice = copy[diceIndex];
     if (dice.count > 1) {
@@ -242,13 +246,13 @@ export default function SelectedDicePanel(props) {
 
   const buttons = <ButtonsPanel>
     <RollButton 
-      disabled={props.selected.length === 0} 
+      disabled={props.disabled || props.selected.length === 0} 
       onClick={handleRollButton}
     >
       {lang('roll')}
     </RollButton>
     <ClearButton
-      disabled={props.selected.length === 0} 
+      disabled={props.disabled || props.selected.length === 0} 
       onClick={handleClear}
     >
       {lang('clear')}
@@ -256,12 +260,13 @@ export default function SelectedDicePanel(props) {
   </ButtonsPanel>;
 
   return (
-    <DiceContainer>
+    <DiceContainer disabled={props.disabled}>
       <TopPanel>
         <Title>{lang('short_code')}:</Title>
         <InputBox>
           <CodeInput 
             type="text"
+            disabled={props.disabled}
             placeholder={rollCode.length === 0 ? getCode(props.selected) : ''} 
             value={rollCode} 
             onChange={handleCodeChange} 

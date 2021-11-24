@@ -26,7 +26,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (socket === null && !!dispatch) {
+    if (socket === null) {
       dispatch(actions.setSocket(socketClient));
     }
   }, [dispatch, socket]);
