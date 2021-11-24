@@ -5,28 +5,36 @@ import styled from 'styled-components';
 import { L18N_NAMESPACE } from '../../utils/constans';
 import DiceRoller from '../Dice/DiceRoller';
 import ChangeNameDialog from './ChangeNameDialog';
+import { ReactComponent as PencilIcon } from '../../assets/img/pencil.svg';
 
 const ViewContainer = styled.div`
   padding: 0 10px 10px 10px;
   margin: 0 auto;
 `;
-const Title = styled.h3``;
-const UserName = styled.span`
+const Title = styled.h3`
+  display: inline-block;
+`;
+const UserNameStart = styled.span`
   color: #a5a5a5;
   font-size: 0.8em;
-  padding: 0.4em;
+  padding-left: 0.4em;
+  font-weight: bold;
 `;
-const EditButton = styled.button`
+const UserNameEnd = styled.span`
+  color: #a5a5a5;
+  font-size: 0.8em;
+  font-weight: bold;
+`;
+const EditButton = styled.div`
+  display: inline-block;
   user-select: none;
   cursor: pointer;
-  font-size: 0.9em;
-  padding: 0.1em;
-  background: none;
-  border: none;
-  color: #a5a5a5;
-  font-weight: bold;
+  opacity: 0.5;
+  width: 16px;
+  height: 16px;
+  transform: scale(110%);
   &:hover {
-    color: #000000;
+    opacity: 1;
   }
 `;
 
@@ -48,11 +56,16 @@ export default function RoomView({ roomId }) {
 
   return (
     <ViewContainer>
-      <Title>{lang('private_room')} 
-        <UserName>[{username}
-          <EditButton onClick={handleEditName}>🖉</EditButton>
-        ]</UserName>
-      </Title>
+      <Title>{lang('private_room')}</Title>
+      <UserNameStart>
+        [{username}
+      </UserNameStart>
+      <EditButton onClick={handleEditName}>
+        <PencilIcon />
+      </EditButton>
+      <UserNameEnd>
+      ]
+      </UserNameEnd>
       <ChangeNameDialog 
         show={showNameEdit} 
         hide={handleCancel} 
