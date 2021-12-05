@@ -86,23 +86,10 @@ export default function DiceRoller({ roomId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const onFocusFunction = () => {
-      if (socket && !socket.connected) {
-        socket.connect();
-      }
-    };
-    window.addEventListener("focus", onFocusFunction);
- 
-    return () => {
-      window.removeEventListener("focus", onFocusFunction);
-    };
-  }, [socket]);
-
-  useEffect(() => {
     if (roomId !== currentRoom && !!socket) {
       const oldRoomName = roomName;
       const joinRoom = () => {
-        console.log(`Leave ${oldRoomName} join ${roomId}`);
+        console.log(`${oldRoomName ? `Leave ${oldRoomName} -> ` : ''}Join ${roomId}`);
         if (oldRoomName) {
           socket.emit('leaveRoom', oldRoomName);
         }
@@ -150,22 +137,9 @@ export default function DiceRoller({ roomId }) {
     setCustomSelected(false);
   };
 
-  const executeWhenConnected = (action) => {
-    if (socket.connected) {
-      if (action) action.call(null);
-      return;
-    }
-    const doAction = () => {
-      if (action) action.call(null);
-      socket.off('connect', doAction);
-    };
-    socket.on('connect', doAction);
-    socket.connect();
-  };
-
   const handleRollDice = (dice, text) => {
     setLoading(true);
-    executeWhenConnected(() => {
+    socket.executeWhenConnected(() => {
       const uid = uuid();
       let fullText = `${username ? username : ''}${username && text ? ': ' : ''}${text}`;
       socket.emit('roll', { dice, text: trimLength(fullText), uid });

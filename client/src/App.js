@@ -6,19 +6,14 @@ import HomePage from './components/pages/HomePage';
 import DiceRollerPage from './components/pages/DiceRollerPage';
 import RollResultPage from './components/pages/RollResultPage';
 import RoomPage from './components/pages/RoomPage';
-import io from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from './redux/room/actions';
+import { Socket } from './helpers/socket';
 
 import './App.css';
 import Header from './components/UI/Header';
 
-const socketClient = io.connect('/');
-
-socketClient.on('connect_error', (e) => {
-  console.log('Socket connection error');
-  console.log(e);
-});
+const socketClient = Socket.build();
 
 function App() {
 

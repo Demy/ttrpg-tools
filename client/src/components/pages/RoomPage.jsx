@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { 
   L18N_NAMESPACE, COOKIES_TOKEN_PREFIX, COOKIES_USER_PREFIX, COOKIES_PARAMS 
 } from '../../utils/constans';
+import SocketControlledView from '../UI/SocketControlledView';
 
 export default function RoomPage() {
 
@@ -94,7 +95,7 @@ export default function RoomPage() {
   };
 
   return (
-    <div className="room">
+    <SocketControlledView>
       {isAuthorized && username !== '' ? <RoomView roomId={roomId} /> : (
         needLogIn || username === '' ? <RoomLogIn roomId={roomId} needPassword={needLogIn} /> : 
           <Loading middle />
@@ -121,6 +122,6 @@ export default function RoomPage() {
       >
         {lang('cookies_descr')}
       </CookieConsent>
-    </div>
+    </SocketControlledView>
   );
 }

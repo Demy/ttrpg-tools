@@ -1,6 +1,7 @@
 import React from 'react';
 import DiceRoller from '../Dice/DiceRoller';
 import styled from 'styled-components';
+import SocketControlledView from '../UI/SocketControlledView';
 
 const DiceRollerContainer = styled.div`
   width: 100%;
@@ -10,8 +11,10 @@ const DiceRollerContainer = styled.div`
 export default function DiceRollerPage() {
 
   return (
-    <DiceRollerContainer>
-      <DiceRoller />
-    </DiceRollerContainer>
+    <SocketControlledView>
+      <DiceRollerContainer>
+        <DiceRoller />
+      </DiceRollerContainer>
+    </SocketControlledView>
   );
 }

@@ -70,8 +70,8 @@ export default function RoomLogIn({ roomId, needPassword }) {
   return (
     <RoomLoginContainer>
       <Title>{lang('private_room')}:</Title>
-      <Label of="name">{lang('char_name')}</Label>
-      <Input type="text" id="name" value={username} onChange={handleUsernameChange} />
+      <Label of="charname">{lang('char_name')}</Label>
+      <Input type="text" id="charname" value={username} onChange={handleUsernameChange} />
       {needPassword ? 
         <div>
           <Label of="password">{lang('room_password')}</Label>

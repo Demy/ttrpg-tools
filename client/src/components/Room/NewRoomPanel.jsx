@@ -169,14 +169,25 @@ export default function RoomPanel() {
           </Description>
         </DescriptionPart>
         <FormPart>
-          <ToggleSwitch label={lang('use_password')} value={isPrivate} onChange={setPrivate} />
+          <ToggleSwitch 
+            id="usePassword"
+            label={lang('use_password')} 
+            value={isPrivate} 
+            onChange={setPrivate} 
+          />
           {isPrivate ? (
             <div>
               <div>
-                <PasswordInput type="text" value={password} onChange={handleChangePassword} />
+                <PasswordInput 
+                  id="newRoomPass"
+                  type="text" 
+                  value={password} 
+                  onChange={handleChangePassword} 
+                />
               </div>
               <div>
                 <ToggleSwitch 
+                  id="protectRolls"
                   label={lang('protect_links')} 
                   value={areRollsPrivate} 
                   onChange={setRollsPrivate} 
@@ -184,7 +195,9 @@ export default function RoomPanel() {
               </div>
             </div>
           ) : <></>}
-          <CreateButton onClick={handleCreate}>{lang('create')}</CreateButton>
+          <CreateButton id="createRoom" onClick={handleCreate}>
+            {lang('create')}
+          </CreateButton>
         </FormPart>
       </PanelPartsContainer>
     </RoomPanelContainer>

@@ -82,7 +82,7 @@ const Checkbox = styled.input`
   }
 `;
 
-const ToggleSwitch = ({ label, value, onChange }) => {
+const ToggleSwitch = ({ id, label, value, onChange }) => {
 
   const handleChange = (e) => {
     if (onChange !== undefined) {
@@ -102,11 +102,11 @@ const ToggleSwitch = ({ label, value, onChange }) => {
         <Checkbox 
           type="checkbox" 
           name={label} 
-          id={label} 
+          id={id || label} 
           checked={value}
           onChange={handleChange} 
         />
-        <SwitchViewLabel htmlFor={label}>
+        <SwitchViewLabel htmlFor={id || label}>
           <Inner />
           <Switch />
         </SwitchViewLabel>
