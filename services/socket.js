@@ -1,9 +1,11 @@
 const rolls = require('./rolls');
 const rooms = require('./rooms');
 
+let count = 0;
+
 module.exports = (io) => {
   io.on("connection", (socket) => {
-    console.log('Socket client connected!');
+    console.log('Socket client connected! Clients connected: ' + (++count));
     
     socket.on('joinRoom', (roomId) => {
       console.log('joinRoom ' + roomId);
@@ -32,7 +34,7 @@ module.exports = (io) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Socket client disconnected!');
+      console.log('Socket client disconnected! Clients connected: ' + (--count));
     });
   });
 };
