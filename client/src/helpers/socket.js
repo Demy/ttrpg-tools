@@ -3,14 +3,12 @@ import io from "socket.io-client";
 export class Socket {
 
   static build() {
-    console.log('=== Build socket proxy ===');
-
     const socketIO = io.connect('/');
     const socketHelper = new Socket(socketIO);
 
     return new Proxy(socketHelper, {
       get: function(target, property) {
-        console.log('Call Socket -> ' + property);
+        // console.log('Call Socket -> ' + property);
         return target[property] || socketIO[property];
       }
     });
@@ -18,21 +16,6 @@ export class Socket {
 
   constructor(socket) {
     this.socket = socket;
-
-    this.socket.addEventListener('error', (e) => {
-      console.log('addEventListener fired');
-      console.log(e);
-    });
-
-    this.socket.on('error', (e) => {
-      console.log('on error fired');
-      console.log(e);
-    });
-
-    socket.on('connect_error', (e) => {
-      console.log('Socket connection error');
-      console.log(e);
-    });
   }
 
   executeWhenConnected(action) {
