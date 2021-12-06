@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import devLog from './logger';
 
 export class Socket {
 
@@ -8,7 +9,7 @@ export class Socket {
 
     return new Proxy(socketHelper, {
       get: function(target, property) {
-        // console.log('Call Socket -> ' + property);
+        devLog('Call Socket -> ' + property);
         return target[property] || socketIO[property];
       }
     });
@@ -16,6 +17,20 @@ export class Socket {
 
   constructor(socket) {
     this.socket = socket;
+
+    socket.on("connect_error", (e) => {  
+      console.log('Socket connection error');
+      console.log(e);
+      socket.disconnect();  
+      setTimeout(() => {    
+        socket.connect();  
+      }, 1000);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log('Socket event: disconnect');
+      console.log(reason);
+    });
   }
 
   executeWhenConnected(action) {

@@ -10,6 +10,7 @@ import * as actions from '../../redux/room/actions';
 import uuid from 'react-uuid';
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
+import devLog from '../../helpers/logger';
 
 const MainContentContainer = styled.div`
   text-align: left;
@@ -89,7 +90,7 @@ export default function DiceRoller({ roomId }) {
     if (roomId !== currentRoom && !!socket) {
       const oldRoomName = roomName;
       const joinRoom = () => {
-        console.log(`${oldRoomName ? `Leave ${oldRoomName} -> ` : ''}Join ${roomId}`);
+        devLog(`${oldRoomName ? `Leave ${oldRoomName} -> ` : ''}Join ${roomId}`);
         if (oldRoomName) {
           socket.emit('leaveRoom', oldRoomName);
         }
