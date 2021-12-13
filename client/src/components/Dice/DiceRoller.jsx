@@ -12,6 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
 import devLog from '../../helpers/logger';
 
+const RollerContainer = styled.div`
+  max-width: 1035px;
+  margin: 0 auto;
+`;
 const MainContentContainer = styled.div`
   text-align: left;
   margin: 15px;
@@ -149,7 +153,7 @@ export default function DiceRoller({ roomId }) {
   };
 
   return (
-    <div className="dice-roller">
+    <RollerContainer>
       <MainContentContainer>
         <DicePanelContainer>
           <DicePanel 
@@ -197,6 +201,6 @@ export default function DiceRoller({ roomId }) {
           <RollsHistory />
         </HistoryPanelContainer>
       </SideContentContainer>
-    </div>
+    </RollerContainer>
   );
 }
