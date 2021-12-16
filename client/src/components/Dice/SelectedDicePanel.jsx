@@ -280,7 +280,7 @@ export default function SelectedDicePanel(props) {
         </PCView>
       </TopPanel>
       {selected.length ? (
-        <Dice>
+        <Dice id="selectedDice">
           {selected.map((die, i) => addDiceFrom(die, i))}
         </Dice>
       ) : <></>}

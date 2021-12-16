@@ -9,7 +9,7 @@ export class Socket {
 
     return new Proxy(socketHelper, {
       get: function(target, property) {
-        devLog('Call Socket -> ' + property);
+        // devLog('Call Socket -> ' + property);
         return target[property] || socketIO[property];
       }
     });

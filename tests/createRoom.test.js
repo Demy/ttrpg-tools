@@ -1,15 +1,11 @@
 const Page = require('./helpers/page');
+const paths = require('./helpers/constants');
 
 let _page;
 
-const ROOM_PATH = '/room/';
-const SERVER_PATH = 'http://localhost:8000/api/';
-const ROOM_PARAMS_REQUEST = 'room?room=';
-const ROOM_HISTORY_REQUEST = 'history?room=';
-
 beforeEach(async () => {
   _page = await Page.build(page);
-  await _page.goto('http://localhost:3000');
+  await _page.goto(paths.MAIN_PAGE);
   await _page.waitForSelector('#createRoom');
 });
 
@@ -24,14 +20,14 @@ describe('"Whith password" OFF', () => {
       await creacteRoom();
 
       const url = await _page.url();
-      expect(url).toContain(ROOM_PATH);
+      expect(url).toContain(paths.ROOM_PATH);
     });
 
     test('The room does not have a password and protection', async () => {
       await creacteRoom();
       const roomId = await _page.getRoomIdFromUrl();
 
-      const params = await _page.get(SERVER_PATH + ROOM_PARAMS_REQUEST + roomId);
+      const params = await _page.get(paths.SERVER_PATH + paths.ROOM_PARAMS_REQUEST + roomId);
       expect(params).toEqual({ private: 0, protected: 0 });
     });
 
@@ -39,7 +35,7 @@ describe('"Whith password" OFF', () => {
       await creacteRoom();
       const roomId = await _page.getRoomIdFromUrl();
 
-      const data = await _page.get(SERVER_PATH + ROOM_HISTORY_REQUEST + roomId);
+      const data = await _page.get(paths.SERVER_PATH + paths.ROOM_HISTORY_REQUEST + roomId);
       expect(data.history).toEqual([]);
     });
   });
@@ -73,7 +69,7 @@ describe('"Whith password" ON', () => {
       await creacteRoom();
       const roomId = await _page.getRoomIdFromUrl();
 
-      const params = await _page.get(SERVER_PATH + ROOM_PARAMS_REQUEST + roomId);
+      const params = await _page.get(paths.SERVER_PATH + paths.ROOM_PARAMS_REQUEST + roomId);
       expect(params).toEqual({ private: 1, protected: 0 });
     });
 
@@ -89,7 +85,7 @@ describe('"Whith password" ON', () => {
         await creacteRoom();
         const roomId = await _page.getRoomIdFromUrl();
   
-        const params = await _page.get(SERVER_PATH + ROOM_PARAMS_REQUEST + roomId);
+        const params = await _page.get(paths.SERVER_PATH + paths.ROOM_PARAMS_REQUEST + roomId);
         expect(params).toEqual({ private: 1, protected: 1 });
       });
     });

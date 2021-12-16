@@ -20,6 +20,10 @@ class CustomPage {
     return await this.page.$eval(selector, el => el.innerHTML);
   }
 
+  async getChildCountOf(selector) {
+    return await this.page.$eval(selector, el => el.childElementCount);
+  }
+
   async clickById(id) {
     await this.page.evaluate((elId) => {
       document.getElementById(elId).click();
