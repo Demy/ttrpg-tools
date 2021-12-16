@@ -245,7 +245,8 @@ export default function SelectedDicePanel(props) {
   };
 
   const buttons = <ButtonsPanel>
-    <RollButton 
+    <RollButton
+      id="rollDice" 
       disabled={props.disabled || props.selected.length === 0} 
       onClick={handleRollButton}
     >
@@ -266,6 +267,7 @@ export default function SelectedDicePanel(props) {
         <InputBox>
           <CodeInput 
             type="text"
+            id="codeInput"
             disabled={props.disabled}
             placeholder={rollCode.length === 0 ? getCode(props.selected) : ''} 
             value={rollCode} 
@@ -286,7 +288,11 @@ export default function SelectedDicePanel(props) {
       ) : <></>}
       <BottomPanel>
         <Title>{lang('description')}:</Title>
-        <DescriptionInput value={descr} onChange={handleDescrChange} />
+        <DescriptionInput
+          id="rollDescription" 
+          value={descr} 
+          onChange={handleDescrChange} 
+        />
       </BottomPanel>
       <MobileView>
         {buttons}

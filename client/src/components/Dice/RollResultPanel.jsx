@@ -108,7 +108,10 @@ export default function RollResultPanel(props) {
     const values = die.res;
     for (let j = 0; j < values.length; j++) {
       result.push(
-        <DieContainer key={`selected${index}-${die.die}-${die.color}-${j}`} >
+        <DieContainer
+          id={`selected${index}-${j}`}
+          key={`selected${index}-${die.die}-${die.color}-${j}`} 
+        >
           <Die sides={die.die} color={die.color} value={values[j]} size="medium" />
         </DieContainer>
       );
@@ -162,12 +165,14 @@ export default function RollResultPanel(props) {
 
   const buttons = <ButtonsPanel>
     <ReRollButton 
+      id="rerollButton"
       disabled={props.disabled || lastRoll.id < 0} 
       onClick={handleReroll}
     >
       {lang('reroll')}
     </ReRollButton>
     <ClearButton
+      id="rollResultClear"
       disabled={props.disabled || lastRoll.id < 0} 
       onClick={handleClear}
     >
@@ -179,6 +184,7 @@ export default function RollResultPanel(props) {
     <DiceContainer ref={ref} disabled={props.disabled}>
       <TopPanel>
         <RollLink 
+          id="rollLink"
           disabled={lastRoll.id < 0}
           type="text"
           value={link} 
@@ -193,8 +199,8 @@ export default function RollResultPanel(props) {
       <MobileView>
         {buttons}
       </MobileView>
-      <Dice>
-        {lastRoll.res.map((die, i) => addDiceFrom(die, `selected${i}`))}
+      <Dice id="rollResult">
+        {lastRoll.res.map((die, i) => addDiceFrom(die, i))}
       </Dice>
     </DiceContainer>
   );

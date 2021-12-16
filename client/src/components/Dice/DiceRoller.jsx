@@ -186,7 +186,9 @@ export default function DiceRoller({ roomId }) {
             onRoll={handleRollDice} />
         </DicePanelContainer>
         <ResultContainer active={lastRoll && lastRoll.id >= 0}>
-          <h3>{lang('result')}: {lastRoll.text ? lastRoll.text : ''}</h3>
+          <h3 id="resultTitle">
+            {lang('result')}: {lastRoll.text ? lastRoll.text : ''}
+          </h3>
           <DicePanelContainer>
             <RollResultPanel
               disabled={isLoading}

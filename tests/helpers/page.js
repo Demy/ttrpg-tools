@@ -29,6 +29,11 @@ class CustomPage {
       document.getElementById(elId).click();
     }, id);
   }
+
+  async typeIn(selector, text) {
+    await this.page.focus(selector);
+    await this.page.keyboard.type(text);
+  }
   
   async getRoomIdFromUrl() {
     const url = await this.page.url();

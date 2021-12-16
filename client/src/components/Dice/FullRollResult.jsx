@@ -61,7 +61,10 @@ export default function FullRollResult() {
     const values = die.res;
     for (let j = 0; j < values.length; j++) {
       result.push(
-        <DieContainer key={`selected${index}-${die.die}-${die.color}-${j}`} >
+        <DieContainer 
+          id={`die${index}-${j}`}
+          key={`die${index}-${die.die}-${die.color}-${j}`} 
+        >
           <Die sides={die.die} color={die.color} value={values[j]} size="big" />
         </DieContainer>
       );
@@ -84,8 +87,8 @@ export default function FullRollResult() {
   return (
     <DiceContainer ref={containerRef}>
       {fullRoll.text ? <h3>{fullRoll.text}</h3> : <></>}
-      <Dice>
-        {roll.map((die, i) => addDiceFrom(die, `selected${i}`))}
+      <Dice id="rollResult">
+        {roll.map((die, i) => addDiceFrom(die, i))}
       </Dice>
       <RoomName>{lang('room')}: {lang(roomId === PUBLIC_ROOM ? 'public_room' : 'private_room')}</RoomName>
       {lang('date')}: {date.toLocaleString()}
