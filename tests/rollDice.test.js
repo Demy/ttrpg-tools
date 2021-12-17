@@ -25,6 +25,22 @@ const makeRoll = async () => {
   await _page.waitForSelector('#selected0-0');
 };
 
+const makeRollWithDescription = async (text) => {
+  await selectDice(getRandomOf(5));    
+  await _page.typeIn('#rollDescription', text);
+  await makeRoll();
+};
+
+const doAndWaitForTitleChange = async (action) => {
+  let oldTitle = await _page.getContentsOf('#resultTitle');
+
+  await action.call(null);
+
+  await _page.waitForFunction(
+    `document.getElementById("resultTitle").innerHTML != "${oldTitle}"`
+  );
+};
+
 describe('When you select dice', () => {
   describe('And roll without description', () => {
     test('It shows a result', async () => {
@@ -99,11 +115,9 @@ describe('When you select dice', () => {
 
   describe('And roll with description', () => {
     test('Same text appears above the result', async () => {
-      await selectDice(getRandomOf(5));
-
-      await _page.typeIn('#rollDescription', TEST_TEXT);
-
-      await makeRoll();
+      await doAndWaitForTitleChange(async () => {
+        await makeRollWithDescription(TEST_TEXT);
+      });
       
       const title = await _page.getContentsOf('#resultTitle');
       expect(title).toContain(`: ${TEST_TEXT}`);
@@ -111,16 +125,13 @@ describe('When you select dice', () => {
 
     describe('And then reroll', () => {
       test('Reroll title also contains the same text in description', async () => {
-        await selectDice(getRandomOf(5));
-  
-        await _page.typeIn('#rollDescription', TEST_TEXT);
-  
-        await makeRoll();
+        await doAndWaitForTitleChange(async () => {
+          await makeRollWithDescription(TEST_TEXT);
+        });
 
-        const link = await _page.$eval('#rollLink', el => el.value);
-
-        await _page.clickById('rerollButton');
-        await _page.waitForFunction(`document.getElementById("rollLink").value != "${link}"`);
+        await doAndWaitForTitleChange(async () => {
+          await _page.clickById('rerollButton');
+        });
         
         const title = await _page.getContentsOf('#resultTitle');
         expect(title).not.toContain(`: ${TEST_TEXT}`);
@@ -130,11 +141,7 @@ describe('When you select dice', () => {
 
     describe('And then click Clear', () => {
       test('It cleans title', async () => {
-        await selectDice(getRandomOf(5));
-    
-        await _page.typeIn('#rollDescription', TEST_TEXT);
-  
-        await makeRoll();
+        await makeRollWithDescription(TEST_TEXT);
   
         await _page.clickById('rollResultClear');
   

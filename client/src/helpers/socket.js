@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import devLog from './logger';
+// import devLog from './logger';
 
 export class Socket {
 
