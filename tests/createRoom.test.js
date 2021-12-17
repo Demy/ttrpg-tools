@@ -1,5 +1,5 @@
 const Page = require('./helpers/page');
-const paths = require('./helpers/constants');
+const paths = require('./helpers/paths');
 
 let _page;
 

@@ -71,12 +71,19 @@ export default function RollsHistory() {
   if (!history) return <></>;
 
   return (
-    <HistoryTableContainer>
+    <HistoryTableContainer id="history">
       {history.map((roll, id) => (
-        <HistoryLine key={`history-roll-${id}`}>
+        <HistoryLine 
+          id={`history${id}`}
+          key={`history-roll-${id}`}
+        >
           <LeftPart>
-            {roll.text ? <HistoryLabel>{roll.text}:</HistoryLabel> : <></>}
-            <div>
+            {roll.text ? (
+              <HistoryLabel id={`historyDescr${id}`}>
+                {roll.text}:
+              </HistoryLabel>
+             ) : <></>}
+            <div id={`historyDice${id}`}>
               {roll.res.map((die, dieIndex) => {
                 return die.res.map((dieResult, resultIndex) => (
                   <Die 
@@ -96,6 +103,7 @@ export default function RollsHistory() {
             </HistoryDate>
             <LinkButton>
               <Link 
+                id={`historyLink${id}`}
                 to={`/roll/${roomName}/${roll.id}`} 
                 target="_blank"
                 style={{ textDecoration: 'none' }}

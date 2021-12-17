@@ -79,6 +79,7 @@ export default function RoomLogIn({ roomId, needPassword }) {
         </div> : <></>
       }
       <LogInButton 
+        id="enterRoom"
         onClick={handleLogIn} 
         disabled={username === '' || (needPassword && password === '')}
       >{lang('enter')}</LogInButton>

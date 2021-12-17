@@ -1,5 +1,5 @@
-const ROOM_PATH = '/room/';
-const ROOT = 'http://localhost:3000';
+const { getRandomFromArray, getRandomOf } = require('./utils');
+const paths = require('./paths');
 
 class CustomPage {
   static async build(page) {
@@ -34,17 +34,6 @@ class CustomPage {
     await this.page.focus(selector);
     await this.page.keyboard.type(text);
   }
-  
-  async getRoomIdFromUrl() {
-    const url = await this.page.url();
-    const idIndex = url.lastIndexOf(ROOM_PATH);
-    const roomIdStart = url.substr(idIndex + ROOM_PATH.length);
-    const idEndIndex = roomIdStart.indexOf('/');
-    if (idEndIndex < 0) {
-      return roomIdStart;
-    }
-    return roomIdStart.substring(0, idEndIndex);
-  }
 
   get(path) {
     return this.page.evaluate((p) => {
@@ -67,6 +56,49 @@ class CustomPage {
         body: JSON.stringify(d)
       }).then(res => res.json());
     }, path, data);
+  }
+
+  /* Website specific */
+  
+  async getRoomIdFromUrl() {
+    const url = await this.page.url();
+    const idIndex = url.lastIndexOf(paths.ROOM_PATH);
+    const roomIdStart = url.substr(idIndex + paths.ROOM_PATH.length);
+    const idEndIndex = roomIdStart.indexOf('/');
+    if (idEndIndex < 0) {
+      return roomIdStart;
+    }
+    return roomIdStart.substring(0, idEndIndex);
+  }
+  
+  async selectDice(number) {
+    const dice = [4, 6, 8, 10, 12, 20];
+    for (let i = 0; i < number; i++) {
+      await this.clickById(`die${getRandomFromArray(dice)}`);
+    }
+
+    await this.waitForSelector('#selectedDice');
+  }
+  
+  async makeRoll() {
+    await this.clickById('rollDice');
+    await this.waitForSelector('#selected0-0');
+  }
+  
+  async makeRollWithDescription(text) {
+    await this.selectDice(getRandomOf(3));    
+    await this.typeIn('#rollDescription', text);
+    await this.makeRoll();
+  }
+  
+  async doAndWaitForTitleChange(action) {
+    let oldTitle = await this.getContentsOf('#resultTitle');
+
+    await action.call(null);
+
+    await this.waitForFunction(
+      `document.getElementById("resultTitle").innerHTML != "${oldTitle}"`
+    );
   }
 }
 
