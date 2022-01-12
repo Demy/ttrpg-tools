@@ -41,7 +41,7 @@ export default function DicePanel(props) {
           key={`die${die}`} 
           onClick={handleSelectDie.bind(null, die)}
         >
-          <Die sides={die} value={die} color={props.diceColor} size="small" />
+          <Die sides={die} value={die} color={props.diceColor} size={props.size || "small"} />
         </DieButton>
       ))}
     </DiceContainer>

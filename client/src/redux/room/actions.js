@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
-  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY, USERNAME
+  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY, USER_PARAMS, USERNAME
 } from "./constants";
 
 export const setSocket = (socket) => dispatch => {
@@ -74,6 +74,10 @@ export const logInToRoom = (roomId, username, password, onError) => dispatch => 
 
 export const setUser = (username) => dispatch => {
   dispatch({ type: USERNAME, payload: username });
+};
+
+export const setUserParams = (params) => dispatch => {
+  dispatch({ type: USER_PARAMS, payload: params });
 };
 
 export const clearToken = () => dispatch => {

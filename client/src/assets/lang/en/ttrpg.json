@@ -16,7 +16,9 @@
 	"create_room_descr_3": "Choose \"Protect roll result links\" if you want the links of the roll results be also protected by the password.",
 	"date": "Date",
 	"description": "Description",
+  "dice_set": "Набор костей",
 	"english": "English",
+  "empty_set": "Default set. To customize your set please choose colors and dice from the set above",
 	"enter": "Enter",
   "enter_name": "Please enter character's name",
 	"enter_password": "Please enter room password",
@@ -41,5 +43,6 @@
 	"short_code": "Short code",
 	"sides": "Sides",
 	"too_many_dice": "Too many dice",
-	"use_password": "Use password"
+	"use_password": "Use password",
+  "your_set": "Your set"
 }

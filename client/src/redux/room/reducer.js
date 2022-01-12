@@ -1,7 +1,7 @@
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, 
   CLEAR_LAST_ROLL, MOVE_TO_ROOM, ROLLS_HISTORY,
-  SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY, USERNAME
+  SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY, USERNAME, USER_PARAMS
 } from './constants';
 
 const defaultLastRoll = {
@@ -16,6 +16,7 @@ const initialState = {
   roomStatus: null,
   roomToken: '',
   username: '',
+  userParams: {},
   lastRoll: defaultLastRoll,
   fullRoll: {
     id: -1
@@ -105,6 +106,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         username: action.payload
+      };
+    case USER_PARAMS:
+      return {
+        ...state,
+        userParams: action.payload
       };
     default:
       return state;

@@ -8,4 +8,6 @@ export const ROLLS_HISTORY = 'ROLLS_HISTORY';
 export const ROOM_STATUS = 'ROOM_STATUS';
 export const ROOM_TOKEN = 'ROOM_TOKEN';
 export const USERNAME = 'USERNAME';
+export const USER_PARAMS = 'USER_PARAMS';
+export const DICE_SET = 'DICE_SET';
 export const CLEAR_HISTORY = 'CLEAR_HISTORY';

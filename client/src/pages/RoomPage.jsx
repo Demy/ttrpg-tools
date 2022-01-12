@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../redux/room/actions';
-import RoomView from '../Room/RoomView';
-import RoomLogIn from '../Room/RoomLogIn';
-import Loading from '../UI/Loading';
+import * as actions from '../redux/room/actions';
+import RoomView from '../components/Room/RoomView';
+import RoomLogIn from '../components/Room/RoomLogIn';
+import Loading from '../components/UI/Loading';
 import { useCookies } from 'react-cookie';
 import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 import { 
   L18N_NAMESPACE, COOKIES_TOKEN_PREFIX, COOKIES_USER_PREFIX, COOKIES_PARAMS 
-} from '../../utils/constans';
-import SocketControlledView from '../UI/SocketControlledView';
+} from '../utils/constans';
+import SocketControlledView from '../components/UI/SocketControlledView';
 
 export default function RoomPage() {
 

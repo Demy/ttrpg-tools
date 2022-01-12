@@ -6,12 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE } from '../../utils/constans';
 
 const ParametersPanel = styled.div`
-  padding: 13px 15px;
   text-align: left;
-`;
-const Title = styled.h4`
-  margin: 0;
-  padding: 0 10px 7px 0;
 `;
 const PanelLabel = styled.div`
   display: inline-block;
@@ -65,7 +60,6 @@ export default function DieParametersPanel(props) {
 
   return (
     <ParametersPanel>
-      <Title>{lang('parameters')}</Title>
       <PanelLabel onClick={setShowPicker.bind(null, !showPicker)}>{lang('color')}:</PanelLabel>
       <ColorPicker>
         <ColorSample color={props.diceColor} onClick={setShowPicker.bind(null, !showPicker)} />

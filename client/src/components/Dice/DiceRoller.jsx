@@ -49,6 +49,7 @@ const ResultContainer = styled.div`
 `;
 const ParametersContainer = styled.div`
   border: 1px solid #c0c0c0;
+  padding: 13px 15px;
 `;
 
 const HistoryPanelContainer = styled.div`
@@ -61,6 +62,11 @@ const HistoryTitle = styled.h3`
   width: 100%;
   margin: 15px 10px;
   text-align: left;
+`;
+const SmallTitle = styled.h4`
+  margin: 0;
+  padding: 0 0 13px 0;
+  tex-align: left;
 `;
 
 const MAX_DICE = 20;
@@ -166,6 +172,7 @@ export default function DiceRoller({ roomId }) {
       </MainContentContainer>
       <SideContentContainer>
         <ParametersContainer>
+          <SmallTitle>{lang('parameters')}</SmallTitle>
           <ParametersPanel 
             diceColor={diceColor} 
             showSidesSetting={isCustomSelected} 

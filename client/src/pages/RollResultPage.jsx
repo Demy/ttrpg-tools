@@ -1,5 +1,5 @@
 import React from 'react';
-import FullRollResult from '../Dice/FullRollResult';
+import FullRollResult from '../components/Dice/FullRollResult';
 
 export default function RollResultPage() {
 

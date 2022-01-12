@@ -1,8 +1,8 @@
 import React from 'react';
-import DiceRoller from '../Dice/DiceRoller';
+import DiceRoller from '../components/Dice/DiceRoller';
 import styled from 'styled-components';
-import SocketControlledView from '../UI/SocketControlledView';
-import { PUBLIC_ROOM } from '../../utils/constans';
+import SocketControlledView from '../components/UI/SocketControlledView';
+import { PUBLIC_ROOM } from '../utils/constans';
 
 const DiceRollerContainer = styled.div`
   width: 100%;

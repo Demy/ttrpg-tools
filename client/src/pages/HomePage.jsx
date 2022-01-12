@@ -1,9 +1,9 @@
 import React from 'react';
-import DiceRoller from '../Dice/DiceRoller';
-import NewRoomPanel from '../Room/NewRoomPanel';
-import { L18N_NAMESPACE, PUBLIC_ROOM } from '../../utils/constans';
+import DiceRoller from '../components/Dice/DiceRoller';
+import NewRoomPanel from '../components/Room/NewRoomPanel';
+import { L18N_NAMESPACE, PUBLIC_ROOM } from '../utils/constans';
 import { useTranslation } from 'react-i18next';
-import SocketControlledView from '../UI/SocketControlledView';
+import SocketControlledView from '../components/UI/SocketControlledView';
 
 export default function HomePage() {
 
