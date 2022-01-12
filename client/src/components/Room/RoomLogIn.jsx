@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useStore } from 'react-redux';
 import styled from 'styled-components';
 import * as actions from '../../redux/room/actions';
-import { L18N_NAMESPACE } from '../../utils/constans';
+import { L18N_NAMESPACE, STORAGE_USER_PAAMS_PREFIX } from '../../utils/constans';
 import { toast } from 'react-toastify';
 import DicePanel from '../Dice/DicePanel';
 import DieParametersPanel from '../Dice/DieParametersPanel';
@@ -101,7 +101,9 @@ export default function RoomLogIn({ roomId, needPassword }) {
     } else {
       dispatch(actions.setUser(username));
     }
-    dispatch(actions.setUserParams({ ...userParams, dice: selected }));
+    const newParams = { ...userParams, dice: selected };
+    dispatch(actions.setUserParams(newParams));
+    localStorage.setItem(STORAGE_USER_PAAMS_PREFIX + roomId, JSON.stringify(newParams));
   };
 
   const addDie = (sides, color) => {

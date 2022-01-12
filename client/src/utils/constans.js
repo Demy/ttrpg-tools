@@ -11,6 +11,6 @@ export const L18N_NAMESPACE = 'ttrpg';
 
 export const MOBILE_SCREEN = '910px';
 
-export const COOKIES_TOKEN_PREFIX = 'token__';
-export const COOKIES_USER_PREFIX = 'user__'
-export const COOKIES_PARAMS = { path: '/room', secure: true };
+export const STORAGE_TOKEN_PREFIX = 'token__';
+export const STORAGE_USER_PREFIX = 'user__';
+export const STORAGE_USER_PAAMS_PREFIX = 'user__';

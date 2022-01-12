@@ -5,11 +5,9 @@ import * as actions from '../redux/room/actions';
 import RoomView from '../components/Room/RoomView';
 import RoomLogIn from '../components/Room/RoomLogIn';
 import Loading from '../components/UI/Loading';
-import { useCookies } from 'react-cookie';
-import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-consent';
-import { useTranslation } from 'react-i18next';
 import { 
-  L18N_NAMESPACE, COOKIES_TOKEN_PREFIX, COOKIES_USER_PREFIX, COOKIES_PARAMS 
+  STORAGE_TOKEN_PREFIX, STORAGE_USER_PREFIX, STORAGE_PARAMS, 
+  STORAGE_USER_PAAMS_PREFIX 
 } from '../utils/constans';
 import SocketControlledView from '../components/UI/SocketControlledView';
 
@@ -22,14 +20,8 @@ export default function RoomPage() {
   const username = useSelector(state => state.room.username);
   const roomToken = useSelector(state => state.room.roomToken);
 
-  const canUseCookies = getCookieConsentValue();
-
-  const [cookies, setCookie] = useCookies(['auth']);
-
   const [needLogIn, setNeedLogIn] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
-
-  const [lang] = useTranslation(L18N_NAMESPACE);
 
   const dispatch = useDispatch();
 
@@ -42,21 +34,23 @@ export default function RoomPage() {
   }, [dispatch, roomId, roomName]);
 
   useEffect(() => {
-    if (canUseCookies) {
-      const token = cookies[COOKIES_TOKEN_PREFIX + roomId];
-      const user = cookies[COOKIES_USER_PREFIX + roomId];
-      if (user) {
-        dispatch(actions.setUser(user));
-      } else {
-        dispatch(actions.setUser(''));
+    const token = localStorage.getItem[STORAGE_TOKEN_PREFIX + roomId];
+    const user = localStorage.getItem[STORAGE_USER_PREFIX + roomId];
+    const params = localStorage.getItem(STORAGE_USER_PAAMS_PREFIX + roomId);
+    if (user) {
+      dispatch(actions.setUser(user));
+      if (params) {
+        dispatch(actions.setUserParams(JSON.parse(params)));
       }
-      if (user && token) {
-        dispatch(actions.verifyAndSaveToken(token, roomId));
-      } else {
-        dispatch(actions.clearToken());
-      }
+    } else {
+      dispatch(actions.setUser(''));
     }
-  }, [canUseCookies, cookies, dispatch, roomId]);
+    if (user && token) {
+      dispatch(actions.verifyAndSaveToken(token, roomId));
+    } else {
+      dispatch(actions.clearToken());
+    }
+  }, [dispatch, roomId]);
 
   useEffect(() => {
     if (roomStatus !== null) {
@@ -72,27 +66,16 @@ export default function RoomPage() {
     if (needLogIn && roomToken && username) {
       setIsAuthorized(true);
       setNeedLogIn(false);
-      if (canUseCookies) {
-        setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
-        setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
-      }
+      localStorage.setItem(STORAGE_TOKEN_PREFIX + roomId, roomToken, STORAGE_PARAMS);
+      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username, STORAGE_PARAMS);
     }
-  }, [canUseCookies, needLogIn, roomId, roomToken, setCookie, username]);
+  }, [needLogIn, roomId, roomToken, username]);
 
   useEffect(() => {
-    if (!needLogIn && isAuthorized && username && canUseCookies) {
-      setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
+    if (!needLogIn && isAuthorized && username) {
+      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username, STORAGE_PARAMS);
     }
-  }, [canUseCookies, isAuthorized, needLogIn, roomId, setCookie, username]);
-
-  const handleCookieAccept = () => {
-    if (isAuthorized) {
-      if (roomToken) {
-        setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
-      }
-      setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
-    }
-  };
+  }, [isAuthorized, needLogIn, roomId, username]);
 
   return (
     <SocketControlledView>
@@ -100,28 +83,6 @@ export default function RoomPage() {
         needLogIn || username === '' ? <RoomLogIn roomId={roomId} needPassword={needLogIn} /> : 
           <Loading middle />
       )}
-      <CookieConsent 
-        enableDeclineButton
-        location={OPTIONS.BOTTOM}
-        style={{ 
-          background: "#ffffff", 
-          color: '#252525', 
-          textAlign: 'left', 
-          border: '1px solid #d0d0d0'
-        }}
-        buttonStyle={{ 
-          color: "#4e503b", 
-          fontSize: "1em", 
-          borderRadius: "5px", 
-          padding: "10px 20px",
-          border: "1px solid #c0c0c0"
-        }}
-        buttonText={lang('cookies_accept')}
-        declineButtonText={lang('cookies_decline')}
-        onAccept={handleCookieAccept}
-      >
-        {lang('cookies_descr')}
-      </CookieConsent>
     </SocketControlledView>
   );
 }
