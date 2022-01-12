@@ -6,7 +6,7 @@ import RoomView from '../components/Room/RoomView';
 import RoomLogIn from '../components/Room/RoomLogIn';
 import Loading from '../components/UI/Loading';
 import { 
-  STORAGE_TOKEN_PREFIX, STORAGE_USER_PREFIX, STORAGE_PARAMS, 
+  STORAGE_TOKEN_PREFIX, STORAGE_USER_PREFIX, 
   STORAGE_USER_PAAMS_PREFIX 
 } from '../utils/constans';
 import SocketControlledView from '../components/UI/SocketControlledView';
@@ -66,14 +66,14 @@ export default function RoomPage() {
     if (needLogIn && roomToken && username) {
       setIsAuthorized(true);
       setNeedLogIn(false);
-      localStorage.setItem(STORAGE_TOKEN_PREFIX + roomId, roomToken, STORAGE_PARAMS);
-      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username, STORAGE_PARAMS);
+      localStorage.setItem(STORAGE_TOKEN_PREFIX + roomId, roomToken);
+      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username);
     }
   }, [needLogIn, roomId, roomToken, username]);
 
   useEffect(() => {
     if (!needLogIn && isAuthorized && username) {
-      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username, STORAGE_PARAMS);
+      localStorage.setItem(STORAGE_USER_PREFIX + roomId, username);
     }
   }, [isAuthorized, needLogIn, roomId, username]);
 
