@@ -53,9 +53,10 @@ export default function RoomPage() {
 
       if (user) {
         dispatch(actions.setUser(user));
-        console.log(params);
         if (params && params !== '') {
           dispatch(actions.setUserParams(params));
+        } else {
+          dispatch(actions.setUserParams(null));
         }
       } else {
         dispatch(actions.setUser(''));

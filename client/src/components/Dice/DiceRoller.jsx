@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../redux/room/actions';
 import uuid from 'react-uuid';
 import { useTranslation } from 'react-i18next';
-import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
+import { L18N_NAMESPACE, MOBILE_SCREEN, PUBLIC_ROOM } from '../../utils/constans';
 import devLog from '../../helpers/logger';
 
 const RollerContainer = styled.div`
@@ -65,7 +65,7 @@ const HistoryTitle = styled.h3`
 `;
 const SmallTitle = styled.h4`
   margin: 0;
-  padding: 0 0 13px 0;
+  padding: 0 0 7px 0;
   tex-align: left;
 `;
 
@@ -92,6 +92,7 @@ export default function DiceRoller({ roomId }) {
   const lastRoll = useSelector(state => state.room.lastRoll);
   const roomName = useSelector(state => state.room.roomName);
   const username = useSelector(state => state.room.username);
+  const userParams = useSelector(state => state.room.userParams);
   const socket = useSelector(state => state.room.socket);
 
   const dispatch = useDispatch();
@@ -128,6 +129,14 @@ export default function DiceRoller({ roomId }) {
       setCurrentRoom(roomId);
     }
   }, [currentRoom, dispatch, roomId, roomName, socket]);
+
+  useEffect(() => {
+    if (roomId === PUBLIC_ROOM && username !== '') {
+      dispatch(actions.clearToken());
+      dispatch(actions.setUser(''));
+      dispatch(actions.setUserParams(null));
+    }
+  });
 
   const addDie = (sides, color) => {
     if (selectedDice.length < MAX_DICE) {
@@ -174,6 +183,7 @@ export default function DiceRoller({ roomId }) {
         <ParametersContainer>
           <SmallTitle>{lang('parameters')}</SmallTitle>
           <ParametersPanel 
+            disabled={userParams && userParams.dice && userParams.dice.length > 0}
             diceColor={diceColor} 
             showSidesSetting={isCustomSelected} 
             onColorSelected={setDiceColor}

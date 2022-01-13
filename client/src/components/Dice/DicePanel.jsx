@@ -1,13 +1,14 @@
 import React from 'react';
 import Die from './Die';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const DiceContainer = styled.div`
   display: inline-block;
   vertical-align: top;
-  padding: 11px 0;
+  padding: 11px 7px;
   text-align: center;
-  width: 100%;
+  width: calc(100% - 14px);
   ${props => props.disabled ? `
     opacity: 0.8;
   ` : ''}
@@ -18,10 +19,19 @@ const DieButton = styled.div`
 `;
 
 const CUSTOM_DIE = '?';
+const ALL_DICE = [4, 6, 8, 10, 12, 20, CUSTOM_DIE];
 
 export default function DicePanel(props) {
 
-  const diceOptions = [4, 6, 8, 10, 12, 20, CUSTOM_DIE];
+  const userParams = useSelector(state => state.room.userParams);
+
+  let diceOptions = [];
+  if (userParams !== null && 
+    userParams.dice && userParams.dice.length > 0) {
+      diceOptions = userParams.dice;
+  } else {
+    diceOptions = ALL_DICE.map(die => ({ die, color: props.diceColor }));
+  }
 
   const handleSelectDie = (die) => {
     if (props.disabled) return;
@@ -37,11 +47,11 @@ export default function DicePanel(props) {
     <DiceContainer disabled={props.disabled}>
       {diceOptions.map(die => (
         <DieButton 
-          id={`die${die}`} 
-          key={`die${die}`} 
-          onClick={handleSelectDie.bind(null, die)}
+          id={`die${die.die}`} 
+          key={`die${die.die}`} 
+          onClick={handleSelectDie.bind(null, die.die)}
         >
-          <Die sides={die} value={die} color={props.diceColor} size={props.size || "small"} />
+          <Die sides={die.die} value={die.die} color={die.color} size={props.size || "small"} />
         </DieButton>
       ))}
     </DiceContainer>
