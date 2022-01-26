@@ -11,6 +11,7 @@ import uuid from 'react-uuid';
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE, MOBILE_SCREEN, PUBLIC_ROOM } from '../../utils/constans';
 import devLog from '../../helpers/logger';
+import EditDicePanel from './EditDicePanel';
 
 const RollerContainer = styled.div`
   max-width: 1035px;
@@ -167,12 +168,33 @@ export default function DiceRoller({ roomId }) {
     });
   };
 
+  const sidePanel = userParams && userParams.dice && userParams.dice.length > 0 ? (
+    <ParametersContainer>
+      <SmallTitle>{lang('dice_set')}</SmallTitle>
+      <EditDicePanel 
+        dice={userParams.dice}
+      />
+    </ParametersContainer>
+  ) : (
+    <ParametersContainer>
+      <SmallTitle>{lang('parameters')}</SmallTitle>
+      <ParametersPanel 
+        diceColor={diceColor} 
+        showSidesSetting={isCustomSelected} 
+        onColorSelected={setDiceColor}
+        onAddDie={addDie} 
+        onCustomCanceled={setCustomSelected.bind(null, false)}
+      />
+    </ParametersContainer>
+  );
+
   return (
     <RollerContainer>
       <MainContentContainer>
         <DicePanelContainer>
           <DicePanel 
             disabled={isLoading}
+            fromParams={true}
             diceColor={diceColor} 
             onDieSelected={addDie} 
             onCustomToggle={setCustomSelected} 
@@ -180,17 +202,7 @@ export default function DiceRoller({ roomId }) {
         </DicePanelContainer>
       </MainContentContainer>
       <SideContentContainer>
-        <ParametersContainer>
-          <SmallTitle>{lang('parameters')}</SmallTitle>
-          <ParametersPanel 
-            disabled={userParams && userParams.dice && userParams.dice.length > 0}
-            diceColor={diceColor} 
-            showSidesSetting={isCustomSelected} 
-            onColorSelected={setDiceColor}
-            onAddDie={addDie} 
-            onCustomCanceled={setCustomSelected.bind(null, false)}
-          />
-        </ParametersContainer>
+        {sidePanel}
       </SideContentContainer>
       <MainContentContainer>
         <DicePanelContainer>

@@ -26,7 +26,7 @@ export default function DicePanel(props) {
   const userParams = useSelector(state => state.room.userParams);
 
   let diceOptions = [];
-  if (userParams !== null && 
+  if (props.fromParams && userParams !== null && 
     userParams.dice && userParams.dice.length > 0) {
       diceOptions = userParams.dice;
   } else {
@@ -35,12 +35,12 @@ export default function DicePanel(props) {
 
   const handleSelectDie = (die) => {
     if (props.disabled) return;
-    if (die === CUSTOM_DIE) {
+    if (die.die === CUSTOM_DIE) {
       props.onCustomToggle(true);
       return;
     }
     props.onCustomToggle(false);
-    props.onDieSelected(die, props.diceColor);
+    props.onDieSelected(die.die, die.color);
   };
 
   return (
@@ -49,7 +49,7 @@ export default function DicePanel(props) {
         <DieButton 
           id={`die${die.die}`} 
           key={`die${die.die}`} 
-          onClick={handleSelectDie.bind(null, die.die)}
+          onClick={handleSelectDie.bind(null, die)}
         >
           <Die sides={die.die} value={die.die} color={die.color} size={props.size || "small"} />
         </DieButton>

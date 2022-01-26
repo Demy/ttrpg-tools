@@ -7,10 +7,6 @@ import { L18N_NAMESPACE } from '../../utils/constans';
 
 const ParametersPanel = styled.div`
   text-align: left;
-  ${props => props.disabled ? `
-    opacity: 0.4;
-    pointer-events: none;
-  ` : ``}
 `;
 const PanelLabel = styled.div`
   display: inline-block;
@@ -42,7 +38,6 @@ const CancelButton = styled.button`
   cursor: pointer;
 `;
 
-
 export default function DieParametersPanel(props) {
   
   const [showPicker, setShowPicker] = React.useState(false);
@@ -63,9 +58,11 @@ export default function DieParametersPanel(props) {
   };
 
   return (
-    <ParametersPanel disabled={props.disabled}>
-      <PanelLabel onClick={setShowPicker.bind(null, !showPicker)}>{lang('color')}:</PanelLabel>
-      <ColorPicker disabled={props.disabled}>
+    <ParametersPanel>
+      <PanelLabel onClick={setShowPicker.bind(null, !showPicker)}>
+        {lang('color')}:
+      </PanelLabel>
+      <ColorPicker>
         <ColorSample color={props.diceColor} onClick={setShowPicker.bind(null, !showPicker)} />
         <Popup show={showPicker} hide={setShowPicker.bind(null, false)}>
           <SketchPicker color={ props.diceColor } onChange={ handleChangeComplete }/>
@@ -78,10 +75,10 @@ export default function DieParametersPanel(props) {
             <input type="number" value={sidesValue} onChange={handleSidesChange} />
           </div>
           <div>
-            <AddButton disabled={props.disabled} onClick={handleAddDie}>
+            <AddButton onClick={handleAddDie}>
               {lang('add')}
             </AddButton>
-            <CancelButton disabled={props.disabled} onClick={props.onCustomCanceled}>
+            <CancelButton onClick={props.onCustomCanceled}>
               {lang('cancel')}
             </CancelButton>
           </div>

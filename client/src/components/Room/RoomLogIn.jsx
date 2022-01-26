@@ -5,21 +5,16 @@ import styled from 'styled-components';
 import * as actions from '../../redux/room/actions';
 import { L18N_NAMESPACE } from '../../utils/constans';
 import { toast } from 'react-toastify';
-import DicePanel from '../Dice/DicePanel';
-import DieParametersPanel from '../Dice/DieParametersPanel';
-import Die from '../Dice/Die';
+import DiceSetEditor from '../Dice/DiceSetEditor';
 
 const RoomLoginContainer = styled.div`
   padding: 20px;
-  margin: 15% auto 0 auto;
+  margin: 100px auto 0 auto;
   width: 100%;
   max-width: 600px;
   text-align: left;
 `;
 const Title = styled.h3`
-`;
-const SmallTitle = styled.h5`
-  margin: 1em 0 0.5em 0;
 `;
 const PanelsContainer = styled.div`
   margin: 0 auto;
@@ -54,24 +49,14 @@ const LogInButton = styled.button`
 const DiceBagPanel = styled.div`
   display: inline-block;
   vertical-align: top;
-  max-width: 280px;
+  max-width: 295px;
   text-align: left;
-`;
-const DieButton = styled.div`
-  cursor: pointer;
-  display: inline-block;
-`;
-const SetInfo = styled.p`
-  font-size: 0.8em;
-  margin: 0;
 `;
 
 export default function RoomLogIn({ roomId, needPassword }) {
 
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [dieColor, setDieColor] = useState('');
-  const [isCustomSelected, setCustomSelected] = useState(false);
   const [selected, setSelected] = useState([]);
 
   const userParams = useStore(store => store.room.userParams);
@@ -104,23 +89,6 @@ export default function RoomLogIn({ roomId, needPassword }) {
     dispatch(actions.setUserParams({ ...userParams, dice: selected }));
   };
 
-  const addDie = (sides, color) => {
-    const existingIndex = selected.findIndex(die => die.die === sides && die.color === color);
-    if (existingIndex < 0) {
-      setSelected(selected.concat([{
-        die: sides, 
-        color: color ? color : dieColor
-      }]));
-    }
-    setCustomSelected(false);
-  };
-
-  const removeDie = (index) => {
-    const newSet = selected.concat();
-    newSet.splice(index, 1);
-    setSelected(newSet);
-  };
-
   return (
     <RoomLoginContainer>
       <PanelsContainer>
@@ -144,37 +112,10 @@ export default function RoomLogIn({ roomId, needPassword }) {
         </CredentialsPanel>
         <DiceBagPanel>
           <Title>{lang('dice_set')}</Title>
-          <DieParametersPanel 
-            diceColor={dieColor} 
-            showSidesSetting={isCustomSelected} 
-            onColorSelected={setDieColor}
-            onAddDie={addDie} 
-            onCustomCanceled={setCustomSelected.bind(null, false)}
+          <DiceSetEditor
+            dice={selected} 
+            onUpdate={setSelected}
           />
-          <DicePanel
-            size="tiny"
-            diceColor={dieColor}
-            onDieSelected={addDie}
-            onCustomToggle={setCustomSelected}
-          />
-          <SmallTitle>{lang('your_set')}:</SmallTitle>
-          {selected.length === 0 ? (
-            <SetInfo>{lang('empty_set')}</SetInfo>
-          ) : (
-            selected.map((die, index) => (
-              <DieButton
-                key={`dieSet${index}`} 
-                onClick={removeDie.bind(null, index)}
-              >
-                <Die 
-                  color={die.color} 
-                  sides={die.die} 
-                  value={die.die}
-                  size="tiny"
-                />
-              </DieButton>
-            ))
-          )}
         </DiceBagPanel>
       </PanelsContainer>
     </RoomLoginContainer>

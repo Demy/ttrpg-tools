@@ -1,4 +1,5 @@
 import axios from "axios";
+import devLog from "../../helpers/logger";
 import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
@@ -91,5 +92,7 @@ export const verifyAndSaveToken = (token, roomId) => dispatch => {
       if (res && res.data) {
 	      dispatch({ type: ROOM_TOKEN, payload: token });
       }
-		}, error => {});
+		}, error => {
+      devLog(error);
+    });
 };
