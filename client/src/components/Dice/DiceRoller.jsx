@@ -14,17 +14,33 @@ import devLog from '../../helpers/logger';
 import EditDicePanel from './EditDicePanel';
 
 const RollerContainer = styled.div`
-  max-width: 1035px;
+  max-width: 915px;
   margin: 0 auto;
+  
+  @media (min-width: ${MOBILE_SCREEN}) {
+    display: flex;
+    flex-flow: column wrap;
+
+    && > :nth-child(2n + 1) { order: 1; }
+    && > :nth-child(2n + 2) { order: 2; }
+    && > :nth-child(-n + 2) {
+      page-break-before: always;
+      break-before: always;
+    }
+  }
 `;
 const MainContentContainer = styled.div`
   text-align: left;
   margin: 15px;
+
   @media (min-width: ${MOBILE_SCREEN}) {
-    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 70%;
     padding: 0;
     margin: 0;
-    margin-right: 10px;
     display: inline-block;
     vertical-align: top;
     max-width: 600px;
@@ -32,10 +48,16 @@ const MainContentContainer = styled.div`
 `;
 const SideContentContainer = styled.div`
   margin: 15px;
+
   @media (min-width: ${MOBILE_SCREEN}) {
-    width: calc(30% - 10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     padding: 0;
     margin: 0;
+    margin-left: 10px;
+    min-width: calc(30% - 10px);
     display: inline-block;
     vertical-align: top;
     max-width: 300px;
