@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { SketchPicker, } from 'react-color';
 import Popup from '../UI/Popup';
@@ -49,13 +49,13 @@ export default function DieParametersPanel(props) {
     props.onColorSelected(color.hex);
   }
 
-  const handleSidesChange = (e) => {
+  const handleSidesChange = useCallback((e) => {
     setSidesValue(e.target.value);
-  };
+  }, []);
 
-  const handleAddDie = () => {
+  const handleAddDie = useCallback(() => {
     props.onAddDie(sidesValue);
-  };
+  }, [props, sidesValue]);
 
   return (
     <ParametersPanel>

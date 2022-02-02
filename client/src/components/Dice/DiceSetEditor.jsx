@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { L18N_NAMESPACE } from '../../utils/constans';
@@ -36,7 +36,7 @@ export default function DiceSetEditor({ dice, onUpdate }) {
 
   const [lang] = useTranslation(L18N_NAMESPACE);
 
-  const addDie = (sides, color) => {
+  const addDie = useCallback((sides, color) => {
     const existingIndex = selected.findIndex(die => {
       return die.die === sides && die.color === color
     });
@@ -49,7 +49,7 @@ export default function DiceSetEditor({ dice, onUpdate }) {
       onUpdate(newSet);
     }
     setCustomSelected(false);
-  };
+  }, [dieColor, onUpdate, selected]);
 
   const removeDie = (index) => {
     const newSet = selected.concat();

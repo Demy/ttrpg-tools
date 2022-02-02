@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DicePanel from './DicePanel';
 import ParametersPanel from './DieParametersPanel';
@@ -161,7 +161,7 @@ export default function DiceRoller({ roomId }) {
     }
   });
 
-  const addDie = (sides, color) => {
+  const addDie = useCallback((sides, color) => {
     if (selectedDice.length < MAX_DICE) {
       const existingIndex = selectedDice.findIndex(die => die.die === sides && die.color === color);
       if (existingIndex < 0) {
@@ -178,9 +178,9 @@ export default function DiceRoller({ roomId }) {
       }
     }
     setCustomSelected(false);
-  };
+  }, [diceColor, selectedDice]);
 
-  const handleRollDice = (dice, text) => {
+  const handleRollDice = useCallback((dice, text) => {
     setLoading(true);
     socket.executeWhenConnected(() => {
       const uid = uuid();
@@ -188,7 +188,7 @@ export default function DiceRoller({ roomId }) {
       socket.emit('roll', { dice, text: trimLength(fullText), uid });
       dispatch(actions.setLastRollId(uid));
     });
-  };
+  }, [dispatch, socket, username]);
 
   const sidePanel = userParams && userParams.dice && userParams.dice.length > 0 ? (
     <ParametersContainer>
