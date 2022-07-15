@@ -3,7 +3,8 @@ import devLog from "../../helpers/logger";
 import { BASE_URL, END_POINT, PUBLIC_ROOM } from "../../utils/constans";
 import { 
   NEW_ROLL, FULL_ROLL, ROLL_UID, CLEAR_LAST_ROLL, MOVE_TO_ROOM, 
-  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, ROOM_TOKEN, CLEAR_HISTORY, USER_PARAMS, USERNAME
+  ROLLS_HISTORY, SET_SOCKET, ROOM_STATUS, LOGIN_VERIFIED, CLEAR_HISTORY, 
+  USER_PARAMS, USERNAME
 } from "./constants";
 
 export const setSocket = (socket) => dispatch => {
@@ -66,10 +67,12 @@ export const getRoomStatus = (room) => dispatch => {
 
 export const logInToRoom = (roomId, username, password, onError) => dispatch => {
 	axios
-		.post(BASE_URL + END_POINT.ROOM_LOGIN, { roomId, password })
+		.post(BASE_URL + END_POINT.ROOM_LOGIN, 
+      { roomId, password }, 
+      { withCredentials: true })
 		.then(res => {
 	    dispatch({ type: USERNAME, payload: username });
-	    dispatch({ type: ROOM_TOKEN, payload: res.data.token });
+	    dispatch({ type: LOGIN_VERIFIED, payload: true });
 		}, onError);
 };
 
@@ -81,17 +84,17 @@ export const setUserParams = (params) => dispatch => {
   dispatch({ type: USER_PARAMS, payload: params });
 };
 
-export const clearToken = () => dispatch => {
-  dispatch({ type: ROOM_TOKEN, payload: '' });
+export const setVerified = (value) => dispatch => {
+  dispatch({ type: LOGIN_VERIFIED, payload: value });
 };
 
-export const verifyAndSaveToken = (token, roomId) => dispatch => {
+export const verifyLogin = (roomId) => dispatch => {
 	axios
-		.post(BASE_URL + END_POINT.VERIFY_TOKEN, { token, roomId })
+		.post(BASE_URL + END_POINT.VERIFY_LOGIN, 
+      { roomId }, 
+      { withCredentials: true })
 		.then(res => {
-      if (res && res.data) {
-	      dispatch({ type: ROOM_TOKEN, payload: token });
-      }
+      dispatch({ type: LOGIN_VERIFIED, payload: true });
 		}, error => {
       devLog(error);
     });

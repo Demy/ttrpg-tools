@@ -40,7 +40,8 @@ class CustomPage {
       return fetch(p, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': true
         }
       }).then(res => res.json());
     }, path);
@@ -51,7 +52,8 @@ class CustomPage {
       return fetch(p, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify(d)
       }).then(res => res.json());

@@ -9,7 +9,7 @@ import { useCookies } from 'react-cookie';
 import CookieConsent, { getCookieConsentValue, OPTIONS } from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 import { 
-  L18N_NAMESPACE, COOKIES_TOKEN_PREFIX, COOKIES_USER_PREFIX, 
+  L18N_NAMESPACE, COOKIES_USER_PREFIX, 
   COOKIES_PARAMS, COOKIES_USER_PARAMS_PREFIX 
 } from '../utils/constans';
 import SocketControlledView from '../components/UI/SocketControlledView';
@@ -21,8 +21,8 @@ export default function RoomPage() {
   const roomName = useSelector(state => state.room.roomName);
   const roomStatus = useSelector(state => state.room.roomStatus);
   const username = useSelector(state => state.room.username);
+  const loginVerified = useSelector(state => state.room.loginVerified);
   const userParams = useSelector(state => state.room.userParams);
-  const roomToken = useSelector(state => state.room.roomToken);
 
   const canUseCookies = getCookieConsentValue();
 
@@ -37,7 +37,6 @@ export default function RoomPage() {
 
   useEffect(() => {
     if (roomName !== roomId) {
-      dispatch(actions.clearToken());
       dispatch(actions.setUser(''));
       dispatch(actions.setUserParams(null));
 
@@ -47,7 +46,6 @@ export default function RoomPage() {
 
   useEffect(() => {
     if (canUseCookies) {
-      const token = cookies[COOKIES_TOKEN_PREFIX + roomId];
       const user = cookies[COOKIES_USER_PREFIX + roomId];
       const params = cookies[COOKIES_USER_PARAMS_PREFIX + roomId];
 
@@ -62,33 +60,32 @@ export default function RoomPage() {
         dispatch(actions.setUser(''));
         dispatch(actions.setUserParams(null));
       }
-      if (user && token) {
-        dispatch(actions.verifyAndSaveToken(token, roomId));
+      if (user) {
+        dispatch(actions.verifyLogin(roomId));
       } else {
-        dispatch(actions.clearToken());
+        dispatch(actions.setVerified(false));
       }
     }
   }, [canUseCookies, cookies, dispatch, roomId]);
 
   useEffect(() => {
     if (roomStatus !== null) {
-      if (roomStatus.private && !roomToken) {
+      if (roomStatus.private && !loginVerified) {
         setNeedLogIn(true);
       } else {
         setIsAuthorized(true);
       }
     }
-  }, [roomStatus, roomToken]);
+  }, [roomStatus, loginVerified]);
 
   useEffect(() => {
     if (!username) return;
 
     if (needLogIn) {
-      if (roomToken) {
+      if (loginVerified) {
         setIsAuthorized(true);
         setNeedLogIn(false);
         if (canUseCookies) {
-          setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
           setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
           setCookie(COOKIES_USER_PARAMS_PREFIX + roomId, userParams, COOKIES_PARAMS);
         }
@@ -100,15 +97,12 @@ export default function RoomPage() {
       }
     }
   }, [
-    canUseCookies, isAuthorized, needLogIn, roomId, roomToken, 
+    canUseCookies, isAuthorized, needLogIn, roomId, loginVerified, 
     setCookie, userParams, username
   ]);
 
   const handleCookieAccept = () => {
     if (isAuthorized) {
-      if (roomToken) {
-        setCookie(COOKIES_TOKEN_PREFIX + roomId, roomToken, COOKIES_PARAMS);
-      }
       setCookie(COOKIES_USER_PREFIX + roomId, username, COOKIES_PARAMS);
       setCookie(COOKIES_USER_PARAMS_PREFIX + roomId, userParams, COOKIES_PARAMS);
     }

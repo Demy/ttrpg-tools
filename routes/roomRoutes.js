@@ -55,7 +55,9 @@ module.exports = app => {
           process.env.TOKEN_KEY,
           { expiresIn: "24h" }
         );
-        res.status(201).json({ token });
+        
+        res.cookie('token', token, { sameSite: 'Strict', secure: true});
+        res.status(201).send('Successfull login');
       } else {
         res.status(400).send('Incorrect password');
       }
@@ -66,14 +68,15 @@ module.exports = app => {
   });
 
   app.post('/api/verify', (req, res) => {
-    const token = req.body.token;
+    const token = req.cookies.token;
     const roomId = req.body.roomId;
+
     if (!token) {
-      return res.status(403).send("A token is required for authentication");
+      return res.status(403).send("Please log in first");
     }
     try {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-      res.send(decoded && decoded.roomId === roomId);
+      res.send(!!decoded && decoded.roomId === roomId);
     } catch (err) {
       return res.status(401).send("Invalid Token");
     }

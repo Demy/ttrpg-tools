@@ -3,6 +3,7 @@ const app = express();
 const socket = require("socket.io");
 const cors = require("cors");
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser')
 
 dotenv.config();
 
@@ -10,7 +11,8 @@ app.use(express());
 const port = 8000;
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser());
 
 var server = app.listen(
   port,

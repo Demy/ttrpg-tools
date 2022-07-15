@@ -155,7 +155,7 @@ export default function DiceRoller({ roomId }) {
 
   useEffect(() => {
     if (roomId === PUBLIC_ROOM && username !== '') {
-      dispatch(actions.clearToken());
+      dispatch(actions.setVerified(false));
       dispatch(actions.setUser(''));
       dispatch(actions.setUserParams(null));
     }
