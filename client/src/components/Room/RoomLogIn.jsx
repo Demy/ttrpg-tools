@@ -58,6 +58,7 @@ export default function RoomLogIn({ roomId, needPassword }) {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [selected, setSelected] = useState([]);
+  const [currentColor, setCurrentColor] = useState('');
 
   const userParams = useStore(store => store.room.userParams);
 
@@ -86,7 +87,11 @@ export default function RoomLogIn({ roomId, needPassword }) {
     } else {
       dispatch(actions.setUser(username));
     }
-    dispatch(actions.setUserParams({ ...userParams, dice: selected }));
+    dispatch(actions.setUserParams({ 
+      ...userParams, 
+      dice: selected, 
+      color: selected.length ? undefined : currentColor
+    }));
   };
 
   return (
@@ -115,6 +120,7 @@ export default function RoomLogIn({ roomId, needPassword }) {
           <DiceSetEditor
             dice={selected} 
             onUpdate={setSelected}
+            onColorChange={setCurrentColor}
           />
         </DiceBagPanel>
       </PanelsContainer>

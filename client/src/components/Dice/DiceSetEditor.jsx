@@ -28,13 +28,18 @@ const SetInfo = styled.p`
   margin: 0;
 `;
 
-export default function DiceSetEditor({ dice, onUpdate }) {
+export default function DiceSetEditor({ dice, onUpdate, onColorChange }) {
 
   const [dieColor, setDieColor] = useState('');
   const [isCustomSelected, setCustomSelected] = useState(false);
   const [selected, setSelected] = useState(dice);
 
   const [lang] = useTranslation(L18N_NAMESPACE);
+
+  const changeColor = (color) => {
+    setDieColor(color);
+    onColorChange(color);
+  }
 
   const addDie = useCallback((sides, color) => {
     const existingIndex = selected.findIndex(die => {
@@ -63,7 +68,7 @@ export default function DiceSetEditor({ dice, onUpdate }) {
       <DieParametersPanel 
         diceColor={dieColor} 
         showSidesSetting={isCustomSelected} 
-        onColorSelected={setDieColor}
+        onColorSelected={changeColor}
         onAddDie={addDie} 
         onCustomCanceled={setCustomSelected.bind(null, false)}
       />

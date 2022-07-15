@@ -104,7 +104,9 @@ const trimLength = (text) => {
 
 export default function DiceRoller({ roomId }) {
 
-  const [diceColor, setDiceColor] = useState('#ffffff');
+  const userParams = useSelector(state => state.room.userParams);
+
+  const [diceColor, setDiceColor] = useState(userParams?.color || '#ffffff');
   const [currentRoom, setCurrentRoom] = useState('');
   const [selectedDice, setSelectedDice] = useState([]);
   const [isCustomSelected, setCustomSelected] = useState(false);
@@ -115,7 +117,6 @@ export default function DiceRoller({ roomId }) {
   const lastRoll = useSelector(state => state.room.lastRoll);
   const roomName = useSelector(state => state.room.roomName);
   const username = useSelector(state => state.room.username);
-  const userParams = useSelector(state => state.room.userParams);
   const socket = useSelector(state => state.room.socket);
 
   const dispatch = useDispatch();
