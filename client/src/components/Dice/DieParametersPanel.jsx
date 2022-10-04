@@ -24,7 +24,7 @@ const ColorSample = styled.div`
   height: 20px;
   background-color: ${(props) => props.color};
   cursor: pointer;
-  border: 1px solid #898989;
+  border: 1px solid ${(props) => props.theme.colors.primaryDark};
 `;
 const AddButton = styled.button`
   padding: 7px 16px;

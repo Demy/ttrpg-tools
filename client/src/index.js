@@ -11,6 +11,7 @@ import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import ttrpg_ru from "./assets/lang/ru/ttrpg.json";
 import ttrpg_en from "./assets/lang/en/ttrpg.json";
+import Theme from './components/UI/Theme';
 
 const userLang = navigator.language || navigator.userLanguage;
 const separator = userLang.indexOf('-');
@@ -34,7 +35,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <I18nextProvider i18n={i18next}>
-        <App />
+        <Theme>
+          <App />
+        </Theme>
       </I18nextProvider>
     </Provider>
   </React.StrictMode>,

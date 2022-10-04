@@ -18,9 +18,6 @@ const RollerContainer = styled.div`
   margin: 0 auto;
   
   @media (min-width: ${MOBILE_SCREEN}) {
-    display: flex;
-    flex-flow: column wrap;
-
     && > :nth-child(2n + 1) { order: 1; }
     && > :nth-child(2n + 2) { order: 2; }
     && > :nth-child(-n + 2) {
@@ -60,19 +57,21 @@ const SideContentContainer = styled.div`
     min-width: calc(30% - 10px);
     display: inline-block;
     vertical-align: top;
-    max-width: 300px;
+    max-width: 264px;
   }
 `;
 const DicePanelContainer = styled.div`
-  border: 1px solid #c0c0c0;
+  border: 1px solid ${props => props.theme.colors.secondaryLight};
   width: 100%;
+  background-color: ${props => props.theme.colors.secondary};
 `;
 const ResultContainer = styled.div`
   opacity: ${props => props.active ? 1 : 0.5};
 `;
 const ParametersContainer = styled.div`
-  border: 1px solid #c0c0c0;
   padding: 13px 15px;
+  background-color: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.textAccent};
 `;
 
 const HistoryPanelContainer = styled.div`
@@ -80,6 +79,7 @@ const HistoryPanelContainer = styled.div`
   max-height: 394px;
   overflow: auto;
   margin: 10px auto;
+  background-color: ${props => props.theme.colors.primaryLight};
 `;
 const HistoryTitle = styled.h3`
   width: 100%;
@@ -102,7 +102,7 @@ const trimLength = (text) => {
   return text;
 };
 
-export default function DiceRoller({ roomId }) {
+export default function DiceRoller({ roomId, isPublic }) {
 
   const userParams = useSelector(state => state.room.userParams);
 
@@ -241,7 +241,7 @@ export default function DiceRoller({ roomId }) {
           <h3 id="resultTitle">
             {lang('result')}: {lastRoll.text ? lastRoll.text : ''}
           </h3>
-          <DicePanelContainer>
+          <DicePanelContainer style={isPublic ? { minHeight: '258px' } : {}}>
             <RollResultPanel
               disabled={isLoading}
               onRoll={handleRollDice}

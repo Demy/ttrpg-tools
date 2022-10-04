@@ -47,13 +47,13 @@ const Inner = styled.span`
   &:before {
     content: "YES";
     padding-left: 5px;
-    background-color: #00ABFF;
+    background-color: ${props => props.theme.colors.primary};
     color: transparent;
   }
   &:after {
     content: "NO";
     padding-right: 5px;
-    background-color: #bbb;
+    background-color: ${props => props.theme.colors.primaryLight};
     color: transparent;
     text-align: right;
   }
@@ -61,7 +61,7 @@ const Inner = styled.span`
 const Switch = styled.span`
   display: block;
   width: 12px;
-  margin: 2.5px;
+  margin: 3px;
   background: #fff;
   position: absolute;
   top: 0;

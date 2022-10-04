@@ -30,23 +30,36 @@ const DropdownButton = styled.div`
   border: none;
   cursor: pointer;
   user-select: none;
+  display: inline-block;
 `;
 const DropdownContent = styled.div`
   display: none;
   position: absolute;
   text-align: left;
   background-color: #f9f9f9;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: -4px 8px 16px 0px rgba(0,0,0,0.4);
   right: 0;
   cursor: pointer;
-  padding: 12px;
+  padding: 13px;
   user-select: none;
   z-index: 1;
+  &:hover {
+    background-color: ${props => props.theme.colors.secondaryLight};
+  }
+`;
+const LanguageIcon = styled.div`
+  border-radius: 50%;
+  background-color: ${props => props.theme.colors.secondary};
+  width: 25px;
+  height: 25px;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 1.7;
 `;
 
 const languages = {
-  'en': { symbol: '🇬🇧', name: 'english' },
-  'ru': { symbol: '🇷🇺', name: 'russian' },
+  'en': { symbol: 'En', name: 'English' },
+  'ru': { symbol: 'Ру', name: 'Русский' },
 };
 
 export default function LanguageSelector() {
@@ -69,10 +82,14 @@ export default function LanguageSelector() {
   return (
     <LanguagePanel>
       <Dropdown open={isOpen}>
-        <DropdownButton onClick={handleLangClick}>{languages[i18n.language].symbol}</DropdownButton>
+        <DropdownButton onClick={handleLangClick}>
+          <LanguageIcon>
+            {languages[i18n.language].symbol}
+          </LanguageIcon>
+        </DropdownButton>
         {Object.keys(languages).map(ln => (
           <DropdownContent key={`lang-${ln}`} onClick={handleChange.bind(null, ln)}>
-            {languages[ln].symbol} {lang(languages[ln].name)}
+            {languages[ln].name}
           </DropdownContent>
         ))}
       </Dropdown>

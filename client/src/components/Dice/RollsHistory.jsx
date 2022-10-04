@@ -13,7 +13,7 @@ const HistoryTableContainer = styled.div`
 `;
 const HistoryLine = styled.div`
   &:nth-child(even) {
-    background: #f5f5f5;
+    background: rgba(0, 0, 0, 0.05);
   }
   padding: 5px 10px;
 `;
@@ -30,7 +30,7 @@ const RightPart = styled.div`
 const HistoryDate = styled.div`
   padding: 2px 0;
   font-size: 10px;
-  color: #585858;
+  color: ${props => props.theme.colors.primaryDark};
 `;
 const HistoryLabel = styled.div`
   padding: 0 0 2px 0;
@@ -39,8 +39,8 @@ const HistoryLabel = styled.div`
 const LinkButton = styled.div`
   width: 100%;
   cursor: pointer;
-  opacity: 0.3;
   text-align: right;
+  opacity: 0.8;
 `;
 
 const addZero = (num) => {

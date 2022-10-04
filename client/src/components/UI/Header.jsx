@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components';
 import Die from '../Dice/Die';
 import LanguageSelector from './LanguageSelector';
+import { theme } from './Theme';
 
 const HeaderContainer = styled.header`
   text-align: left;
-  background: #f5f5f5;
-  border-bottom: 1px solid #898989;
+  background: ${props => props.theme.colors.primary};
+  border-bottom: 1px solid ${props => props.theme.colors.primaryDark};
   display: relative;
 `;
 const LogoButton = styled.div`
@@ -23,7 +24,7 @@ const Title = styled.div`
   margin: 12px 5px;
   & a {
     text-decoration: none;
-    color: #000000;
+    color: ${props => props.theme.colors.textAccent};
   }
 `;
 
@@ -38,7 +39,7 @@ export default function Header(props) {
   return (
     <HeaderContainer>
       <LogoButton onClick={handleLogoClick}>
-        <Die sides={10} color="white" value={10} size="tiny" />
+        <Die sides={10} color={theme.colors.textAccent} value={10} size="tiny" />
       </LogoButton>
       <Title><Link to="/">TTRPG Tools</Link></Title>
       <LanguageSelector />

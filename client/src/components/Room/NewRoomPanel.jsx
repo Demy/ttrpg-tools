@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { L18N_NAMESPACE, MOBILE_SCREEN } from '../../utils/constans';
 import * as actions from '../../redux/room/actions';
+import SimpleButton from '../UI/SimpleButton';
 
 const RoomPanelContainer = styled.div`
   text-align: left;
@@ -88,12 +89,8 @@ const Description = styled.p`
   margin: 5px 0 10px 0;
   padding-right: 20px;
 `;
-const CreateButton = styled.button`
-  padding: 10px 20px;
+const CreateButton = styled.div`
   margin: 5px 10px 5px 0;
-  cursor: pointer;
-  width: 110px;
-  display: block;
 `;
 const PasswordInput = styled.input`
 `;
@@ -195,8 +192,10 @@ export default function RoomPanel() {
               </div>
             </div>
           ) : <></>}
-          <CreateButton id="createRoom" onClick={handleCreate}>
-            {lang('create')}
+          <CreateButton>
+            <SimpleButton id="createRoom" onClick={handleCreate}>
+              {lang('create')}
+            </SimpleButton>
           </CreateButton>
         </FormPart>
       </PanelPartsContainer>

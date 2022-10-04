@@ -13,7 +13,7 @@ export default function HomePage() {
     <SocketControlledView>
       <NewRoomPanel />
       <h3>{lang('public_room')}</h3>
-      <DiceRoller roomId={PUBLIC_ROOM} />
+      <DiceRoller roomId={PUBLIC_ROOM} isPublic />
     </SocketControlledView>
   );
 }
